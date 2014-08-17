@@ -1,0 +1,19 @@
+﻿<div class="panel panel-default">
+    <div class="panel-heading">Active Projects</div>
+    <div class="panel-body">
+        <table class="table">
+            <tr>
+                <th>Client</th>
+                <th>Project Name</th>
+                <th>Stage</th>
+                <th>Probability</th>
+            </tr>
+            <tr ng-repeat="project in ActiveProjectDetails">
+                <td>{{project.Client}}</td>
+                <td>{{project.ProjectName}}</td>
+                <td>{{project.Stage}}</td>
+                <td>{{project.Probability}}</td>
+            </tr>
+        </table>
+    </div>
+</div>
