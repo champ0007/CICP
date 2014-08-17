@@ -65,4 +65,16 @@ var InvoicesData = [
 
 $scope.AllInvoices = InvoicesData;
 
+var allResources = [
+    { FirstName: 'Tushar', LastName: 'Sharma', PrimarySkill: '.NET/Sitecore', Level: 'Manager', CurrentProject: 'Non-AU', ProposedProject: 'None', StartDate: ' - ', AvailableOn: '31-Mar-2015' },
+    { FirstName: 'Surekha', LastName: 'Bandaru', PrimarySkill: 'Testing', Level: 'Sr. Consultant', CurrentProject: 'Aus Super', ProposedProject: 'None', StartDate: ' 5-Mar-2014 ', AvailableOn: '31-Mar-2015' },
+    { FirstName: 'Shakil', LastName: 'Shaikh', PrimarySkill: 'Adobe CQ', Level: 'Manager', CurrentProject: 'Telstra.com', ProposedProject: 'None', StartDate: ' 5-Aug-2014 ', AvailableOn: '31-Mar-2015' },
+    { FirstName: 'Hardik', LastName: 'Desai', PrimarySkill: 'Java/CQ', Level: 'Sr. Consultant', CurrentProject: 'Telstra.com', ProposedProject: 'None', StartDate: ' - ', AvailableOn: '31-Mar-2015' },
+    { FirstName: 'Harsha', LastName: 'Tiwari', PrimarySkill: '.NET/Sitecore', Level: 'Consultant', CurrentProject: 'VicRoads', ProposedProject: 'None', StartDate: ' - ', AvailableOn: '31-Mar-2015' },
+    { FirstName: 'Ram', LastName: 'Harkala', PrimarySkill: '.NET/Sitecore', Level: 'Consultant', CurrentProject: 'Caltex', ProposedProject: 'None', StartDate: ' - ', AvailableOn: '31-Mar-2015' },
+];
+
+$scope.AllResources = allResources;
+
+
 }]);
