@@ -18,6 +18,10 @@ body {
     width: 1200px;
   }
 
+ .textSearch{
+color:black;
+}
+
 #wrapper {
     width: 100%;
 }

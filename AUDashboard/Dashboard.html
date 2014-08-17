@@ -404,8 +404,9 @@
                                     <div class="modal-dialog modal-lg-invoices">
                                         <div class="modal-content">
                                             <div class="panel panel-default">
-                                                <div class="panel-heading">Pending Invoices
-                                                    <div class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></div>
+                                                <div class="panel-heading">Pending Invoices &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <i class="fa fa-search"></i> <input ng-model="searchText" class="textSearch" /> <div class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span>
+                                                    </div>
                                                 </div>
                                                 <div class="panel-body">
                                                     <table class="table">
@@ -424,7 +425,7 @@
                                                             <th>Comments</th>
                                                             <th>Payment Received</th>
                                                         </tr>
-                                                        <tr ng-repeat="invoice in AllInvoices">
+                                                        <tr ng-repeat="invoice in AllInvoices | filter:searchText">
                                                             <td>{{invoice.Project}}</td>
                                                             <td>{{invoice.Partner}}</td>
                                                             <td>{{invoice.Resource}}</td>
