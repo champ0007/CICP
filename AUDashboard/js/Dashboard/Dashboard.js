@@ -3,15 +3,15 @@ var AUDashboardApp = angular.module("AUDashboardApp", []);
 
 AUDashboardApp.controller('DashboardController', ['$scope', function ($scope) {
 
-    $scope.ActiveProjects = 9;
-    $scope.PendingInvoices = 3;
-    $scope.ActiveResources = 60;
-    $scope.OpenActionItems = 1;
+    $scope.ActiveProjects = 12;
+    $scope.PendingInvoices = 9;
+    $scope.ActiveResources = 32;
+    $scope.OpenActionItems = 5;
 
     var FakeNotifications = [
         { message: 'EDC-AU meet', eventdate: '11-Sep', type: 'fa fa-calendar fa-fw' },
-        { message: '4 users added', eventdate: '44 mins ago', type: 'fa fa-comment fa-fw' },
-        { message: '5 users added', eventdate: '45 mins ago', type: 'fa fa-twitter fa-fw' },
+        { message: 'Telstra India Visit', eventdate: '1-Sep', type: 'fa fa-comment fa-fw' },
+        { message: 'Submit Project Report', eventdate: '20-Aug', type: 'fa fa-twitter fa-fw' },
         { message: '7 tasks added', eventdate: '47 mins ago', type: 'fa fa-tasks fa-fw' },
         { message: '7 tasks added', eventdate: '47 mins ago', type: 'fa fa-tasks fa-fw' },
         { message: '7 tasks added', eventdate: '47 mins ago', type: 'fa fa-tasks fa-fw' },
@@ -19,10 +19,6 @@ AUDashboardApp.controller('DashboardController', ['$scope', function ($scope) {
 
     $scope.notifications = FakeNotifications;
     
-   
-
-    //  $scope.ShowDetails = false;
-
 var ProjectDetails = [
         { Client: 'AMP', ProjectName: 'AMP', Stage: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014' },
         { Client: 'Telstra', ProjectName: 'Telstra', Stage: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014' },
@@ -45,5 +41,28 @@ var ActionItems = [
 
 $scope.AllActionItems = ActionItems;
 
+var InvoicesData = [
+    {Project:'Time Saver App', Partner: 'Hallam/Enderby', Resource:'Tiwari Harsha, Harkala Ram', Period:'P10_FY12', Date:'02/20/12 - 03/02/12', AmountUSD:4860, ATBApproval:'Received',ATBSentOn:'11/26/2012',InvoiceRaised:'Yes',InvoiceNumber:'3000079888',InvoiceRaisedOn:'11/27/2012', Comments:'---', PaymentReceived:'Received'},
+    { Project: 'Aus Super Spt', Partner: 'Milesi / Lipman', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2012', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
+    { Project: 'ANZ', Partner: 'Carlisle / Adappa', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2012', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
+    {Project:'Time Saver App', Partner: 'Hallam/Enderby', Resource:'Tiwari Harsha, Harkala Ram', Period:'P10_FY12', Date:'02/20/12 - 03/02/12', AmountUSD:4860, ATBApproval:'Received',ATBSentOn:'11/26/2012',InvoiceRaised:'Yes',InvoiceNumber:'3000079888',InvoiceRaisedOn:'11/27/2012', Comments:'---', PaymentReceived:'Received'},
+    {Project:'Time Saver App', Partner: 'Hallam/Enderby', Resource:'Tiwari Harsha, Harkala Ram', Period:'P10_FY12', Date:'02/20/12 - 03/02/12', AmountUSD:4860, ATBApproval:'Received',ATBSentOn:'11/26/2012',InvoiceRaised:'Yes',InvoiceNumber:'3000079888',InvoiceRaisedOn:'11/27/2012', Comments:'---', PaymentReceived:'Received'},
+    {Project:'Time Saver App', Partner: 'Hallam/Enderby', Resource:'Tiwari Harsha, Harkala Ram', Period:'P10_FY12', Date:'02/20/12 - 03/02/12', AmountUSD:4860, ATBApproval:'Received',ATBSentOn:'11/26/2012',InvoiceRaised:'Yes',InvoiceNumber:'3000079888',InvoiceRaisedOn:'11/27/2012', Comments:'---', PaymentReceived:'Received'},
+    {Project:'Time Saver App', Partner: 'Hallam/Enderby', Resource:'Tiwari Harsha, Harkala Ram', Period:'P10_FY12', Date:'02/20/12 - 03/02/12', AmountUSD:4860, ATBApproval:'Received',ATBSentOn:'11/26/2013',InvoiceRaised:'Yes',InvoiceNumber:'3000079888',InvoiceRaisedOn:'11/27/2012', Comments:'---', PaymentReceived:'Received'},
+    {Project:'Time Saver App', Partner: 'Hallam/Enderby', Resource:'Tiwari Harsha, Harkala Ram', Period:'P10_FY12', Date:'02/20/12 - 03/02/12', AmountUSD:4860, ATBApproval:'Received',ATBSentOn:'11/26/2013',InvoiceRaised:'Yes',InvoiceNumber:'3000079888',InvoiceRaisedOn:'11/27/2012', Comments:'---', PaymentReceived:'Received'},
+    {Project:'Time Saver App', Partner: 'Hallam/Enderby', Resource:'Tiwari Harsha, Harkala Ram', Period:'P10_FY12', Date:'02/20/12 - 03/02/12', AmountUSD:4860, ATBApproval:'Received',ATBSentOn:'11/26/2013',InvoiceRaised:'Yes',InvoiceNumber:'3000079888',InvoiceRaisedOn:'11/27/2013', Comments:'---', PaymentReceived:'Received'},
+    {Project:'Time Saver App', Partner: 'Hallam/Enderby', Resource:'Tiwari Harsha, Harkala Ram', Period:'P10_FY12', Date:'02/20/12 - 03/02/12', AmountUSD:4860, ATBApproval:'Received',ATBSentOn:'11/26/2012',InvoiceRaised:'Yes',InvoiceNumber:'3000079888',InvoiceRaisedOn:'11/27/2012', Comments:'---', PaymentReceived:'Received'},
+    {Project:'Time Saver App', Partner: 'Hallam/Enderby', Resource:'Tiwari Harsha, Harkala Ram', Period:'P10_FY12', Date:'02/20/12 - 03/02/12', AmountUSD:4860, ATBApproval:'Received',ATBSentOn:'11/26/2012',InvoiceRaised:'Yes',InvoiceNumber:'3000079888',InvoiceRaisedOn:'11/27/2012', Comments:'---', PaymentReceived:'Pending'},
+    {Project:'Time Saver App', Partner: 'Hallam/Enderby', Resource:'Tiwari Harsha, Harkala Ram', Period:'P10_FY12', Date:'02/20/12 - 03/02/12', AmountUSD:4860, ATBApproval:'Received',ATBSentOn:'11/26/2014',InvoiceRaised:'Yes',InvoiceNumber:'3000079888',InvoiceRaisedOn:'11/27/2012', Comments:'---', PaymentReceived:'Received'},
+    {Project:'Time Saver App', Partner: 'Hallam/Enderby', Resource:'Tiwari Harsha, Harkala Ram', Period:'P10_FY12', Date:'02/20/12 - 03/02/12', AmountUSD:4860, ATBApproval:'Received',ATBSentOn:'11/26/2014',InvoiceRaised:'Yes',InvoiceNumber:'3000079888',InvoiceRaisedOn:'11/27/2012', Comments:'---', PaymentReceived:'Received'},
+    {Project:'Time Saver App', Partner: 'Hallam/Enderby', Resource:'Tiwari Harsha, Harkala Ram', Period:'P10_FY12', Date:'02/20/12 - 03/02/12', AmountUSD:4860, ATBApproval:'Received',ATBSentOn:'11/26/2014',InvoiceRaised:'Yes',InvoiceNumber:'3000079888',InvoiceRaisedOn:'11/27/2012', Comments:'---', PaymentReceived:'Received'},
+    {Project:'Time Saver App', Partner: 'Hallam/Enderby', Resource:'Tiwari Harsha, Harkala Ram', Period:'P10_FY12', Date:'02/20/12 - 03/02/12', AmountUSD:4860, ATBApproval:'Received',ATBSentOn:'11/26/2012',InvoiceRaised:'Yes',InvoiceNumber:'3000079888',InvoiceRaisedOn:'11/27/2012', Comments:'---', PaymentReceived:'Received'},
+    {Project:'Time Saver App', Partner: 'Hallam/Enderby', Resource:'Sharma, Tushar', Period:'P10_FY12', Date:'02/20/12 - 03/02/12', AmountUSD:4860, ATBApproval:'Received',ATBSentOn:'11/26/2012',InvoiceRaised:'Yes',InvoiceNumber:'3000079888',InvoiceRaisedOn:'11/27/2012', Comments:'---', PaymentReceived:'Pending'},
+    {Project:'Time Saver App', Partner: 'Hallam/Enderby', Resource:'Tiwari Harsha, Harkala Ram', Period:'P10_FY12', Date:'02/20/12 - 03/02/12', AmountUSD:4860, ATBApproval:'Received',ATBSentOn:'11/26/2012',InvoiceRaised:'Yes',InvoiceNumber:'3000079888',InvoiceRaisedOn:'11/27/2012', Comments:'---', PaymentReceived:'Received'},
+    {Project:'Time Saver App', Partner: 'Hallam/Enderby', Resource:'Tiwari Harsha, Harkala Ram', Period:'P10_FY12', Date:'02/20/12 - 03/02/12', AmountUSD:4860, ATBApproval:'Received',ATBSentOn:'11/26/2012',InvoiceRaised:'Yes',InvoiceNumber:'3000079888',InvoiceRaisedOn:'11/27/2012', Comments:'---', PaymentReceived:'Received'},
+    {Project:'Time Saver App', Partner: 'Hallam/Enderby', Resource:'Tiwari Harsha, Harkala Ram', Period:'P10_FY12', Date:'02/20/12 - 03/02/12', AmountUSD:4860, ATBApproval:'Received',ATBSentOn:'11/26/2012',InvoiceRaised:'Yes',InvoiceNumber:'3000079888',InvoiceRaisedOn:'11/27/2012', Comments:'---', PaymentReceived:'Received'}
+];
+
+$scope.AllInvoices = InvoicesData;
 
 }]);
