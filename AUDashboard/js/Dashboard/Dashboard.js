@@ -9,12 +9,12 @@ AUDashboardApp.controller('DashboardController', ['$scope', function ($scope) {
     $scope.OpenActionItems = 5;
 
     var FakeNotifications = [
-        { message: 'EDC-AU meet', eventdate: '11-Sep', type: 'fa fa-calendar fa-fw' },
-        { message: 'Telstra India Visit', eventdate: '1-Sep', type: 'fa fa-comment fa-fw' },
+        { message: '7 tasks added', eventdate: '47 mins ago', type: 'fa fa-tasks fa-fw' },
+        { message: 'AMP India visit', eventdate: '18-Aug', type: 'fa fa-tasks fa-fw' },
         { message: 'Submit Project Report', eventdate: '20-Aug', type: 'fa fa-twitter fa-fw' },
-        { message: '7 tasks added', eventdate: '47 mins ago', type: 'fa fa-tasks fa-fw' },
-        { message: '7 tasks added', eventdate: '47 mins ago', type: 'fa fa-tasks fa-fw' },
-        { message: '7 tasks added', eventdate: '47 mins ago', type: 'fa fa-tasks fa-fw' },
+        { message: 'Telstra India Visit', eventdate: '1-Sep', type: 'fa fa-comment fa-fw' },
+        { message: 'EDC-AU meet', eventdate: '12-Sep', type: 'fa fa-calendar fa-fw' },       
+        { message: 'EDC Upcoming Holiday', eventdate: '2-Oct', type: 'fa fa-tasks fa-fw' }        
     ];
 
     $scope.notifications = FakeNotifications;
