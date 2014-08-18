@@ -20,12 +20,12 @@ AUDashboardApp.controller('DashboardController', ['$scope', function ($scope) {
     $scope.notifications = FakeNotifications;
     
 var ProjectDetails = [
-        { Client: 'AMP', ProjectName: 'AMP', Stage: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014' },
-        { Client: 'Telstra', ProjectName: 'Telstra', Stage: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014' },
-        { Client: 'Caltex', ProjectName: 'Caltex', Stage: 'Sold', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014' },
-        { Client: 'VicRoads', ProjectName: 'VicRoads', Stage: 'Sold', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014' },
-        { Client: 'CPA ITB', ProjectName: 'CPA ITB', Stage: 'Completed', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014' },
-        { Client: 'Sydney Trains', ProjectName: 'SydneyTrains', Stage: 'Lost', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014' }
+        { Client: 'AMP', ProjectName: 'AMP-Online', Stage: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Phase: 'Development' },
+        { Client: 'Telstra', ProjectName: 'Telstra.com', Stage: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Phase: 'Development' },
+        { Client: 'Caltex', ProjectName: 'Caltex', Stage: 'Sold', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Phase: 'UAT' },
+        { Client: 'VicRoads', ProjectName: 'VicRoads', Stage: 'Sold', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Phase: 'Design' },
+        { Client: 'CPA ITB', ProjectName: 'CPA ITB', Stage: 'Completed', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Phase: 'Design' },
+        { Client: 'Sydney Trains', ProjectName: 'SydneyTrains', Stage: 'Lost', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Phase: 'Proposal' }
 ];
 
 $scope.ActiveProjectDetails = ProjectDetails;
