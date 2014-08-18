@@ -15,7 +15,15 @@ $(function () {
             label: "Proposed Projects",
             value: 8
         }],
-        resize: true
+        resize: true,
+        backgroundColor: '#ccc',
+        labelColor: '#045',
+        colors: [
+          '#0BA491',
+          '#0BA491',
+          '#0BA491',
+          '#0BA491'
+        ]
     });
    
 
