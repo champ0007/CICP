@@ -419,33 +419,31 @@
                                             <table class="table table-striped table-responsive">
                                                 <tr>
                                                     <th>Project</th>
-                                                    <th>Partner / Director</th>
+                                                    <th class="hidden-sm hidden-xs">Partner / Director</th>
                                                     <th>Invoice No.</th>
                                                     <th>Period</th>
-                                                    <th>Date</th>
+                                                    <th class="hidden-lg hidden-sm hidden-xs">Date</th>
                                                     <th>Amount(USD)</th>
-                                                    <!--<th>"ATB Approval"</th>
-                                                    <th>"ATB Approved/Sent On"</th>
-                                                    <th>Invoice Raised</th>
-                                                    <th>Invoice No</th>
-                                                    <th>Invoice Raised On</th>
-                                                    <th>Comments</th>
-                                                    <th>Payment Received</th>-->
+                                                    <th class="hidden-lg hidden-sm hidden-xs">ATB Approval</th>
+                                                    <th class="hidden-lg hidden-sm hidden-xs">ATB Approved/Sent On</th>
+                                                    <th class="hidden-lg hidden-sm hidden-xs">Invoice Raised</th>
+                                                    <th class="hidden-lg hidden-sm hidden-xs">Invoice Raised On</th>
+                                                    <th class="hidden-lg hidden-sm hidden-xs">Comments</th>
+                                                    <th class="hidden-sm hidden-xs">Payment Received</th>
                                                 </tr>
                                                 <tr ng-repeat="invoice in AllInvoices | filter:searchText">
                                                     <td>{{invoice.Project}}</td>
-                                                    <td>{{invoice.Partner}}</td>
+                                                    <td class ="hidden-sm hidden-xs">{{invoice.Partner}}</td>
                                                     <td>{{invoice.InvoiceNumber}}</td>
                                                     <td>{{invoice.Period}}</td>
-                                                    <td>{{invoice.Date}}</td>
+                                                    <td class="hidden-lg hidden-sm hidden-xs">{{invoice.Date}}</td>
                                                     <td>{{invoice.AmountUSD}}</td>
-                                                    <!--<td>{{invoice.ATBApproval}}</td>
-                                                    <td>{{invoice.ATBSentOn}}</td>
-                                                    <td>{{invoice.InvoiceRaised}}</td>
-                                                    <td>{{invoice.InvoiceNumber}}</td>
-                                                    <td>{{invoice.InvoiceRaisedOn}}</td>
-                                                    <td>{{invoice.Comments}}</td>
-                                                    <td>{{invoice.PaymentReceived}}</td>-->
+                                                    <td class="hidden-lg hidden-sm hidden-xs">{{invoice.ATBApproval}}</td>
+                                                    <td class="hidden-lg hidden-sm hidden-xs">{{invoice.ATBSentOn}}</td>
+                                                    <td class="hidden-lg hidden-sm hidden-xs">{{invoice.InvoiceRaised}}</td>
+                                                    <td class="hidden-lg hidden-sm hidden-xs">{{invoice.InvoiceRaisedOn}}</td>
+                                                    <td class="hidden-lg hidden-sm hidden-xs">{{invoice.Comments}}</td>
+                                                    <td class="hidden-sm hidden-xs">{{invoice.PaymentReceived}}</td>
                                                 </tr>
                                             </table>
                                         </div>

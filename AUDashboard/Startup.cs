@@ -4,15 +4,15 @@ using System.Linq;
 using Microsoft.Owin;
 using Owin;
 
-[assembly: OwinStartup(typeof(AUDashboard.Startup))]
+//[assembly: OwinStartup(typeof(AUDashboard.Startup))]
 
 namespace AUDashboard
 {
     public partial class Startup
     {
-        public void Configuration(IAppBuilder app)
-        {
-            ConfigureAuth(app);
-        }
+        //public void Configuration(IAppBuilder app)
+        //{
+        //    ConfigureAuth(app);
+        //}
     }
 }
