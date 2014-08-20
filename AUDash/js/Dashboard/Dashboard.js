@@ -7,6 +7,7 @@ AUDashboardApp.controller('DashboardController', ['$scope', function ($scope) {
     $scope.PendingInvoices = 9;
     $scope.ActiveResources = 32;
     $scope.OpenActionItems = 5;
+    var ProjectEntity;
 
     var FakeNotifications = [
         { message: '7 tasks added', eventdate: '47 mins ago', type: 'fa fa-tasks fa-fw' },
@@ -20,12 +21,12 @@ AUDashboardApp.controller('DashboardController', ['$scope', function ($scope) {
     $scope.notifications = FakeNotifications;
     
 var ProjectDetails = [
-        { Client: 'AMP', ProjectName: 'AMP-Online', Stage: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Phase: 'Development' },
-        { Client: 'Telstra', ProjectName: 'Telstra.com', Stage: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Phase: 'Development' },
-        { Client: 'Caltex', ProjectName: 'Caltex', Stage: 'Active', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Phase: 'UAT' },
-        { Client: 'VicRoads', ProjectName: 'VicRoads', Stage: 'Active', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Phase: 'Design' },
-        { Client: 'CPA ITB', ProjectName: 'CPA ITB', Stage: 'Inactive', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Phase: 'Design' },
-        { Client: 'Sydney Trains', ProjectName: 'SydneyTrains', Stage: 'Lost', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Phase: 'Proposal' }
+        { Client: 'AMP', ProjectName: 'AMP-Online', IsActive: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Development' },
+        { Client: 'Telstra', ProjectName: 'Telstra.com', IsActive: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Development' },
+        { Client: 'Caltex', ProjectName: 'Caltex', IsActive: 'Active', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'UAT' },
+        { Client: 'VicRoads', ProjectName: 'VicRoads', IsActive: 'Active', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'Design' },
+        { Client: 'CPA ITB', ProjectName: 'CPA ITB', IsActive: 'Inactive', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'Design' },
+        { Client: 'Sydney Trains', ProjectName: 'SydneyTrains', IsActive: 'Lost', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Proposal' }
 ];
 
 $scope.ActiveProjectDetails = ProjectDetails;
@@ -90,5 +91,15 @@ var allResources = [
 
 $scope.AllResources = allResources;
 
+
+
+$scope.AddProject= function (ProjectEntity) {
+    var currentProjects = $scope.ActiveProjectDetails;
+    var newProjects = currentProjects.concat(ProjectEntity);
+    $scope.ActiveProjectDetails = newProjects;
+    $scope.IsHidden = 'false';
+    $scope.ProjectEntity = '';
+
+};
 
 }]);

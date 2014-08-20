@@ -29,6 +29,7 @@
     <!-- Custom Fonts -->
     <link href="font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -309,24 +310,112 @@
 
                                         </div>
                                         <div class="panel-body" ng-show="IsHidden">
-                                            <form role="form">
+                                            <form class="form-horizontal" name="addForm" role="form" ng-submit="AddProject(ProjectEntity)">
                                                 <div class="form-group">
-                                                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter Client Name">                                                    
+                                                    <label for="inputClientName" class="col-sm-2 control-label">Client</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="text" class="form-control" id="inputClientName" placeholder="Client Name" ng-model="ProjectEntity.Client">
+                                                    </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter Project Name">
+                                                    <label for="inputProjectName" class="col-sm-2 control-label">Project</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="text" class="form-control" id="inputProjectName" placeholder="Project Name" ng-model="ProjectEntity.ProjectName">
+                                                    </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="exampleInputFile">File input</label>
-                                                    <input type="file" id="exampleInputFile">
-                                                    <p class="help-block">Example block-level help text here.</p>
+                                                    <label for="selectProjectStage" class="col-sm-2 control-label">Stage</label>
+                                                    <div class="col-sm-4">
+                                                        <select class="form-control" id="selectProjectStage" ng-model="ProjectEntity.Stage">
+                                                            <option>Contacted</option>
+                                                            <option>Qualified</option>
+                                                            <option>Proposal</option>
+                                                            <option>Verbal Commit</option>
+                                                            <option>Sold</option>
+                                                            <option>Design</option>
+                                                            <option>Development</option>
+                                                            <option>UAT</option>
+                                                            <option>Completed</option>
+                                                            <option>Abandoned / Lost</option>
+                                                        </select>
+                                                    </div>
+                                               
+                                                    <label for="inputGDM" class="col-sm-2 control-label">GDM</label>
+                                                    <div class="col-sm-4">
+                                                        <input type="text" class="form-control" id="inputGDM" placeholder="India Contact" ng-model="ProjectEntity.GDM">
+                                                    </div>
                                                 </div>
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox"> Check me out
-                                                    </label>
+                                              
+                                                <div class="form-group">
+                                                    <label for="selectProjectProbability" class="col-sm-2 control-label">Probability</label>
+                                                    <div class="col-sm-4">
+                                                        <select class="form-control" id="selectProjectProbability" ng-model="ProjectEntity.Probability">
+                                                            <option>N/A</option>
+                                                            <option>Low</option>
+                                                            <option>Medium</option>
+                                                            <option>High</option>
+                                                            <option>Sold</option>
+                                                        </select>
+                                                    </div>
+                                            
+                                                    <label for="selectTechnology" class="col-sm-2 control-label">Technology</label>
+                                                    <div class="col-sm-4">
+                                                        <select class="form-control" id="selectTechnology" ng-model="ProjectEntity.Technology">
+                                                            <option>Java</option>
+                                                            <option>Sitecore</option>
+                                                            <option>UX</option>
+                                                            <option>FE</option>
+                                                            <option>CQ5</option>
+                                                            <option>Biztalk</option>
+                                                            <option>Mobile</option>
+                                                            <option>Web</option>
+                                                            <option>Other</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <button type="submit" class="btn btn-default" ng-click="IsHidden='false'">Submit</button>
+                                                <div class="form-group">
+                                                    <label for="inputStartDate" class="col-sm-2 control-label">StartDate</label>
+                                                    <div class="col-sm-4">
+                                                        <input type="date" class="form-control" id="inputStartDate" placeholder="Start Date" ng-model="ProjectEntity.StartDate">
+                                                    </div>
+
+                                                    <label for="inputEndDate" class="col-sm-2 control-label">EndDate</label>
+                                                    <div class="col-sm-4">
+                                                        <input type="date" class="form-control" id="inputEndDate" placeholder="End Date" ng-model="ProjectEntity.EndDate">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputResources" class="col-sm-2 control-label">Resources</label>
+                                                    <div class="col-sm-4">
+                                                        <input type="number" class="form-control" id="inputResources" placeholder="No. of Resources" ng-model="ProjectEntity.TotalResources">
+                                                    </div>
+
+                                                    <label for="selectWorkOrder" class="col-sm-2 control-label">WorkOrder</label>
+                                                    <div class="col-sm-4">
+                                                        <select class="form-control" id="selectWorkOrder" ng-model="ProjectEntity.WorkOrderStatus">
+                                                            <option>Not Received</option>
+                                                            <option>EDC Review</option>
+                                                            <option>Waiting AU Signature</option>
+                                                            <option>Signed WO Received</option>
+                                                            <option>WBS created</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="checkbox col-sm-offset-2 col-sm-2">
+                                                        <label>
+                                                            <input type="checkbox" value="">
+                                                            IsActive
+                                                        </label>
+                                                    </div>
+                                                </div>  
+
+                                                <div class="form-group">
+                                                    <div class="col-sm-offset-4 col-sm-10">
+                                                        <button type="submit" class="btn btn-success">Save</button> &nbsp;
+                                                        <button type="button" class="btn btn-default" ng-click="IsHidden='false'">Cancel</button>
+                                                    </div>
+                                                </div>
                                             </form>
                                         </div>
                                         <div class="panel-body" ng-hide="IsHidden">
@@ -334,13 +423,13 @@
                                                 <tr>
                                                     <th>Client</th>
                                                     <th>Project Name</th>
-                                                    <th>Project Phase</th>
+                                                    <th>Project Stage</th>
                                                     <th>Technology</th>
                                                 </tr>
                                                 <tr ng-repeat="project in ActiveProjectDetails">
                                                     <td>{{project.Client}}</td>
                                                     <td>{{project.ProjectName}}</td>
-                                                    <td>{{project.Phase}}</td>
+                                                    <td>{{project.Stage}}</td>
                                                     <td>{{project.Technology}}</td>
                                                 </tr>
                                             </table>
@@ -364,13 +453,13 @@
                                                 <tr>
                                                     <th>Client</th>
                                                     <th>Project Name</th>
-                                                    <th>Project Phase</th>
+                                                    <th>Project Stage</th>
                                                     <th>Technology</th>
                                                 </tr>
                                                 <tr ng-repeat="project in ActiveProjectDetails | filter:'active'">
                                                     <td>{{project.Client}}</td>
                                                     <td>{{project.ProjectName}}</td>
-                                                    <td>{{project.Phase}}</td>
+                                                    <td>{{project.Stage}}</td>
                                                     <td>{{project.Technology}}</td>
                                                 </tr>
                                             </table>
@@ -721,7 +810,6 @@
         </div>
         <!-- /.row -->
         <!-- /#page-wrapper -->
-
     </div>
     <!-- /#wrapper -->
     <!-- jQuery Version 1.11.0 -->
@@ -746,7 +834,6 @@
 
     <!--Main Dashboard Angular JS-->
     <script src="js/Dashboard/Dashboard.js"></script>
-
 
 </body>
 
