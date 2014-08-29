@@ -275,6 +275,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="js\jquery-1.10.2.min.map" />
     <Content Include="js\angular.min.js.map" />
+    <None Include="Properties\PublishProfiles\AUDashboard.pubxml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
