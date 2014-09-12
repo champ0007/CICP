@@ -1,0 +1,26 @@
+﻿<div class="col-lg-5">
+    <header id="header">
+        <h1>Action Items</h1>
+        <form id="todo-form" ng-submit="addTodo()">
+            <input id="new-todo" placeholder="What needs to be done?" ng-model="newTodo" autofocus>
+        </form>
+    </header>
+
+    <ul id="todo-list">
+        <li ng-repeat="todo in todos | filter:statusFilter track by $index" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+            <div class="view">
+                <input class="toggle" type="checkbox" ng-model="todo.completed">
+                <label ng-dblclick="editTodo(todo)">{{todo.title}}</label>
+                <button class="destroy" ng-click="removeTodo(todo)"></button>
+            </div>
+            <form ng-submit="doneEditing(todo)">
+                <input class="edit" ng-trim="false" ng-model="todo.title" todo-escape="revertEditing(todo)" ng-blur="doneEditing(todo)" todo-focus="todo == editedTodo">
+            </form>
+        </li>
+    </ul>
+
+
+
+    <link href="../css/plugins/ToDo/base.css" rel="stylesheet" />
+
+</div>

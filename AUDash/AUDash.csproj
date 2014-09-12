@@ -114,6 +114,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="scripts\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -167,7 +168,9 @@
     <Content Include="css\plugins\morris.css" />
     <Content Include="css\plugins\social-buttons.css" />
     <Content Include="css\plugins\timeline.css" />
+    <Content Include="css\plugins\ToDo\base.css" />
     <Content Include="css\sb-admin-2.css" />
+    <Content Include="Dashboard-2.html" />
     <Content Include="Dashboard.html" />
     <Content Include="favicon.ico" />
     <Content Include="font-awesome-4.1.0\css\font-awesome.css" />
@@ -252,12 +255,22 @@
     <Content Include="js\plugins\morris\morris.js" />
     <Content Include="js\plugins\morris\morris.min.js" />
     <Content Include="js\plugins\morris\raphael.min.js" />
+    <Content Include="js\plugins\ToDo\app.js" />
+    <Content Include="js\plugins\ToDo\base.js" />
+    <Content Include="js\plugins\ToDo\todoCtrl.js" />
+    <Content Include="js\plugins\ToDo\todoEscape.js" />
+    <Content Include="js\plugins\ToDo\todoFocus.js" />
+    <Content Include="js\plugins\ToDo\todoStorage.js" />
     <Content Include="js\respond.js" />
     <Content Include="js\respond.min.js" />
+    <Content Include="js\sb-admin-2.js" />
+    <Content Include="partials\ActionItems.html" />
+    <Content Include="partials\partialDashboard.html" />
     <Content Include="js\angular-mocks.js" />
+    <Content Include="js\angular-route.js" />
+    <Content Include="js\angular-route.min.js" />
     <Content Include="js\angular.js" />
     <Content Include="js\angular.min.js" />
-    <Content Include="js\sb-admin-2.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -274,8 +287,9 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="js\jquery-1.10.2.min.map" />
-    <Content Include="js\angular.min.js.map" />
     <None Include="Properties\PublishProfiles\AUDashboard.pubxml" />
+    <Content Include="js\angular.min.js.map" />
+    <Content Include="js\angular-route.min.js.map" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
