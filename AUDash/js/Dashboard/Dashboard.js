@@ -125,6 +125,7 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', 'todoSt
 
     var todos = $scope.todos = todoStorage.get();
     $scope.newTodo = '';
+    $scope.newAssignedTo = '';
     $scope.editedTodo = null;
 
     $scope.$watch('todos', function (newValue, oldValue) {
@@ -147,16 +148,19 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', 'todoSt
 
     $scope.addTodo = function () {
         var newTodo = $scope.newTodo.trim();
-        if (!newTodo.length) {
+        var newAssignedTo = $scope.newAssignedTo.trim();
+        if (!newTodo.length && !newTodo.length) {
             return;
         }
 
         todos.push({
             title: newTodo,
+            AssignedTo: newAssignedTo,
             completed: false
         });
 
         $scope.newTodo = '';
+        $scope.newAssignedTo = '';
     };
 
     $scope.editTodo = function (todo) {
@@ -168,6 +172,7 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', 'todoSt
     $scope.doneEditing = function (todo) {
         $scope.editedTodo = null;
         todo.title = todo.title.trim();
+        todo.AssignedTo = todo.AssignedTo.trim();
 
         if (!todo.title) {
             $scope.removeTodo(todo);
