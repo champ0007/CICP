@@ -12,15 +12,32 @@ AUDashboardApp.config(['$routeProvider',
                   templateUrl: 'partials/ActionItems.html',
                   controller: 'ActionItemsController'
               }).
+            when('/ActiveProjects', {
+                templateUrl: 'partials/ActiveProjects.html',
+                controller: 'ActiveProjectsController'
+            }).
+           when('/ActiveResources', {
+               templateUrl: 'partials/ActiveResources.html',
+               controller: 'ActiveResourcesController'
+           }).
               otherwise({
                   redirectTo: '/Dashboard'
               });
   }]);
 
-AUDashboardApp.controller('DashboardController', ['$scope', function ($scope) {
+AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($scope, $http) {
+
+    $http({ method: 'GET', url: 'api/Dashboard/getactiveprojects' }).
+        success(function (data, status, headers, config) {
+            $scope.ActiveProjects = data;
+        }).
+        error(function (data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            $scope.ActiveProjects = -1;
+        });
 
 
-    $scope.ActiveProjects = 12;
     $scope.PendingInvoices = 9;
     $scope.ActiveResources = 32;
     $scope.OpenActionItems = 5;
@@ -97,16 +114,6 @@ AUDashboardApp.controller('DashboardController', ['$scope', function ($scope) {
 
     $scope.AllInvoices = FakeInvoicesData;
 
-    var allResources = [
-        { FirstName: 'Tushar', LastName: 'Sharma', PrimarySkill: '.NET/Sitecore', Level: 'Manager', CurrentProject: 'Non-AU', ProposedProject: 'None', StartDate: ' - ', AvailableOn: '31-Mar-2015' },
-        { FirstName: 'Surekha', LastName: 'Bandaru', PrimarySkill: 'Testing', Level: 'Sr. Consultant', CurrentProject: 'Aus Super', ProposedProject: 'None', StartDate: ' 5-Mar-2014 ', AvailableOn: '31-Mar-2015' },
-        { FirstName: 'Shakil', LastName: 'Shaikh', PrimarySkill: 'Adobe CQ', Level: 'Manager', CurrentProject: 'Telstra.com', ProposedProject: 'None', StartDate: ' 5-Aug-2014 ', AvailableOn: '31-Mar-2015' },
-        { FirstName: 'Hardik', LastName: 'Desai', PrimarySkill: 'Java/CQ', Level: 'Sr. Consultant', CurrentProject: 'Telstra.com', ProposedProject: 'None', StartDate: ' - ', AvailableOn: '31-Mar-2015' },
-        { FirstName: 'Harsha', LastName: 'Tiwari', PrimarySkill: '.NET/Sitecore', Level: 'Consultant', CurrentProject: 'VicRoads', ProposedProject: 'None', StartDate: ' - ', AvailableOn: '31-Mar-2015' },
-        { FirstName: 'Ram', LastName: 'Harkala', PrimarySkill: '.NET/Sitecore', Level: 'Consultant', CurrentProject: 'Caltex', ProposedProject: 'None', StartDate: ' - ', AvailableOn: '31-Mar-2015' },
-    ];
-
-    $scope.AllResources = allResources;
 
 
 
@@ -216,3 +223,80 @@ AUDashboardApp.factory('todoStorage', function () {
         }
     };
 });
+
+AUDashboardApp.controller('ActiveProjectsController', ['$scope', function ($scope) {
+
+
+    $scope.ActiveProjects = 12;
+    $scope.PendingInvoices = 9;
+    $scope.ActiveResources = 32;
+    $scope.OpenActionItems = 5;
+    var ProjectEntity;
+    var ProjectDetails = [
+            { Client: 'AMP', ProjectName: 'AMP-Online', IsActive: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Development' },
+            { Client: 'Telstra', ProjectName: 'Telstra.com', IsActive: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Development' },
+            { Client: 'Caltex', ProjectName: 'Caltex', IsActive: 'Active', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'UAT' },
+            { Client: 'VicRoads', ProjectName: 'VicRoads', IsActive: 'Active', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'Design' },
+            { Client: 'CPA ITB', ProjectName: 'CPA ITB', IsActive: 'Inactive', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'Design' },
+            { Client: 'Sydney Trains', ProjectName: 'SydneyTrains', IsActive: 'Lost', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Proposal' }
+    ];
+
+    $scope.ActiveProjectDetails = ProjectDetails;
+
+
+    $scope.AddProject = function (ProjectEntity) {
+        var currentProjects = $scope.ActiveProjectDetails;
+        var newProjects = currentProjects.concat(ProjectEntity);
+        $scope.ActiveProjectDetails = newProjects;
+        $scope.IsHidden = 'false';
+        $scope.ProjectEntity = '';
+
+    };
+
+}]);
+
+AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', function ($scope, $http) {
+
+
+
+    //var allResources = [
+    //    { FirstName: 'Tushar', LastName: 'Sharma', PrimarySkill: '.NET/Sitecore', Level: 'Manager', CurrentProject: 'Non-AU', ProposedProject: 'None', StartDate: ' - ', AvailableOn: '31-Mar-2015' },
+    //    { FirstName: 'Surekha', LastName: 'Bandaru', PrimarySkill: 'Testing', Level: 'Sr. Consultant', CurrentProject: 'Aus Super', ProposedProject: 'None', StartDate: ' 5-Mar-2014 ', AvailableOn: '31-Mar-2015' },
+    //    { FirstName: 'Shakil', LastName: 'Shaikh', PrimarySkill: 'Adobe CQ', Level: 'Manager', CurrentProject: 'Telstra.com', ProposedProject: 'None', StartDate: ' 5-Aug-2014 ', AvailableOn: '31-Mar-2015' },
+    //    { FirstName: 'Hardik', LastName: 'Desai', PrimarySkill: 'Java/CQ', Level: 'Sr. Consultant', CurrentProject: 'Telstra.com', ProposedProject: 'None', StartDate: ' - ', AvailableOn: '31-Mar-2015' },
+    //    { FirstName: 'Harsha', LastName: 'Tiwari', PrimarySkill: '.NET/Sitecore', Level: 'Consultant', CurrentProject: 'VicRoads', ProposedProject: 'None', StartDate: ' - ', AvailableOn: '31-Mar-2015' },
+    //    { FirstName: 'Ram', LastName: 'Harkala', PrimarySkill: '.NET/Sitecore', Level: 'Consultant', CurrentProject: 'Caltex', ProposedProject: 'None', StartDate: ' - ', AvailableOn: '31-Mar-2015' },
+    //];
+
+    $http({ method: 'GET', url: 'api/Dashboard/GetResourceList' }).
+       success(function (data, status, headers, config) {
+           $scope.AllResources = JSON.parse(JSON.parse(data));
+       }).
+       error(function (data, status, headers, config) {
+           // called asynchronously if an error occurs
+           // or server returns response with an error status.
+           $scope.AllResources = -1;
+       });
+
+
+    $scope.addResource = function (resource) {
+        
+        $http({
+            url: 'api/Dashboard/AddResource',
+            method: "POST",
+            data: "'" + JSON.stringify(resource) + "'"
+        })
+        .then(function (response) {
+
+        },
+      function (response) { // optional
+      }
+            );
+
+        $scope.ResourceEntity = '';
+        dialog.close;
+    };
+
+    // $scope.AllResources = allResources;
+
+}]);

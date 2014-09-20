@@ -315,7 +315,7 @@
                     </div>
                     <!--<a href="#" >-->
                     <div class="panel-footer">
-                        <a class="pull-left" data-toggle="modal" data-target=".bs-ActiveProjects-modal-lg">Quick View</a>
+                        <a class="pull-left" href="#ActiveProjects">Quick View</a>
                         <span class="pull-right"><a data-toggle="modal" data-target=".bs-ManageProjects-modal-lg">Manage</a> &nbsp;<i class="fa fa-arrow-circle-right"></i></span>
                         <div class="clearfix"></div>
                         <!--Projects - Manage Projects Modal Popup-->
@@ -460,36 +460,7 @@
                             </div>
                         </div>
                         <!--End Manage Modal Popup-->
-                        <!--Modal Popup-->
-                        <div class="modal fade bs-ActiveProjects-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            Active Projects
-                                            <div class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></div>
-                                        </div>
-                                        <div class="panel-body">
-                                            <table class="table table-striped table-responsive">
-                                                <tr>
-                                                    <th>Client</th>
-                                                    <th>Project Name</th>
-                                                    <th>Project Stage</th>
-                                                    <th>Technology</th>
-                                                </tr>
-                                                <tr ng-repeat="project in ActiveProjectDetails | filter:'active'">
-                                                    <td>{{project.Client}}</td>
-                                                    <td>{{project.ProjectName}}</td>
-                                                    <td>{{project.Stage}}</td>
-                                                    <td>{{project.Technology}}</td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--End Modal Popup-->
+                       
 
                     </div>
                     <!--</a>-->
@@ -638,45 +609,14 @@
                     </div>
                     <!--<a href="#">-->
                     <div class="panel-footer">
-                        <a class="pull-left" data-toggle="modal" data-target=".bs-ActiveResources-modal-lg">View Details</a>
+                        <a class="pull-left" href="#ActiveResources">View Details</a>
                         <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                         <div class="clearfix"></div>
 
                         <div class="modal fade bs-ActiveResources-modal-lg" tabindex="-1" role="dialog">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            Current Resources &nbsp;&nbsp;&nbsp;&nbsp;
-                                            <i class="fa fa-search"></i> <input ng-model="searchResource" class="textSearch" /> <div class="close" data-dismiss="modal">
-                                                <span aria-hidden="true">&times;</span>
-                                            </div>
-                                        </div>
-                                        <div class="panel-body">
-                                            <table class="table table-striped table-responsive">
-                                                <tr>
-                                                    <th>First Name</th>
-                                                    <th>Last Name</th>
-                                                    <th>Primary Skill</th>
-                                                    <th>Level</th>
-                                                    <th>Current Project</th>
-                                                    <th>Proposed Project</th>
-                                                    <th>Start Date</th>
-                                                    <th>Available On</th>
-                                                </tr>
-                                                <tr ng-repeat="resource in AllResources | filter: searchResource">
-                                                    <td>{{resource.FirstName}}</td>
-                                                    <td>{{resource.LastName}}</td>
-                                                    <td>{{resource.PrimarySkill}}</td>
-                                                    <td>{{resource.Level}}</td>
-                                                    <td>{{resource.CurrentProject}}</td>
-                                                    <td>{{resource.ProposedProject}}</td>
-                                                    <td>{{resource.StartDate}}</td>
-                                                    <td>{{resource.AvailableOn}}</td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
+                                   
 
                                 </div>
                             </div>
