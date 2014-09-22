@@ -256,37 +256,31 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', function ($scop
 }]);
 
 AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', function ($scope, $http) {
+   
+    $scope.GetResource = function () {
+        $http({ method: 'GET', url: 'api/Dashboard/GetResourceList' }).
+      success(function (data, status, headers, config) {
+          $scope.AllResources = JSON.parse(JSON.parse(data));
+      }).
+      error(function (data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+          $scope.AllResources = -1;
+      });
+    };
 
-
-
-    //var allResources = [
-    //    { FirstName: 'Tushar', LastName: 'Sharma', PrimarySkill: '.NET/Sitecore', Level: 'Manager', CurrentProject: 'Non-AU', ProposedProject: 'None', StartDate: ' - ', AvailableOn: '31-Mar-2015' },
-    //    { FirstName: 'Surekha', LastName: 'Bandaru', PrimarySkill: 'Testing', Level: 'Sr. Consultant', CurrentProject: 'Aus Super', ProposedProject: 'None', StartDate: ' 5-Mar-2014 ', AvailableOn: '31-Mar-2015' },
-    //    { FirstName: 'Shakil', LastName: 'Shaikh', PrimarySkill: 'Adobe CQ', Level: 'Manager', CurrentProject: 'Telstra.com', ProposedProject: 'None', StartDate: ' 5-Aug-2014 ', AvailableOn: '31-Mar-2015' },
-    //    { FirstName: 'Hardik', LastName: 'Desai', PrimarySkill: 'Java/CQ', Level: 'Sr. Consultant', CurrentProject: 'Telstra.com', ProposedProject: 'None', StartDate: ' - ', AvailableOn: '31-Mar-2015' },
-    //    { FirstName: 'Harsha', LastName: 'Tiwari', PrimarySkill: '.NET/Sitecore', Level: 'Consultant', CurrentProject: 'VicRoads', ProposedProject: 'None', StartDate: ' - ', AvailableOn: '31-Mar-2015' },
-    //    { FirstName: 'Ram', LastName: 'Harkala', PrimarySkill: '.NET/Sitecore', Level: 'Consultant', CurrentProject: 'Caltex', ProposedProject: 'None', StartDate: ' - ', AvailableOn: '31-Mar-2015' },
-    //];
-
-    $http({ method: 'GET', url: 'api/Dashboard/GetResourceList' }).
-       success(function (data, status, headers, config) {
-           $scope.AllResources = JSON.parse(JSON.parse(data));
-       }).
-       error(function (data, status, headers, config) {
-           // called asynchronously if an error occurs
-           // or server returns response with an error status.
-           $scope.AllResources = -1;
-       });
-
+    $scope.GetResource();
 
     $scope.addResource = function (resource) {
-        
+
         $http({
             url: 'api/Dashboard/AddResource',
             method: "POST",
             data: "'" + JSON.stringify(resource) + "'"
         })
         .then(function (response) {
+
+            $scope.GetResource();
 
         },
       function (response) { // optional
@@ -297,6 +291,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', funct
         dialog.close;
     };
 
+    
     // $scope.AllResources = allResources;
 
 }]);
