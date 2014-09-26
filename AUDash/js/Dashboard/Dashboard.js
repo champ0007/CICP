@@ -266,6 +266,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', funct
           // called asynchronously if an error occurs
           // or server returns response with an error status.
           $scope.AllResources = -1;
+
       });
     };
 
