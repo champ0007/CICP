@@ -49,5 +49,13 @@ namespace AUDash.Repository
         }
 
 
+
+        internal void EditResource(string resource, int resourceId)
+        {
+            SqlCommand cmd = new SqlCommand("update resources set resourcedata = '" + resource + "' where resourceId = " + resourceId , GetConnection());
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+            cmd.Connection.Close();
+        }
     }
 }

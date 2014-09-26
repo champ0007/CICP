@@ -58,7 +58,8 @@ namespace AUDash.Controllers
 
             foreach (Resource resource in resourceList)
             {
-                concatString += resource.ResourceData + ",";
+                //concatString += resource.ResourceData + ",";
+                concatString += resource.ResourceData.Replace("{", "{\"ResourceId\":\" " + resource.ResourceId + "\",") + ",";
             }
             concatString = concatString.Substring(0, concatString.Length - 1);
             concatString += "]";
@@ -74,6 +75,18 @@ namespace AUDash.Controllers
        
             repo.AddResource(resource);
         }
+
+        //POST api/Dashboard/EditResource
+        [HttpPost]
+        public void EditResource([FromBody]string resource)
+        {
+            miniResource resourceData = new miniResource();
+            resourceData = JsonConvert.DeserializeObject<miniResource>(resource.Substring(0, resource.IndexOf("\"FirstName")).Replace(",", "}"));
+            string editedResourceData = "{" + resource.Substring(resource.IndexOf("\"FirstName"));
+
+            repo.EditResource(resource, resourceData.ResourceId);
+        }
+
         [HttpPost]
         public void AsyncMonerisResponse()
         {

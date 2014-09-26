@@ -256,7 +256,7 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', function ($scop
 }]);
 
 AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', function ($scope, $http) {
-   
+
     $scope.GetResource = function () {
         $http({ method: 'GET', url: 'api/Dashboard/GetResourceList' }).
       success(function (data, status, headers, config) {
@@ -269,29 +269,60 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', funct
       });
     };
 
+    $scope.EditMode = "false";
+
+    $scope.EditResource = function (resource) {
+        $scope.EditMode = "true";
+        $scope.ResourceEntity = resource;
+
+    }
+
     $scope.GetResource();
 
     $scope.addResource = function (resource) {
+        debugger;
 
-        $http({
-            url: 'api/Dashboard/AddResource',
-            method: "POST",
-            data: "'" + JSON.stringify(resource) + "'"
-        })
-        .then(function (response) {
+        if ($scope.EditMode == "true") {
+                $http({
+                    url: 'api/Dashboard/EditResource',
+                    method: "POST",
+                    data: "'" + JSON.stringify(resource) + "'"
+                })
+                .then(function (response) {
 
-            $scope.GetResource();
+                    $scope.GetResource();
+                    $scope.ResourceEntity = '';
+                    dialog.close;
 
-        },
-      function (response) { // optional
-      }
-            );
+                },
+                function (response) { // optional
+                }
+              );
 
-        $scope.ResourceEntity = '';
-        dialog.close;
+        }
+        else {
+            $http({
+                url: 'api/Dashboard/AddResource',
+                method: "POST",
+                data: "'" + JSON.stringify(resource) + "'"
+            })
+            .then(function (response) {
+
+                $scope.GetResource();
+                $scope.ResourceEntity = '';
+                dialog.close;
+
+            },
+            function (response) { // optional
+            }
+          );
+        }
+
+
+      
     };
 
-    
+
     // $scope.AllResources = allResources;
 
 }]);

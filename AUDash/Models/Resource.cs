@@ -13,4 +13,10 @@ namespace AUDash.Models
 
        
     }
+
+    public class miniResource
+    {
+        public int ResourceId { get; set; }
+
+    }
 }
