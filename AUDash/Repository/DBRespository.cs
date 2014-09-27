@@ -52,10 +52,38 @@ namespace AUDash.Repository
 
         internal void EditResource(string resource, int resourceId)
         {
-            SqlCommand cmd = new SqlCommand("update resources set resourcedata = '" + resource + "' where resourceId = " + resourceId , GetConnection());
+            SqlCommand cmd = new SqlCommand("update resources set resourcedata = '" + resource + "' where resourceId = " + resourceId, GetConnection());
             cmd.Connection.Open();
             cmd.ExecuteNonQuery();
             cmd.Connection.Close();
+        }
+
+        internal string GetReferenceData(string storageId)
+        {
+            string storageData = string.Empty;
+            SqlCommand cmd = new SqlCommand("select StorageData from ReferenceData where StorageId = '" + storageId + "'", GetConnection());
+            cmd.Connection.Open();
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            while (rdr.Read())
+            {
+                storageData = rdr.GetString(0);
+            }
+
+            cmd.Connection.Close();
+
+            return storageData;
+        }
+
+
+        internal void SetReferenceData(string storageId, string storageData)
+        {
+            SqlCommand cmd = new SqlCommand("update ReferenceData set StorageData = '" + storageData + "' where StorageId = '" + storageId + "'", GetConnection());
+            cmd.Connection.Open();
+            cmd.ExecuteNonQuery();
+            cmd.Connection.Close();
+
+
         }
     }
 }

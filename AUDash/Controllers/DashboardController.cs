@@ -39,6 +39,21 @@ namespace AUDash.Controllers
             return 40;
         }
 
+        //GET api/Dashboard/GetReferenceData
+        public string GetReferenceData(string storageId)
+        {
+            string response = repo.GetReferenceData(storageId);
+            return response == string.Empty ? null : response;
+        }
+
+        //POST api/Dashboard/SetReferenceData
+        [HttpPost]
+        public void SetReferenceData([FromBody] string referenceData)
+        {
+            ReferenceData refData = JsonConvert.DeserializeObject<ReferenceData>(referenceData);
+            repo.SetReferenceData(refData.storageId, refData.storageData);
+        }
+
         //GET api/Dashboard/GetResourceList
         public string GetResourceList()
         {

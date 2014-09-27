@@ -142,6 +142,29 @@ input[type="checkbox"] {
 	box-shadow: none;
 }
 
+#Listed-todo {
+	position: relative;
+	margin: 0;
+	width: 45%;
+	font-size: 14px;
+	font-family: inherit;
+	line-height: 1.4em;
+	border: 0;
+	outline: none;
+	color: inherit;
+	padding: 6px;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-font-smoothing: antialiased;
+	-moz-font-smoothing: antialiased;
+	-ms-font-smoothing: antialiased;
+	-o-font-smoothing: antialiased;
+	font-smoothing: antialiased;
+}
+
+
 #main {
 	position: relative;
 	z-index: 2;
@@ -195,6 +218,13 @@ label[for='toggle-all'] {
 }
 
 #todo-list li.editing .edit {
+	display: inline-block;
+	width: 45%;
+	padding: 13px 17px 12px 17px;
+	margin: 0 0 0 43px;
+}
+
+#todo-list li.editing Listed-AssignedTo .edit {
 	display: inline-block;
 	width: 30%;
 	padding: 13px 17px 12px 17px;

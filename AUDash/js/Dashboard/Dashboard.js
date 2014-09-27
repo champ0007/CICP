@@ -1,4 +1,7 @@
 ﻿/// <reference path="../angular.min.js" />
+/// <reference path="../jquery-1.10.2.intellisense.js" />
+var todos;
+
 var AUDashboardApp = angular.module("AUDashboardApp", ["ngRoute"]);
 
 AUDashboardApp.config(['$routeProvider',
@@ -128,38 +131,77 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
 
 }]);
 
-AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', 'todoStorage', function ($scope, $filter, todoStorage) {
+AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
 
-    var todos = $scope.todos = todoStorage.get();
+    var todos = $scope.todos = [];
+
     $scope.newTodo = '';
     $scope.newAssignedTo = '';
     $scope.editedTodo = null;
+    var STORAGE_ID = 'ToDoItems';
 
     $scope.$watch('todos', function (newValue, oldValue) {
-        $scope.remainingCount = $filter('filter')(todos, { completed: false }).length;
-        $scope.completedCount = todos.length - $scope.remainingCount;
-        $scope.allChecked = !$scope.remainingCount;
+        //$scope.remainingCount = $filter('filter')(todos, { completed: false }).length;
+        //$scope.completedCount = todos.length - $scope.remainingCount;
+        //$scope.allChecked = !$scope.remainingCount;
         if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
-            todoStorage.put(todos);
+            $scope.setTodos(todos);
         }
     }, true);
 
-    // Monitor the current route for changes and adjust the filter accordingly.
-    $scope.$on('$routeChangeSuccess', function () {
-        var status = $scope.status = $routeParams.status || '';
+    //// Monitor the current route for changes and adjust the filter accordingly.
+    //$scope.$on('$routeChangeSuccess', function () {
+    //    var status = $scope.status = $routeParams.status || '';
 
-        $scope.statusFilter = (status === 'active') ?
-				{ completed: false } : (status === 'completed') ?
-				{ completed: true } : null;
-    });
+    //    $scope.statusFilter = (status === 'active') ?
+    //			{ completed: false } : (status === 'completed') ?
+    //			{ completed: true } : null;
+    //});
+
+    $scope.getTodos = function () {
+        debugger;
+        $http({ method: 'GET', url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID }).
+               success(function (data, status, headers, config) {
+
+                   if (data != 'null') {
+                       todos = $scope.todos = JSON.parse(JSON.parse(data));
+                   }
+               }).
+               error(function (data, status, headers, config) {
+                   // called asynchronously if an error occurs
+                   // or server returns response with an error status.
+                  
+               });
+
+    };
+
+    $scope.getTodos();
+
+    $scope.setTodos = function (todos) {
+        //localStorage.setItem(STORAGE_ID, JSON.stringify(todos));
+        debugger;
+        var referenceData = new Object();
+        referenceData.storageId = STORAGE_ID;
+        referenceData.storageData = JSON.stringify(todos);
+        $http({
+            url: 'api/Dashboard/SetReferenceData',
+            method: "POST",
+            data: JSON.stringify(JSON.stringify(referenceData))
+        })
+       .then(function (response) {
+       },
+       function (response) { // optional
+       }
+     );
+    };
 
     $scope.addTodo = function () {
+        debugger;
         var newTodo = $scope.newTodo.trim();
         var newAssignedTo = $scope.newAssignedTo.trim();
         if (!newTodo.length && !newTodo.length) {
             return;
         }
-
         todos.push({
             title: newTodo,
             AssignedTo: newAssignedTo,
@@ -208,21 +250,6 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', 'todoSt
     };
 }]);
 
-AUDashboardApp.factory('todoStorage', function () {
-    'use strict';
-
-    var STORAGE_ID = 'todos-angularjs';
-
-    return {
-        get: function () {
-            return JSON.parse(localStorage.getItem(STORAGE_ID) || '[]');
-        },
-
-        put: function (todos) {
-            localStorage.setItem(STORAGE_ID, JSON.stringify(todos));
-        }
-    };
-});
 
 AUDashboardApp.controller('ActiveProjectsController', ['$scope', function ($scope) {
 
@@ -273,8 +300,10 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', funct
     $scope.EditMode = "false";
 
     $scope.EditResource = function (resource) {
+        debugger;
         $scope.EditMode = "true";
-        $scope.ResourceEntity = resource;
+        // Shallow Copy - $scope.ResourceEntity = resource;
+        $scope.ResourceEntity = jQuery.extend(true, {}, resource); // deep copy
 
     }
 
@@ -284,21 +313,21 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', funct
         debugger;
 
         if ($scope.EditMode == "true") {
-                $http({
-                    url: 'api/Dashboard/EditResource',
-                    method: "POST",
-                    data: "'" + JSON.stringify(resource) + "'"
-                })
-                .then(function (response) {
+            $http({
+                url: 'api/Dashboard/EditResource',
+                method: "POST",
+                data: "'" + JSON.stringify(resource) + "'"
+            })
+            .then(function (response) {
 
-                    $scope.GetResource();
-                    $scope.ResourceEntity = '';
-                    dialog.close;
+                $scope.GetResource();
+                $scope.ResourceEntity = '';
+                dialog.close;
 
-                },
-                function (response) { // optional
-                }
-              );
+            },
+            function (response) { // optional
+            }
+          );
 
         }
         else {
@@ -320,7 +349,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', funct
         }
 
 
-      
+
     };
 
 
