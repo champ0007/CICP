@@ -12,19 +12,19 @@
             <tr>
                 <th>Edit</th>
                 <th>Name</th>
-                <th>Primary Skill</th>
-                <th>Level</th>
+                <th class="hidden-sm hidden-xs">Primary Skill</th>
+                <th class="hidden-sm hidden-xs">Level</th>
                 <th>Current Project</th>
-                <th>Proposed Project</th>
+                <th class="hidden-sm hidden-xs">Proposed Project</th>
                 <th>Available On</th>
             </tr>
             <tr ng-repeat="resource in AllResources | filter: searchResource">
                 <td><i class="fa fa-edit" ng-click="EditResource(resource)" data-toggle="modal" data-target=".bs-AddResource-modal-lg"> </i></td>
                 <td>{{resource.FirstName}} {{resource.LastName}}</td>
-                <td>{{resource.Skills}}</td>
-                <td>{{resource.Level}}</td>
+                <td class="hidden-sm hidden-xs">{{resource.Skills}}</td>
+                <td class="hidden-sm hidden-xs">{{resource.Level}}</td>
                 <td>{{resource.CurrentProject}}</td>
-                <td>{{resource.NextProject}}</td>
+                <td class="hidden-sm hidden-xs">{{resource.NextProject}}</td>
                 <td>{{resource.EndDate}}</td>
             </tr>
         </table>
