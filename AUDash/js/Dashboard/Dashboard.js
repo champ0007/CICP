@@ -57,27 +57,6 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
 
     $scope.notifications = FakeNotifications;
 
-    var ProjectDetails = [
-            { Client: 'AMP', ProjectName: 'AMP-Online', IsActive: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Development' },
-            { Client: 'Telstra', ProjectName: 'Telstra.com', IsActive: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Development' },
-            { Client: 'Caltex', ProjectName: 'Caltex', IsActive: 'Active', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'UAT' },
-            { Client: 'VicRoads', ProjectName: 'VicRoads', IsActive: 'Active', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'Design' },
-            { Client: 'CPA ITB', ProjectName: 'CPA ITB', IsActive: 'Inactive', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'Design' },
-            { Client: 'Sydney Trains', ProjectName: 'SydneyTrains', IsActive: 'Lost', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Proposal' }
-    ];
-
-    $scope.ActiveProjectDetails = ProjectDetails;
-
-    var ActionItems = [
-            { ShortDesc: 'TafeNSW', Owner: 'Adam', DueDate: '20-Aug', Status: 'Closed' },
-            { ShortDesc: 'Testing CoE', Owner: 'Shakeel', DueDate: '20-Aug', Status: 'Open' },
-            { ShortDesc: 'Upcoming Holidays', Owner: 'Tushar', DueDate: '20-Aug', Status: 'Open' },
-            { ShortDesc: 'India Trip', Owner: 'Adam', DueDate: '20-Aug', Status: 'Open' },
-            { ShortDesc: 'India Trip', Owner: 'Adam', DueDate: '20-Aug', Status: 'Open' },
-            { ShortDesc: 'India Trip', Owner: 'Adam', DueDate: '20-Aug', Status: 'Open' }
-    ];
-
-    $scope.AllActionItems = ActionItems;
 
     var InvoicesData = [
         { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2012', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
@@ -120,14 +99,7 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
 
 
 
-    $scope.AddProject = function (ProjectEntity) {
-        var currentProjects = $scope.ActiveProjectDetails;
-        var newProjects = currentProjects.concat(ProjectEntity);
-        $scope.ActiveProjectDetails = newProjects;
-        $scope.IsHidden = 'false';
-        $scope.ProjectEntity = '';
-
-    };
+ 
 
 }]);
 
@@ -251,33 +223,66 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', '$http'
 }]);
 
 
-AUDashboardApp.controller('ActiveProjectsController', ['$scope', function ($scope) {
+AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
+    var STORAGE_ID = 'Projects';
+    //var ProjectDetails = [
+    //        { Client: 'AMP', ProjectName: 'AMP-Online', IsActive: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Development' },
+    //        { Client: 'Telstra', ProjectName: 'Telstra.com', IsActive: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Development' },
+    //        { Client: 'Caltex', ProjectName: 'Caltex', IsActive: 'Active', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'UAT' },
+    //        { Client: 'VicRoads', ProjectName: 'VicRoads', IsActive: 'Active', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'Design' },
+    //        { Client: 'CPA ITB', ProjectName: 'CPA ITB', IsActive: 'Inactive', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'Design' },
+    //        { Client: 'Sydney Trains', ProjectName: 'SydneyTrains', IsActive: 'Lost', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Proposal' }
+    //];
+    var ProjectDetails = $scope.ActiveProjectDetails = [];
 
+    $scope.getProjects = function () {
+        debugger;
+        $http({ method: 'GET', url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID }).
+               success(function (data, status, headers, config) {
 
-    $scope.ActiveProjects = 12;
-    $scope.PendingInvoices = 9;
-    $scope.ActiveResources = 32;
-    $scope.OpenActionItems = 5;
-    var ProjectEntity;
-    var ProjectDetails = [
-            { Client: 'AMP', ProjectName: 'AMP-Online', IsActive: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Development' },
-            { Client: 'Telstra', ProjectName: 'Telstra.com', IsActive: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Development' },
-            { Client: 'Caltex', ProjectName: 'Caltex', IsActive: 'Active', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'UAT' },
-            { Client: 'VicRoads', ProjectName: 'VicRoads', IsActive: 'Active', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'Design' },
-            { Client: 'CPA ITB', ProjectName: 'CPA ITB', IsActive: 'Inactive', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'Design' },
-            { Client: 'Sydney Trains', ProjectName: 'SydneyTrains', IsActive: 'Lost', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Proposal' }
-    ];
+                   if (data != 'null') {
+                       ProjectDetails = $scope.ActiveProjectDetails = JSON.parse(JSON.parse(data));
+                   }
+               }).
+               error(function (data, status, headers, config) {
+                   // called asynchronously if an error occurs
+                   // or server returns response with an error status.
 
-    $scope.ActiveProjectDetails = ProjectDetails;
+               });
 
+    };
+
+    $scope.getProjects();
+
+    $scope.setProjects = function (ProjectDetails) {
+        var referenceData = new Object();
+        referenceData.storageId = STORAGE_ID;
+        referenceData.storageData = JSON.stringify(ProjectDetails);
+        $http({
+            url: 'api/Dashboard/SetReferenceData',
+            method: "POST",
+            data: JSON.stringify(JSON.stringify(referenceData))
+        })
+       .then(function (response) {
+           $scope.getProjects();
+       },
+       function (response) { // optional
+       }
+     );
+    };
+   
+    $scope.$watch('ActiveProjectDetails', function (newValue, oldValue) {
+        if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
+            $scope.setProjects(ProjectDetails);
+        }
+    }, true);
+
+   
 
     $scope.AddProject = function (ProjectEntity) {
-        var currentProjects = $scope.ActiveProjectDetails;
-        var newProjects = currentProjects.concat(ProjectEntity);
-        $scope.ActiveProjectDetails = newProjects;
-        $scope.IsHidden = 'false';
+        ProjectDetails.push(ProjectEntity);
+        $scope.ActiveProjectDetails = ProjectDetails;
         $scope.ProjectEntity = '';
-
     };
 
 }]);

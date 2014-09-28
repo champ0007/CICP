@@ -20,7 +20,7 @@ namespace AUDash.Repository
 
         public void AddResource(string resource)
         {
-            SqlCommand cmd = new SqlCommand("Insert into resources(resourcedata) values('" + resource + "')", GetConnection());
+            SqlCommand cmd = new SqlCommand("Insert into resource(resourcedata) values('" + resource + "')", GetConnection());
             cmd.Connection.Open();
             cmd.ExecuteNonQuery();
             cmd.Connection.Close();
@@ -29,7 +29,7 @@ namespace AUDash.Repository
         public List<Resource> GetAllResources()
         {
             List<Resource> resources = new List<Resource>();
-            SqlCommand cmd = new SqlCommand("select resourceid, resourcedata from resources", GetConnection());
+            SqlCommand cmd = new SqlCommand("select resourceid, resourcedata from resource", GetConnection());
             cmd.Connection.Open();
             SqlDataReader rdr = cmd.ExecuteReader();
 
@@ -52,7 +52,7 @@ namespace AUDash.Repository
 
         internal void EditResource(string resource, int resourceId)
         {
-            SqlCommand cmd = new SqlCommand("update resources set resourcedata = '" + resource + "' where resourceId = " + resourceId, GetConnection());
+            SqlCommand cmd = new SqlCommand("update resource set resourcedata = '" + resource + "' where resourceId = " + resourceId, GetConnection());
             cmd.Connection.Open();
             cmd.ExecuteNonQuery();
             cmd.Connection.Close();
