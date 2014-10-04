@@ -102,10 +102,31 @@ namespace AUDash.Controllers
             repo.EditResource(resource, resourceData.ResourceId);
         }
 
-        [HttpPost]
-        public void AsyncMonerisResponse()
+        //GET api/Dashboard/GetKeyUpdates
+        public string GetKeyUpdates()
         {
+            List<KeyUpdates> kUpdates = new List<KeyUpdates>();
+            kUpdates.Add(new KeyUpdates()
+            {
+                Heading = "Telstra Client India Visit",
+                Highlights = new List<string>() {
+                    "Brendan Devers, Jen Cochrane and Adam Sandler along with Telstra client will be visiting Hyderabad and Mumbai office between 1st Sept and 5th Sept"
+                 }
+            });
+
+            kUpdates.Add(new KeyUpdates()
+            {
+                Heading = " Decisions on AU/DD Testing CoE continue",
+                Highlights = new List<string>() {
+                    "Process identified",
+                    "Identification of right resources for CoE in progress"
+                 }
+            });
+
+
+            return JsonConvert.SerializeObject(kUpdates);
 
         }
+
     }
 }

@@ -96,10 +96,74 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
 
     $scope.AllInvoices = FakeInvoicesData;
 
+    //Start Key Updates
+    var keyUpdates = $scope.keyUpdates = [];
+
+    $scope.getKeyUpdates = function () {
+        debugger;
+        $http({ method: 'GET', url: 'api/Dashboard/GetReferenceData?storageId=KeyUpdates' }).
+               success(function (data, status, headers, config) {
+
+                   if (data != 'null') {
+                       keyUpdates = $scope.keyUpdates = JSON.parse(JSON.parse(data));
+                   }
+               }).
+               error(function (data, status, headers, config) {
+                   // called asynchronously if an error occurs
+                   // or server returns response with an error status.
+
+               });
+
+    };
+
+    $scope.EditKeyUpdates = function (keyUpdate, index) {
+        keyUpdate.index = index;
+        $scope.keyUpdate = jQuery.extend(true, {}, keyUpdate); // deep copy
+        $scope.OriginalKeyUpdate = jQuery.extend(true, {}, keyUpdate); // deep copy
+       
+    }
+
+    $scope.getKeyUpdates();
+
+    $scope.setKeyUpdates = function (keyUpdates) {
+        var referenceData = new Object();
+        referenceData.storageId = 'KeyUpdates';
+        referenceData.storageData = JSON.stringify(keyUpdates);
+        $http({
+            url: 'api/Dashboard/SetReferenceData',
+            method: "POST",
+            data: JSON.stringify(JSON.stringify(referenceData))
+        })
+       .then(function (response) {
+           $scope.getKeyUpdates();
+       },
+       function (response) { // optional
+       }
+     );
+    };
+
+    $scope.$watch('keyUpdates', function (newValue, oldValue) {
+        if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
+            $scope.setKeyUpdates(keyUpdates);
+        }
+    }, true);
+
+    $scope.AddKeyUpdate = function (keyUpdate) {
+        if (keyUpdate.index >= 0) {
+            keyUpdates[keyUpdate.index] = keyUpdate;
+        }
+        else {
+            keyUpdates.push(keyUpdate);
+        }
+
+        $scope.keyUpdates = keyUpdates;
+        $scope.keyUpdate = '';
+    };
+    //End Key updates
 
 
 
- 
+
 
 }]);
 
@@ -142,7 +206,7 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', '$http'
                error(function (data, status, headers, config) {
                    // called asynchronously if an error occurs
                    // or server returns response with an error status.
-                  
+
                });
 
     };
@@ -222,17 +286,10 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', '$http'
     };
 }]);
 
-
 AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
     var STORAGE_ID = 'Projects';
-    //var ProjectDetails = [
-    //        { Client: 'AMP', ProjectName: 'AMP-Online', IsActive: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Development' },
-    //        { Client: 'Telstra', ProjectName: 'Telstra.com', IsActive: 'Active', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Development' },
-    //        { Client: 'Caltex', ProjectName: 'Caltex', IsActive: 'Active', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'UAT' },
-    //        { Client: 'VicRoads', ProjectName: 'VicRoads', IsActive: 'Active', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'Design' },
-    //        { Client: 'CPA ITB', ProjectName: 'CPA ITB', IsActive: 'Inactive', Probability: 'Medium', Technology: 'Sitecore', Startdate: '4-Jul-2014', Stage: 'Design' },
-    //        { Client: 'Sydney Trains', ProjectName: 'SydneyTrains', IsActive: 'Lost', Probability: 'Medium', Technology: 'CQ', Startdate: '4-Jul-2014', Stage: 'Proposal' }
-    //];
+    $scope.EditMode = "false";
+
     var ProjectDetails = $scope.ActiveProjectDetails = [];
 
     $scope.getProjects = function () {
@@ -252,6 +309,12 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
 
     };
 
+    $scope.EditProject = function (project, index) {
+        project.index = index;
+        $scope.ProjectEntity = jQuery.extend(true, {}, project); // deep copy
+        $scope.OriginalProject = jQuery.extend(true, {}, project); // deep copy
+    }
+
     $scope.getProjects();
 
     $scope.setProjects = function (ProjectDetails) {
@@ -270,21 +333,25 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
        }
      );
     };
-   
+
     $scope.$watch('ActiveProjectDetails', function (newValue, oldValue) {
         if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
             $scope.setProjects(ProjectDetails);
         }
     }, true);
 
-   
-
     $scope.AddProject = function (ProjectEntity) {
-        ProjectDetails.push(ProjectEntity);
+        debugger;
+        if (ProjectEntity.index >= 0) {
+            ProjectDetails[ProjectEntity.index] = ProjectEntity;
+        }
+        else {
+            ProjectDetails.push(ProjectEntity);
+        }
+
         $scope.ActiveProjectDetails = ProjectDetails;
         $scope.ProjectEntity = '';
     };
-
 }]);
 
 AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', function ($scope, $http) {
@@ -307,7 +374,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', funct
     $scope.EditResource = function (resource) {
         debugger;
         $scope.EditMode = "true";
-        // Shallow Copy - $scope.ResourceEntity = resource;
+        //Shallow Copy - $scope.ResourceEntity = resource;
         $scope.ResourceEntity = jQuery.extend(true, {}, resource); // deep copy
 
     }
@@ -327,6 +394,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', funct
 
                 $scope.GetResource();
                 $scope.ResourceEntity = '';
+                $scope.EditMode == "false";
                 dialog.close;
 
             },

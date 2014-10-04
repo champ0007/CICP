@@ -154,6 +154,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\KeyUpdates.cs" />
+    <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\ReferenceData.cs" />
     <Compile Include="Models\Resource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
