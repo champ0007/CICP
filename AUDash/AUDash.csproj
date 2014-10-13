@@ -179,6 +179,7 @@
     <Content Include="css\plugins\morris.css" />
     <Content Include="css\plugins\social-buttons.css" />
     <Content Include="css\plugins\timeline.css" />
+    <Content Include="css\plugins\ToDo\NewToDoItem.css" />
     <Content Include="css\plugins\ToDo\base.css" />
     <Content Include="css\sb-admin-2.css" />
     <Content Include="Dashboard-2.html" />
@@ -242,6 +243,8 @@
     <Content Include="font-awesome-4.1.0\scss\_variables.scss" />
     <Content Include="font-awesome-4.1.0\scss\font-awesome.scss" />
     <None Include="js\jquery-1.10.2.intellisense.js" />
+    <Content Include="js\Chart.js" />
+    <Content Include="js\ChartNew.js" />
     <Content Include="js\Dashboard\Dashboard.js" />
     <Content Include="js\jquery-1.10.2.js" />
     <Content Include="js\jquery-1.10.2.min.js" />
@@ -275,10 +278,13 @@
     <Content Include="js\respond.js" />
     <Content Include="js\respond.min.js" />
     <Content Include="js\sb-admin-2.js" />
+    <Content Include="js\tc-angular-chartjs.min.js" />
     <Content Include="partials\ActionItems.html" />
+    <Content Include="partials\NewActionItems.html" />
     <Content Include="partials\ActiveProjects.html" />
     <Content Include="partials\ActiveResources.html" />
     <Content Include="partials\ManageDashboard.html" />
+    <Content Include="partials\Operations.html" />
     <Content Include="partials\partialDashboard.html" />
     <Content Include="js\angular-mocks.js" />
     <Content Include="js\angular-route.js" />

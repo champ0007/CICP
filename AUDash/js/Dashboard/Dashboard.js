@@ -2,43 +2,57 @@
 /// <reference path="../jquery-1.10.2.intellisense.js" />
 var todos;
 
-var AUDashboardApp = angular.module("AUDashboardApp", ["ngRoute"]);
+var AUDashboardApp = angular.module("AUDashboardApp", ["ngRoute", "tc.chartjs"]);
 
 AUDashboardApp.config(['$routeProvider',
-  function ($routeProvider) {
-      $routeProvider.
-              when('/Dashboard', {
-                  templateUrl: 'partials/partialDashboard.html',
-                  controller: 'DashboardController'
-              }).
-              when('/ActionItems', {
-                  templateUrl: 'partials/ActionItems.html',
-                  controller: 'ActionItemsController'
-              }).
-            when('/ActiveProjects', {
-                templateUrl: 'partials/ActiveProjects.html',
-                controller: 'ActiveProjectsController'
-            }).
-           when('/ActiveResources', {
-               templateUrl: 'partials/ActiveResources.html',
-               controller: 'ActiveResourcesController'
-           }).
-              otherwise({
-                  redirectTo: '/Dashboard'
-              });
-  }]);
+    function ($routeProvider) {
+        $routeProvider.
+        when('/Dashboard', {
+            templateUrl: 'partials/partialDashboard.html',
+            controller: 'DashboardController'
+        }).
+        when('/ActionItems', {
+            templateUrl: 'partials/ActionItems.html',
+            controller: 'ActionItemsController'
+        }).
+        when('/ActiveProjects', {
+            templateUrl: 'partials/ActiveProjects.html',
+            controller: 'ActiveProjectsController'
+        }).
+        when('/ActiveResources', {
+            templateUrl: 'partials/ActiveResources.html',
+            controller: 'ActiveResourcesController'
+        }).
+        when('/NewActionItems', {
+            templateUrl: 'partials/NewActionItems.html',
+            controller: 'NewActionItemsController'
+        }).
+        when('/Operations', {
+            templateUrl: 'partials/Operations.html',
+            controller: 'OperationsController'
+        }).
+        otherwise({
+            redirectTo: '/Dashboard'
+        });
+    }
+]);
+
+
 
 AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($scope, $http) {
 
-    $http({ method: 'GET', url: 'api/Dashboard/getactiveprojects' }).
-        success(function (data, status, headers, config) {
-            $scope.ActiveProjects = data;
-        }).
-        error(function (data, status, headers, config) {
-            // called asynchronously if an error occurs
-            // or server returns response with an error status.
-            $scope.ActiveProjects = -1;
-        });
+    $http({
+        method: 'GET',
+        url: 'api/Dashboard/getactiveprojects'
+    }).
+    success(function (data, status, headers, config) {
+        $scope.ActiveProjects = data;
+    }).
+    error(function (data, status, headers, config) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+        $scope.ActiveProjects = -1;
+    });
 
 
     $scope.PendingInvoices = 9;
@@ -46,50 +60,417 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
     $scope.OpenActionItems = 5;
     var ProjectEntity;
 
-    var FakeNotifications = [
-        { message: '7 tasks added', eventdate: '47 mins ago', type: 'fa fa-tasks fa-fw' },
-        { message: 'AMP India visit', eventdate: '18-Aug', type: 'fa fa-tasks fa-fw' },
-        { message: 'Submit Project Report', eventdate: '20-Aug', type: 'fa fa-twitter fa-fw' },
-        { message: 'Telstra India Visit', eventdate: '1-Sep', type: 'fa fa-comment fa-fw' },
-        { message: 'EDC-AU meet', eventdate: '12-Sep', type: 'fa fa-calendar fa-fw' },
-        { message: 'EDC Upcoming Holiday', eventdate: '2-Oct', type: 'fa fa-tasks fa-fw' }
-    ];
+    var FakeNotifications = [{
+        message: '7 tasks added',
+        eventdate: '47 mins ago',
+        type: 'fa fa-tasks fa-fw'
+    }, {
+        message: 'AMP India visit',
+        eventdate: '18-Aug',
+        type: 'fa fa-tasks fa-fw'
+    }, {
+        message: 'Submit Project Report',
+        eventdate: '20-Aug',
+        type: 'fa fa-twitter fa-fw'
+    }, {
+        message: 'Telstra India Visit',
+        eventdate: '1-Sep',
+        type: 'fa fa-comment fa-fw'
+    }, {
+        message: 'EDC-AU meet',
+        eventdate: '12-Sep',
+        type: 'fa fa-calendar fa-fw'
+    }, {
+        message: 'EDC Upcoming Holiday',
+        eventdate: '2-Oct',
+        type: 'fa fa-tasks fa-fw'
+    }];
 
     $scope.notifications = FakeNotifications;
 
 
-    var InvoicesData = [
-        { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2012', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Aus Super Spt', Partner: 'Milesi / Lipman', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2012', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'ANZ', Partner: 'Carlisle / Adappa', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2012', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2012', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2012', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2012', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2013', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2013', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2013', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2013', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2012', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2012', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Pending' },
-        { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2014', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2014', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2014', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2012', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Sharma, Tushar', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2012', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Pending' },
-        { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2012', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2012', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Time Saver App', Partner: 'Hallam/Enderby', Resource: 'Tiwari Harsha, Harkala Ram', Period: 'P10_FY12', Date: '02/20/12 - 03/02/12', AmountUSD: 4860, ATBApproval: 'Received', ATBSentOn: '11/26/2012', InvoiceRaised: 'Yes', InvoiceNumber: '3000079888', InvoiceRaisedOn: '11/27/2012', Comments: '---', PaymentReceived: 'Received' }
-    ];
+    var InvoicesData = [{
+        Project: 'Time Saver App',
+        Partner: 'Hallam/Enderby',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2012',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Aus Super Spt',
+        Partner: 'Milesi / Lipman',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2012',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'ANZ',
+        Partner: 'Carlisle / Adappa',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2012',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Time Saver App',
+        Partner: 'Hallam/Enderby',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2012',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Time Saver App',
+        Partner: 'Hallam/Enderby',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2012',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Time Saver App',
+        Partner: 'Hallam/Enderby',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2012',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Time Saver App',
+        Partner: 'Hallam/Enderby',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2013',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Time Saver App',
+        Partner: 'Hallam/Enderby',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2013',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Time Saver App',
+        Partner: 'Hallam/Enderby',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2013',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2013',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Time Saver App',
+        Partner: 'Hallam/Enderby',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2012',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Time Saver App',
+        Partner: 'Hallam/Enderby',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2012',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Pending'
+    }, {
+        Project: 'Time Saver App',
+        Partner: 'Hallam/Enderby',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2014',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Time Saver App',
+        Partner: 'Hallam/Enderby',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2014',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Time Saver App',
+        Partner: 'Hallam/Enderby',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2014',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Time Saver App',
+        Partner: 'Hallam/Enderby',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2012',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Time Saver App',
+        Partner: 'Hallam/Enderby',
+        Resource: 'Sharma, Tushar',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2012',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Pending'
+    }, {
+        Project: 'Time Saver App',
+        Partner: 'Hallam/Enderby',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2012',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Time Saver App',
+        Partner: 'Hallam/Enderby',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2012',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Time Saver App',
+        Partner: 'Hallam/Enderby',
+        Resource: 'Tiwari Harsha, Harkala Ram',
+        Period: 'P10_FY12',
+        Date: '02/20/12 - 03/02/12',
+        AmountUSD: 4860,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2012',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '3000079888',
+        InvoiceRaisedOn: '11/27/2012',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }];
 
 
-    var FakeInvoicesData = [
-        { Project: 'Project 1', Partner: 'Partner 1', Resource: 'Resource 1, Resource 2', Period: 'P10_FY13', Date: '02/20/17 - 03/02/17', AmountUSD: 1234, ATBApproval: 'Received', ATBSentOn: '11/26/2017', InvoiceRaised: 'Yes', InvoiceNumber: '123456789', InvoiceRaisedOn: '11/27/2017', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Project 2', Partner: 'Partner 2', Resource: 'Resource 2, Resource 3', Period: 'P10_FY13', Date: '02/20/18 - 03/02/18', AmountUSD: 5678, ATBApproval: 'Received', ATBSentOn: '11/26/2018', InvoiceRaised: 'Yes', InvoiceNumber: '987654321', InvoiceRaisedOn: '11/27/2017', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Project 3', Partner: 'Partner 3', Resource: 'Resource 3, Resource 4', Period: 'P10_FY13', Date: '02/20/19 - 03/02/19', AmountUSD: 9012, ATBApproval: 'Received', ATBSentOn: '11/26/2019', InvoiceRaised: 'Yes', InvoiceNumber: '111111111', InvoiceRaisedOn: '11/27/2017', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Project 4', Partner: 'Partner 4', Resource: 'Resource 3, Resource 2', Period: 'P10_FY13', Date: '02/20/18 - 03/02/18', AmountUSD: 1234, ATBApproval: 'Received', ATBSentOn: '11/26/2017', InvoiceRaised: 'Yes', InvoiceNumber: '987654321', InvoiceRaisedOn: '11/27/2017', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Project 5', Partner: 'Partner 1', Resource: 'Resource 1, Resource 4', Period: 'P10_FY13', Date: '02/20/19 - 03/02/19', AmountUSD: 5678, ATBApproval: 'Received', ATBSentOn: '11/26/2018', InvoiceRaised: 'Yes', InvoiceNumber: '222222222', InvoiceRaisedOn: '11/27/2017', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Project 6', Partner: 'Partner 2', Resource: 'Resource 1, Resource 2', Period: 'P10_FY13', Date: '02/20/18 - 03/02/18', AmountUSD: 9876, ATBApproval: 'Received', ATBSentOn: '11/26/2019', InvoiceRaised: 'Yes', InvoiceNumber: '987654321', InvoiceRaisedOn: '11/27/2017', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Project 7', Partner: 'Partner 3', Resource: 'Resource 1, Resource 2', Period: 'P10_FY13', Date: '02/20/19 - 03/02/19', AmountUSD: 5432, ATBApproval: 'Received', ATBSentOn: '11/26/2017', InvoiceRaised: 'Yes', InvoiceNumber: '112233445', InvoiceRaisedOn: '11/27/2017', Comments: '---', PaymentReceived: 'Received' },
-        { Project: 'Project 8', Partner: 'Partner 4', Resource: 'Resource 1, Resource 2', Period: 'P10_FY13', Date: '02/20/18 - 03/02/18', AmountUSD: 4321, ATBApproval: 'Received', ATBSentOn: '11/26/2018', InvoiceRaised: 'Yes', InvoiceNumber: '987654321', InvoiceRaisedOn: '11/27/2017', Comments: '---', PaymentReceived: 'Received' },
+    var FakeInvoicesData = [{
+        Project: 'Project 1',
+        Partner: 'Partner 1',
+        Resource: 'Resource 1, Resource 2',
+        Period: 'P10_FY13',
+        Date: '02/20/17 - 03/02/17',
+        AmountUSD: 1234,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2017',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '123456789',
+        InvoiceRaisedOn: '11/27/2017',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Project 2',
+        Partner: 'Partner 2',
+        Resource: 'Resource 2, Resource 3',
+        Period: 'P10_FY13',
+        Date: '02/20/18 - 03/02/18',
+        AmountUSD: 5678,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2018',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '987654321',
+        InvoiceRaisedOn: '11/27/2017',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Project 3',
+        Partner: 'Partner 3',
+        Resource: 'Resource 3, Resource 4',
+        Period: 'P10_FY13',
+        Date: '02/20/19 - 03/02/19',
+        AmountUSD: 9012,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2019',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '111111111',
+        InvoiceRaisedOn: '11/27/2017',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Project 4',
+        Partner: 'Partner 4',
+        Resource: 'Resource 3, Resource 2',
+        Period: 'P10_FY13',
+        Date: '02/20/18 - 03/02/18',
+        AmountUSD: 1234,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2017',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '987654321',
+        InvoiceRaisedOn: '11/27/2017',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Project 5',
+        Partner: 'Partner 1',
+        Resource: 'Resource 1, Resource 4',
+        Period: 'P10_FY13',
+        Date: '02/20/19 - 03/02/19',
+        AmountUSD: 5678,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2018',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '222222222',
+        InvoiceRaisedOn: '11/27/2017',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Project 6',
+        Partner: 'Partner 2',
+        Resource: 'Resource 1, Resource 2',
+        Period: 'P10_FY13',
+        Date: '02/20/18 - 03/02/18',
+        AmountUSD: 9876,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2019',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '987654321',
+        InvoiceRaisedOn: '11/27/2017',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Project 7',
+        Partner: 'Partner 3',
+        Resource: 'Resource 1, Resource 2',
+        Period: 'P10_FY13',
+        Date: '02/20/19 - 03/02/19',
+        AmountUSD: 5432,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2017',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '112233445',
+        InvoiceRaisedOn: '11/27/2017',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    }, {
+        Project: 'Project 8',
+        Partner: 'Partner 4',
+        Resource: 'Resource 1, Resource 2',
+        Period: 'P10_FY13',
+        Date: '02/20/18 - 03/02/18',
+        AmountUSD: 4321,
+        ATBApproval: 'Received',
+        ATBSentOn: '11/26/2018',
+        InvoiceRaised: 'Yes',
+        InvoiceNumber: '987654321',
+        InvoiceRaisedOn: '11/27/2017',
+        Comments: '---',
+        PaymentReceived: 'Received'
+    },
 
     ];
 
@@ -101,18 +482,21 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
 
     $scope.getKeyUpdates = function () {
         debugger;
-        $http({ method: 'GET', url: 'api/Dashboard/GetReferenceData?storageId=KeyUpdates' }).
-               success(function (data, status, headers, config) {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetReferenceData?storageId=KeyUpdates'
+        }).
+        success(function (data, status, headers, config) {
 
-                   if (data != 'null') {
-                       keyUpdates = $scope.keyUpdates = JSON.parse(JSON.parse(data));
-                   }
-               }).
-               error(function (data, status, headers, config) {
-                   // called asynchronously if an error occurs
-                   // or server returns response with an error status.
+            if (data != 'null') {
+                keyUpdates = $scope.keyUpdates = JSON.parse(JSON.parse(data));
+            }
+        }).
+        error(function (data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
 
-               });
+        });
 
     };
 
@@ -120,7 +504,7 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
         keyUpdate.index = index;
         $scope.keyUpdate = jQuery.extend(true, {}, keyUpdate); // deep copy
         $scope.OriginalKeyUpdate = jQuery.extend(true, {}, keyUpdate); // deep copy
-       
+
     }
 
     $scope.getKeyUpdates();
@@ -134,12 +518,12 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
             method: "POST",
             data: JSON.stringify(JSON.stringify(referenceData))
         })
-       .then(function (response) {
-           $scope.getKeyUpdates();
-       },
-       function (response) { // optional
-       }
-     );
+            .then(function (response) {
+                $scope.getKeyUpdates();
+            },
+                function (response) { // optional
+                }
+            );
     };
 
     $scope.$watch('keyUpdates', function (newValue, oldValue) {
@@ -151,8 +535,7 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
     $scope.AddKeyUpdate = function (keyUpdate) {
         if (keyUpdate.index >= 0) {
             keyUpdates[keyUpdate.index] = keyUpdate;
-        }
-        else {
+        } else {
             keyUpdates.push(keyUpdate);
         }
 
@@ -161,8 +544,123 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
     };
     //End Key updates
 
+    //Start 
+    // Chart.js Data
+    $scope.skillChartData = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [
+          {
+              label: 'FY15 Business',
+              fillColor: '#FFFFFF',
+              strokeColor: 'rgba(69,201,102,0.9)',
+              highlightFill: 'rgba(69,201,102,0.9)',
+              highlightStroke: 'rgba(220,220,220,1)',
+              data: [65, 59, 80, 81, 56, 55, 40]
+          },
+          {
+              label: 'FY14 Business',
+              fillColor: '#FFFFFF',
+              strokeColor: 'rgba(1,187,205,0.8)',
+              highlightFill: 'rgba(38, 208, 255, 0.75)',
+              highlightStroke: 'rgba(151,187,205,1)',
+              data: [28, 48, 40, 19, 86, 27, 30]
+          }
+        ]
+    };
+
+    // Chart.js Options
+    $scope.skillChartOptions = {
+
+        // Sets the chart to be responsive
+        responsive: true,
+
+        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+        scaleBeginAtZero: true,
+
+        //Boolean - Whether grid lines are shown across the chart
+        scaleShowGridLines: true,
+
+        //String - Colour of the grid lines
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+
+        //Number - Width of the grid lines
+        scaleGridLineWidth: 1,
+
+        //Boolean - If there is a stroke on each bar
+        barShowStroke: true,
+
+        //Number - Pixel width of the bar stroke
+        barStrokeWidth: 2,
+
+        //Number - Spacing between each of the X value sets
+        barValueSpacing: 5,
+
+        //Number - Spacing between data sets within X values
+        barDatasetSpacing: 1,
+
+        //String - A legend template
+        legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+    };
+
+    // Chart.js Data
+    $scope.ProjectChartData = [
+      {
+          value: 300,
+          color: '#F7464A',
+          highlight: '#FF5A5E',
+          label: 'Sitecore'
+      },
+      {
+          value: 50,
+          color: '#46BFBD',
+          highlight: '#5AD3D1',
+          label: 'Hybris'
+      },
+      {
+          value: 100,
+          color: '#FDB45C',
+          highlight: '#FFC870',
+          label: 'Adobe CQ'
+      }
+    ];
+
+    // Chart.js Options
+    $scope.ProjectChartOptions = {
+
+        // Sets the chart to be responsive
+        responsive: true,
+
+        //Boolean - Whether we should show a stroke on each segment
+        segmentShowStroke: true,
+
+        //String - The colour of each segment stroke
+        segmentStrokeColor: '#fff',
+
+        //Number - The width of each segment stroke
+        segmentStrokeWidth: 2,
+
+        //Number - The percentage of the chart that we cut out of the middle
+        percentageInnerCutout: 50, // This is 0 for Pie charts
+
+        //Number - Amount of animation steps
+        animationSteps: 100,
+
+        //String - Animation easing effect
+        animationEasing: 'easeOutQuint',
+
+        //Boolean - Whether we animate the rotation of the Doughnut
+        animateRotate: true,
+
+        //Boolean - Whether we animate scaling the Doughnut from the centre
+        animateScale: false,
+
+        //String - A legend template
+        legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
+
+    };
 
 
+    //End
 
 
 }]);
@@ -196,18 +694,22 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', '$http'
 
     $scope.getTodos = function () {
         debugger;
-        $http({ method: 'GET', url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID }).
-               success(function (data, status, headers, config) {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
+        }).
+        success(function (data, status, headers, config) {
 
-                   if (data != 'null') {
-                       todos = $scope.todos = JSON.parse(JSON.parse(data));
-                   }
-               }).
-               error(function (data, status, headers, config) {
-                   // called asynchronously if an error occurs
-                   // or server returns response with an error status.
+            if (data != 'null') {
+                todos = $scope.todos = JSON.parse(JSON.parse(data));
+                $scope.$parent.OpenActionItems = todos.length;
+            }
+        }).
+        error(function (data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
 
-               });
+        });
 
     };
 
@@ -224,11 +726,10 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', '$http'
             method: "POST",
             data: JSON.stringify(JSON.stringify(referenceData))
         })
-       .then(function (response) {
-       },
-       function (response) { // optional
-       }
-     );
+            .then(function (response) { },
+                function (response) { // optional
+                }
+            );
     };
 
     $scope.addTodo = function () {
@@ -294,18 +795,22 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
 
     $scope.getProjects = function () {
         debugger;
-        $http({ method: 'GET', url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID }).
-               success(function (data, status, headers, config) {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
+        }).
+        success(function (data, status, headers, config) {
 
-                   if (data != 'null') {
-                       ProjectDetails = $scope.ActiveProjectDetails = JSON.parse(JSON.parse(data));
-                   }
-               }).
-               error(function (data, status, headers, config) {
-                   // called asynchronously if an error occurs
-                   // or server returns response with an error status.
+            if (data != 'null') {
+                ProjectDetails = $scope.ActiveProjectDetails = JSON.parse(JSON.parse(data));
+                $scope.$parent.ActiveProjects = ProjectDetails.length;
+            }
+        }).
+        error(function (data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
 
-               });
+        });
 
     };
 
@@ -326,12 +831,12 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
             method: "POST",
             data: JSON.stringify(JSON.stringify(referenceData))
         })
-       .then(function (response) {
-           $scope.getProjects();
-       },
-       function (response) { // optional
-       }
-     );
+            .then(function (response) {
+                $scope.getProjects();
+            },
+                function (response) { // optional
+                }
+            );
     };
 
     $scope.$watch('ActiveProjectDetails', function (newValue, oldValue) {
@@ -344,32 +849,109 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
         debugger;
         if (ProjectEntity.index >= 0) {
             ProjectDetails[ProjectEntity.index] = ProjectEntity;
-        }
-        else {
+        } else {
             ProjectDetails.push(ProjectEntity);
         }
 
         $scope.ActiveProjectDetails = ProjectDetails;
         $scope.ProjectEntity = '';
     };
+
+    // Chart.js Data
+    $scope.ActiveProjectChartData = {
+        labels: ['Project Status'],
+        datasets: [
+          {
+              label: 'Proposed',
+              fillColor: 'rgba(220,220,220,0.5)',
+              strokeColor: 'rgba(220,220,220,0.8)',
+              highlightFill: 'rgba(220,220,220,0.75)',
+              highlightStroke: 'rgba(220,220,220,1)',
+              data: [6]
+          },
+          {
+              label: 'Sold',
+              fillColor: 'rgba(151,187,205,0.5)',
+              strokeColor: 'rgba(151,187,205,0.8)',
+              highlightFill: 'rgba(151,187,205,0.75)',
+              highlightStroke: 'rgba(151,187,205,1)',
+              data: [9]
+          },
+          {
+              label: 'InProgress',
+              fillColor: 'rgba(551,187,205,0.5)',
+              strokeColor: 'rgba(551,187,205,0.8)',
+              highlightFill: 'rgba(551,187,205,0.75)',
+              highlightStroke: 'rgba(551,187,205,1)',
+              data: [8]
+          },
+          {
+              label: 'Lost',
+              fillColor: 'rgba(251,087,005,0.5)',
+              strokeColor: 'rgba(551,487,005,0.8)',
+              highlightFill: 'rgba(551,487,005,0.75)',
+              highlightStroke: 'rgba(551,487,005,1)',
+              data: [13]
+          }
+        ]
+    };
+
+    // Chart.js Options
+    $scope.ActiveProjectChartOptions = {
+
+        // Sets the chart to be responsive
+        responsive: true,
+
+        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+        scaleBeginAtZero: true,
+
+        //Boolean - Whether grid lines are shown across the chart
+        scaleShowGridLines: true,
+
+        //String - Colour of the grid lines
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+
+        //Number - Width of the grid lines
+        scaleGridLineWidth: 1,
+
+        //Boolean - If there is a stroke on each bar
+        barShowStroke: true,
+
+        //Number - Pixel width of the bar stroke
+        barStrokeWidth: 2,
+
+        //Number - Spacing between each of the X value sets
+        barValueSpacing: 15,
+
+        //Number - Spacing between data sets within X values
+        barDatasetSpacing: 50,
+
+        //String - A legend template
+        legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+    };
+
 }]);
 
 AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', function ($scope, $http) {
 
-    $scope.GetResource = function () {
-        $http({ method: 'GET', url: 'api/Dashboard/GetResourceList' }).
-      success(function (data, status, headers, config) {
-          $scope.AllResources = JSON.parse(JSON.parse(data));
-      }).
-      error(function (data, status, headers, config) {
-          // called asynchronously if an error occurs
-          // or server returns response with an error status.
-          $scope.AllResources = -1;
-
-      });
-    };
-
     $scope.EditMode = "false";
+
+    $scope.GetResource = function () {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetResourceList'
+        }).
+        success(function (data, status, headers, config) {
+            $scope.AllResources = JSON.parse(JSON.parse(data));
+            $scope.$parent.ActiveResources = $scope.AllResources.length;
+            $scope.UpdateChart(1, 1, 1);
+        }).
+        error(function (data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            $scope.AllResources = -1;
+        });
+    };
 
     $scope.EditResource = function (resource) {
         debugger;
@@ -378,8 +960,6 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', funct
         $scope.ResourceEntity = jQuery.extend(true, {}, resource); // deep copy
 
     }
-
-    $scope.GetResource();
 
     $scope.addResource = function (resource) {
         debugger;
@@ -390,42 +970,496 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', funct
                 method: "POST",
                 data: "'" + JSON.stringify(resource) + "'"
             })
-            .then(function (response) {
+                .then(function (response) {
 
-                $scope.GetResource();
-                $scope.ResourceEntity = '';
-                $scope.EditMode == "false";
-                dialog.close;
+                    $scope.GetResource();
+                    $scope.ResourceEntity = '';
+                    $scope.EditMode == "false";
+                    dialog.close;
 
-            },
-            function (response) { // optional
-            }
-          );
+                },
+                    function (response) { // optional
+                    }
+                );
 
-        }
-        else {
+        } else {
             $http({
                 url: 'api/Dashboard/AddResource',
                 method: "POST",
                 data: "'" + JSON.stringify(resource) + "'"
             })
-            .then(function (response) {
+                .then(function (response) {
 
-                $scope.GetResource();
-                $scope.ResourceEntity = '';
-                dialog.close;
+                    $scope.GetResource();
+                    $scope.ResourceEntity = '';
+                    dialog.close;
 
-            },
-            function (response) { // optional
-            }
-          );
+                },
+                    function (response) { // optional
+                    }
+                );
         }
 
 
 
     };
 
+    $scope.UpdateChart = function () {
+        // Chart.js Data
+        $scope.ResourceChartData = {
+            labels: ['AMP', 'Telstra', 'QUU', 'AusSuper', 'ANZ', 'Caltex'],
+            datasets: [
+              {
+                  label: 'My First dataset',
+                  fillColor: '#FFFFFF',
+                  strokeColor: '#000000',
+                  highlightFill: '#000000',
+                  highlightStroke: '#FFFFFF',
+                  data: [65, 59, 80, 81, 56, 55]
+              }
 
-    // $scope.AllResources = allResources;
+            ]
+        };
+
+        // Chart.js Options
+        $scope.ResourceChartOptions = {
+
+            // Sets the chart to be responsive
+            responsive: true,
+
+            //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+            scaleBeginAtZero: true,
+
+            //Boolean - Whether grid lines are shown across the chart
+            scaleShowGridLines: true,
+
+            //String - Colour of the grid lines
+            scaleGridLineColor: "rgba(0,0,0,.05)",
+
+            //Number - Width of the grid lines
+            scaleGridLineWidth: 1,
+
+            //Boolean - If there is a stroke on each bar
+            barShowStroke: true,
+
+            //Number - Pixel width of the bar stroke
+            barStrokeWidth: 2,
+
+            //Number - Spacing between each of the X value sets
+            barValueSpacing: 15,
+
+            //Number - Spacing between data sets within X values
+            barDatasetSpacing: 1,
+
+            //String - A legend template
+            legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+        };
+
+    };
+
+    $scope.GetResource();
+
+
+
+}]);
+
+AUDashboardApp.controller('NewActionItemsController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
+    var STORAGE_ID = 'NewToDoItems'; // To be passed
+    //$scope.EditMode = "false";
+
+    var NewToDos = $scope.NewToDos = [];
+
+    $scope.getNewToDos = function () {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
+        }).
+        success(function (data, status, headers, config) {
+
+            if (data != 'null') {
+                NewToDos = $scope.NewToDos = JSON.parse(JSON.parse(data));
+                $scope.$parent.OpenActionItems = NewToDos.length;
+                $scope.UpdateChart($filter('filter')(NewToDos, { Status: "Open" }).length, $filter('filter')(NewToDos, { Status: "Closed" }).length, $filter('filter')(NewToDos, { Status: "Pending" }).length);
+            }
+        }).
+        error(function (data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+
+        });
+
+    };
+
+    $scope.EditToDoItem = function (ToDoItem, index) {
+        ToDoItem.index = index;
+        $scope.ToDoItem = jQuery.extend(true, {}, ToDoItem); // deep copy
+        $scope.OriginalToDoItem = jQuery.extend(true, {}, ToDoItem); // deep copy
+    }
+
+    $scope.setToDoItems = function (NewToDos) {
+        var referenceData = new Object();
+        referenceData.storageId = STORAGE_ID;
+        referenceData.storageData = JSON.stringify(NewToDos);
+        $http({
+            url: 'api/Dashboard/SetReferenceData',
+            method: "POST",
+            data: JSON.stringify(JSON.stringify(referenceData))
+        })
+            .then(function (response) {
+                $scope.getNewToDos();
+            },
+                function (response) { // optional
+                }
+            );
+    };
+
+    $scope.$watch('NewToDos', function (newValue, oldValue) {
+        if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
+            $scope.setToDoItems(NewToDos);
+        }
+    }, true);
+
+    $scope.AddToDoItem = function (ToDoItem) {
+        ToDoItem.Status = 'Open';
+        if (ToDoItem.index >= 0) {
+            NewToDos[ToDoItem.index] = ToDoItem;
+        } else {
+            NewToDos.push(ToDoItem);
+        }
+
+        $scope.NewToDos = NewToDos;
+        $scope.NewToDoItem = '';
+    };
+
+    $scope.UpdateChart = function (open, closed, pending) {
+        // Chart.js Data
+        $scope.ActionItemChartData = [
+          {
+              value: open,
+              color: '#F7464A',
+              highlight: '#FF5A5E',
+              label: 'Open'
+          },
+          {
+              value: closed,
+              color: '#46BFBD',
+              highlight: '#5AD3D1',
+              label: 'Closed'
+          },
+          {
+              value: pending,
+              color: '#FDB45C',
+              highlight: '#FFC870',
+              label: 'Pending'
+          }
+        ];
+
+        // Chart.js Options
+        $scope.ActionItemChartOptions = {
+
+            // Sets the chart to be responsive
+            responsive: true,
+
+            //Boolean - Whether we should show a stroke on each segment
+            segmentShowStroke: true,
+
+            //String - The colour of each segment stroke
+            segmentStrokeColor: '#fff',
+
+            //Number - The width of each segment stroke
+            segmentStrokeWidth: 2,
+
+            //Number - The percentage of the chart that we cut out of the middle
+            percentageInnerCutout: 0, // This is 0 for Pie charts
+
+            //Number - Amount of animation steps
+            animationSteps: 100,
+
+            //String - Animation easing effect
+            animationEasing: 'easeOutBounce',
+
+            //Boolean - Whether we animate the rotation of the Doughnut
+            animateRotate: true,
+
+            //Boolean - Whether we animate scaling the Doughnut from the centre
+            animateScale: false,
+
+            //String - A legend template
+            legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
+
+        };
+    };
+
+    $scope.getNewToDos();
+
+}]);
+
+AUDashboardApp.controller('OperationsController', ['$scope', '$http', function ($scope, $http) {
+
+    //Start Key Updates
+    var keyUpdates = $scope.keyUpdates = [];
+
+    $scope.getKeyUpdates = function () {
+        debugger;
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetReferenceData?storageId=KeyUpdates'
+        }).
+        success(function (data, status, headers, config) {
+
+            if (data != 'null') {
+                keyUpdates = $scope.keyUpdates = JSON.parse(JSON.parse(data));
+            }
+        }).
+        error(function (data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+
+        });
+
+    };
+
+    $scope.EditKeyUpdates = function (keyUpdate, index) {
+        keyUpdate.index = index;
+        $scope.keyUpdate = jQuery.extend(true, {}, keyUpdate); // deep copy
+        $scope.OriginalKeyUpdate = jQuery.extend(true, {}, keyUpdate); // deep copy
+
+    }
+
+    $scope.getKeyUpdates();
+
+    $scope.setKeyUpdates = function (keyUpdates) {
+        var referenceData = new Object();
+        referenceData.storageId = 'KeyUpdates';
+        referenceData.storageData = JSON.stringify(keyUpdates);
+        $http({
+            url: 'api/Dashboard/SetReferenceData',
+            method: "POST",
+            data: JSON.stringify(JSON.stringify(referenceData))
+        })
+            .then(function (response) {
+                $scope.getKeyUpdates();
+            },
+                function (response) { // optional
+                }
+            );
+    };
+
+    $scope.$watch('keyUpdates', function (newValue, oldValue) {
+        if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
+            $scope.setKeyUpdates(keyUpdates);
+        }
+    }, true);
+
+    $scope.AddKeyUpdate = function (keyUpdate) {
+        if (keyUpdate.index >= 0) {
+            keyUpdates[keyUpdate.index] = keyUpdate;
+        } else {
+            keyUpdates.push(keyUpdate);
+        }
+
+        $scope.keyUpdates = keyUpdates;
+        $scope.keyUpdate = '';
+    };
+    //End Key updates
+
+    //Start 
+    // Chart.js Data
+    $scope.skillChartData = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [
+          {
+              label: 'FY15 Business',
+              fillColor: 'rgba(69,201,102,0.75)',
+              strokeColor: 'rgba(220,220,220,0.8)',
+              highlightFill: 'rgba(69,201,102,0.9)',
+              highlightStroke: 'rgba(220,220,220,1)',
+              data: [65, 59, 80, 81, 56, 55, 40]
+          },
+          {
+              label: 'FY14 Business',
+              fillColor: 'rgba(121, 176, 0, 1)',
+              strokeColor: 'rgba(1,187,205,0.8)',
+              highlightFill: 'rgba(38, 208, 255, 0.75)',
+              highlightStroke: 'rgba(151,187,205,1)',
+              data: [28, 48, 40, 19, 86, 27, 30]
+          }
+        ]
+    };
+
+    // Chart.js Options
+    $scope.skillChartOptions = {
+
+        // Sets the chart to be responsive
+        responsive: true,
+
+        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+        scaleBeginAtZero: true,
+
+        //Boolean - Whether grid lines are shown across the chart
+        scaleShowGridLines: true,
+
+        //String - Colour of the grid lines
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+
+        //Number - Width of the grid lines
+        scaleGridLineWidth: 1,
+
+        //Boolean - If there is a stroke on each bar
+        barShowStroke: true,
+
+        //Number - Pixel width of the bar stroke
+        barStrokeWidth: 2,
+
+        //Number - Spacing between each of the X value sets
+        barValueSpacing: 5,
+
+        //Number - Spacing between data sets within X values
+        barDatasetSpacing: 1,
+
+        //String - A legend template
+        legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+    };
+
+    // Chart.js Data
+    $scope.ProjectChartData = [
+      {
+          value: 300,
+          color: '#F7464A',
+          highlight: '#FF5A5E',
+          label: 'Sitecore'
+      },
+      {
+          value: 50,
+          color: '#46BFBD',
+          highlight: '#5AD3D1',
+          label: 'Hybris'
+      },
+      {
+          value: 100,
+          color: '#FDB45C',
+          highlight: '#FFC870',
+          label: 'Adobe CQ'
+      }
+    ];
+
+    // Chart.js Options
+    $scope.ProjectChartOptions = {
+
+        // Sets the chart to be responsive
+        responsive: true,
+
+        //Boolean - Whether we should show a stroke on each segment
+        segmentShowStroke: true,
+
+        //String - The colour of each segment stroke
+        segmentStrokeColor: '#fff',
+
+        //Number - The width of each segment stroke
+        segmentStrokeWidth: 2,
+
+        //Number - The percentage of the chart that we cut out of the middle
+        percentageInnerCutout: 50, // This is 0 for Pie charts
+
+        //Number - Amount of animation steps
+        animationSteps: 100,
+
+        //String - Animation easing effect
+        animationEasing: 'easeOutQuint',
+
+        //Boolean - Whether we animate the rotation of the Doughnut
+        animateRotate: true,
+
+        //Boolean - Whether we animate scaling the Doughnut from the centre
+        animateScale: false,
+
+        //String - A legend template
+        legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
+
+    };
+
+
+    //End
+
+    // Chart.js Data
+    $scope.ODYoYData = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [
+          {
+              label: 'My First dataset',
+              fillColor: 'rgba(220,220,220,0.2)',
+              strokeColor: 'rgba(220,220,220,1)',
+              pointColor: 'rgba(220,220,220,1)',
+              pointStrokeColor: '#fff',
+              pointHighlightFill: '#fff',
+              pointHighlightStroke: 'rgba(220,220,220,1)',
+              data: [65, 59, 80, 81, 56, 55, 40]
+          },
+          {
+              label: 'My Second dataset',
+              fillColor: 'rgba(151,187,205,0.2)',
+              strokeColor: 'rgba(151,187,205,1)',
+              pointColor: 'rgba(151,187,205,1)',
+              pointStrokeColor: '#fff',
+              pointHighlightFill: '#fff',
+              pointHighlightStroke: 'rgba(151,187,205,1)',
+              data: [28, 48, 40, 19, 86, 27, 90]
+          }
+        ]
+    };
+
+    // Chart.js Options
+    $scope.ODYoYOptions = {
+
+        // Sets the chart to be responsive
+        responsive: true,
+
+        ///Boolean - Whether grid lines are shown across the chart
+        scaleShowGridLines: true,
+
+        //String - Colour of the grid lines
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+
+        //Number - Width of the grid lines
+        scaleGridLineWidth: 1,
+
+        //Boolean - Whether the line is curved between points
+        bezierCurve: true,
+
+        //Number - Tension of the bezier curve between points
+        bezierCurveTension: 0.4,
+
+        //Boolean - Whether to show a dot for each point
+        pointDot: true,
+
+        //Number - Radius of each point dot in pixels
+        pointDotRadius: 4,
+
+        //Number - Pixel width of point dot stroke
+        pointDotStrokeWidth: 1,
+
+        //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+        pointHitDetectionRadius: 20,
+
+        //Boolean - Whether to show a stroke for datasets
+        datasetStroke: true,
+
+        //Number - Pixel width of dataset stroke
+        datasetStrokeWidth: 2,
+
+        //Boolean - Whether to fill the dataset with a colour
+        datasetFill: true,
+
+        // Function - on animation progress
+        onAnimationProgress: function () { },
+
+        // Function - on animation complete
+        onAnimationComplete: function () { },
+
+        //String - A legend template
+        legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].strokeColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+    };
+
+
 
 }]);

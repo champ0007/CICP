@@ -1,0 +1,58 @@
+﻿<div class="col-lg-4">
+    <div class="panel panel-green">
+        <div class="panel-heading">
+            <i class="fa fa-info-circle fa-fw"></i> Open Items
+
+        </div>
+        <div class="panel-body">
+            <canvas tc-chartjs-pie chart-options="ActionItemChartOptions" chart-data="ActionItemChartData" auto-legend></canvas>
+        </div>
+
+        <link href="../css/plugins/ToDo/NewToDoItem.css" rel="stylesheet" />
+        <!-- /.panel-body -->
+    </div>
+</div>
+
+<!--Begin Three Charts-->
+<div class="col-lg-8">
+    <div class="panel panel-green">
+        <div class="panel-heading">
+            <i class="fa fa-info-circle fa-fw"></i> Action Items
+
+        </div>
+        <div class="panel-body">
+            <table class="table table-responsive">
+                <tr>
+                    <td><input id="new-todo" placeholder="What needs to be done?" ng-model="NewToDoItem.Desc" autofocus></td>
+                    <td>
+                        <input id="new-AssignedTo" placeholder="Assigned To?" ng-model="NewToDoItem.AssignedTo">
+                        &nbsp; <input type="button" class="btn-success btn-lg" value="Add" ng-click="AddToDoItem(NewToDoItem)">
+                    </td>
+                </tr>
+            </table>
+            <table class="table table-responsive col-lg-8">
+                <tr ng-repeat="ToDoItem in NewToDos">
+                    <td><i class="fa fa-edit" ng-click="EditItem(Item, $index)"> </i></td>
+                    <td class="col-lg-4">{{ToDoItem.Desc}}</td>
+                    <td class="col-lg-2">{{ToDoItem.AssignedTo}}</td>
+                    <td class="col-lg-2">
+                        <select class="form-control" ng-model="ToDoItem.Status">
+                            <option>Open</option>
+                            <option>Pending</option>
+                            <option>Closed</option>
+                        </select>
+                    </td>
+                    <td class="col-lg-6"><textarea class="form-control" rows="2" cols="50"> {{ToDoItem.Comments}}</textarea></td>
+                </tr>
+            </table>
+        </div>
+
+        <link href="../css/plugins/ToDo/NewToDoItem.css" rel="stylesheet" />
+        <!-- /.panel-body -->
+    </div>
+</div>
+
+
+
+
+
