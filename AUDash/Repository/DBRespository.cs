@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Data.SqlClient;
 using AUDash.Models;
-
 namespace AUDash.Repository
 {
     public class DBRepository
@@ -67,7 +66,7 @@ namespace AUDash.Repository
 
             while (rdr.Read())
             {
-                storageData = rdr.GetString(0);
+                storageData = HttpUtility.HtmlDecode(rdr.GetString(0));
             }
 
             cmd.Connection.Close();
@@ -78,7 +77,7 @@ namespace AUDash.Repository
 
         internal void SetReferenceData(string storageId, string storageData)
         {
-            SqlCommand cmd = new SqlCommand("update ReferenceData set StorageData = '" + storageData + "' where StorageId = '" + storageId + "'", GetConnection());
+            SqlCommand cmd = new SqlCommand("update ReferenceData set StorageData = '" +  HttpUtility.HtmlEncode(storageData) + "' where StorageId = '" + storageId + "'", GetConnection());
             cmd.Connection.Open();
             cmd.ExecuteNonQuery();
             cmd.Connection.Close();

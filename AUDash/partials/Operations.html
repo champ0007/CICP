@@ -2,7 +2,7 @@
 
     <div class="panel panel-blue">
         <div class="panel-heading">
-            <i class="fa fa-bell fa-fw"></i> Project Distribution
+            <i class="fa fa-bell fa-fw"></i> Competency Distribution
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
@@ -11,54 +11,70 @@
         <!-- /.panel-body -->
     </div>
 
+    <div class="panel panel-blue">
+        <div class="panel-heading">
+            <i class="fa fa-ma fa-fw"></i> Resource Demand - Sold vs Proposed
+        </div>
+        <div class="panel-body">
+            <canvas tc-chartjs-line chart-options="ODYoYOptions" chart-data="ODYoYData" auto-legend></canvas>
+        </div>
+        <!-- /.panel-body -->
+    </div>  
+</div>
 
+<div class="col-lg-4">
+  
+    <div class="panel panel-blue">
+        <div class="panel-heading">
+            <i class="fa fa-bell fa-fw"></i> Project Distribution
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <canvas tc-chartjs-bar chart-options="skillChartOptions" chart-data="ResourceDeploymentData" auto-legend></canvas>
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    
+      <div class="panel panel-blue">
+        <div class="panel-heading">
+            <i class="fa fa-bar-chart-o fa-fw"></i> USI Revenue - AU Cost
+        </div>
+        <div class="panel-body">
+            <!--<div id="morris-bar-chart"></div>-->
+            <canvas tc-chartjs-bar chart-options="skillChartOptions" chart-data="skillChartData" auto-legend></canvas>
+        </div>
+        <!-- /.panel-body -->
+    </div>
+
+  
+</div>
+
+<div class="col-lg-4">
 
     <div class="panel panel-blue">
         <div class="panel-heading">
-            <i class="fa fa-ma fa-fw"></i> Standard Documents Library
+            <i class="fa fa-ma fa-fw"></i> Resource Demand - Sold vs Proposed
         </div>
         <div class="panel-body">
             <canvas tc-chartjs-line chart-options="ODYoYOptions" chart-data="ODYoYData" auto-legend></canvas>
         </div>
         <!-- /.panel-body -->
     </div>
-</div>
 
-<div class="col-lg-4">
     <div class="panel panel-blue">
         <div class="panel-heading">
-            <i class="fa fa-bar-chart-o fa-fw"></i> Skill Resource Distribution
+            <i class="fa fa-bar-chart-o fa-fw"></i> USI Resource Deployment
         </div>
         <div class="panel-body">
             <!--<div id="morris-bar-chart"></div>-->
-            <canvas tc-chartjs-bar chart-options="skillChartOptions" chart-data="skillChartData" auto-legend></canvas>
-        </div>
-        <!-- /.panel-body -->
-    </div>
-
-    <div class="panel panel-blue">
-        <div class="panel-heading">
-            <i class="fa fa-bell fa-fw"></i> Project Distribution
-        </div>
-        <!-- /.panel-heading -->
-        <div class="panel-body">
-            <canvas tc-chartjs-doughnut chart-options="ProjectChartOptions" chart-data="ProjectChartData" class="col-lg-4" auto-legend></canvas>
+            <canvas tc-chartjs-bar chart-options="skillChartOptions" chart-data="ResourceDeploymentData" auto-legend></canvas>
         </div>
         <!-- /.panel-body -->
     </div>
 </div>
 
-<div class="col-lg-4">
-    <div class="panel panel-blue">
-        <div class="panel-heading">
-            <i class="fa fa-bar-chart-o fa-fw"></i> Skill Resource Distribution
-        </div>
-        <div class="panel-body">
-            <!--<div id="morris-bar-chart"></div>-->
-            <canvas tc-chartjs-bar chart-options="skillChartOptions" chart-data="skillChartData" auto-legend></canvas>
-        </div>
-        <!-- /.panel-body -->
-    </div>
-
-
-</div>
+<script>
+        //$(function () { // when the DOM is ready...
+        //    $("html, body").animate({ scrollTop: $(document).height()}, 1000);
+        //});
+</script>

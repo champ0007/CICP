@@ -2,7 +2,7 @@
 /// <reference path="../jquery-1.10.2.intellisense.js" />
 var todos;
 
-var AUDashboardApp = angular.module("AUDashboardApp", ["ngRoute", "tc.chartjs"]);
+var AUDashboardApp = angular.module("AUDashboardApp", ["ngRoute", "tc.chartjs", "angularUtils.directives.dirPagination"]);
 
 AUDashboardApp.config(['$routeProvider',
     function ($routeProvider) {
@@ -30,6 +30,10 @@ AUDashboardApp.config(['$routeProvider',
         when('/Operations', {
             templateUrl: 'partials/Operations.html',
             controller: 'OperationsController'
+        }).
+        when('/Invoices', {
+            templateUrl: 'partials/Invoices.html',
+            controller: 'InvoicesController'
         }).
         otherwise({
             redirectTo: '/Dashboard'
@@ -481,7 +485,7 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
     var keyUpdates = $scope.keyUpdates = [];
 
     $scope.getKeyUpdates = function () {
-        debugger;
+        
         $http({
             method: 'GET',
             url: 'api/Dashboard/GetReferenceData?storageId=KeyUpdates'
@@ -649,13 +653,13 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
         animationEasing: 'easeOutQuint',
 
         //Boolean - Whether we animate the rotation of the Doughnut
-        animateRotate: true,
+        animateRotate: false,
 
         //Boolean - Whether we animate scaling the Doughnut from the centre
         animateScale: false,
 
-        //String - A legend template
-        legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
+        //String - A legend template     
+        legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
 
     };
 
@@ -693,7 +697,7 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', '$http'
     //});
 
     $scope.getTodos = function () {
-        debugger;
+        
         $http({
             method: 'GET',
             url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
@@ -717,7 +721,7 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', '$http'
 
     $scope.setTodos = function (todos) {
         //localStorage.setItem(STORAGE_ID, JSON.stringify(todos));
-        debugger;
+        //debugger;
         var referenceData = new Object();
         referenceData.storageId = STORAGE_ID;
         referenceData.storageData = JSON.stringify(todos);
@@ -733,7 +737,7 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', '$http'
     };
 
     $scope.addTodo = function () {
-        debugger;
+        //debugger;
         var newTodo = $scope.newTodo.trim();
         var newAssignedTo = $scope.newAssignedTo.trim();
         if (!newTodo.length && !newTodo.length) {
@@ -794,7 +798,7 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
     var ProjectDetails = $scope.ActiveProjectDetails = [];
 
     $scope.getProjects = function () {
-        debugger;
+        //debugger;
         $http({
             method: 'GET',
             url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
@@ -846,7 +850,7 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
     }, true);
 
     $scope.AddProject = function (ProjectEntity) {
-        debugger;
+        //debugger;
         if (ProjectEntity.index >= 0) {
             ProjectDetails[ProjectEntity.index] = ProjectEntity;
         } else {
@@ -954,7 +958,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', funct
     };
 
     $scope.EditResource = function (resource) {
-        debugger;
+        //debugger;
         $scope.EditMode = "true";
         //Shallow Copy - $scope.ResourceEntity = resource;
         $scope.ResourceEntity = jQuery.extend(true, {}, resource); // deep copy
@@ -962,7 +966,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', funct
     }
 
     $scope.addResource = function (resource) {
-        debugger;
+        //debugger;
 
         if ($scope.EditMode == "true") {
             $http({
@@ -1200,7 +1204,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
     var keyUpdates = $scope.keyUpdates = [];
 
     $scope.getKeyUpdates = function () {
-        debugger;
+        //debugger;
         $http({
             method: 'GET',
             url: 'api/Dashboard/GetReferenceData?storageId=KeyUpdates'
@@ -1264,13 +1268,28 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
     //End Key updates
 
     //Start 
-    // Chart.js Data
-    $scope.skillChartData = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+
+    $scope.ResourceDeploymentData = {
+        labels: ['April', 'May', 'June', 'July', 'August', 'September', 'October'],
         datasets: [
           {
               label: 'FY15 Business',
-              fillColor: 'rgba(69,201,102,0.75)',
+              fillColor: 'lightblue',//rgba(69,201,102,0.75)',
+              strokeColor: 'rgba(220,220,220,0.8)',
+              highlightFill: 'rgba(69,201,102,0.9)',
+              highlightStroke: 'rgba(220,220,220,1)',
+              data: [40, 66, 65, 81, 75, 75, 80]
+          }
+        ]
+    };
+
+    // Chart.js Data
+    $scope.skillChartData = {
+        labels: ['April', 'May', 'June', 'July', 'August', 'September', 'October'],
+        datasets: [
+          {
+              label: 'FY15 Business',
+              fillColor: 'rgba(620,201,102,0.75)',
               strokeColor: 'rgba(220,220,220,0.8)',
               highlightFill: 'rgba(69,201,102,0.9)',
               highlightStroke: 'rgba(220,220,220,1)',
@@ -1278,8 +1297,8 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
           },
           {
               label: 'FY14 Business',
-              fillColor: 'rgba(121, 176, 0, 1)',
-              strokeColor: 'rgba(1,187,205,0.8)',
+              fillColor: 'rgba(321, 176, 0, 1)',
+              strokeColor: 'rgba(321, 176, 0, 0.8)',
               highlightFill: 'rgba(38, 208, 255, 0.75)',
               highlightStroke: 'rgba(151,187,205,1)',
               data: [28, 48, 40, 19, 86, 27, 30]
@@ -1318,7 +1337,8 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
         barDatasetSpacing: 1,
 
         //String - A legend template
-        legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+        legendTemplate: '<div class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i+=3){%><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(i<datasets.length){%><%=datasets[i].label%><%}%><%if(i+1<datasets.length){%><span style="background-color:<%=datasets[i+1].fillColor%>"></span> &nbsp; <%=datasets[i+1].label%><%}%><%if(i+2<datasets.length){%><span style="background-color:<%=datasets[i+2].fillColor%>"></span><%=datasets[i+2].label%><%}%><%}%></div>'
+        //legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
     };
 
     // Chart.js Data
@@ -1329,6 +1349,12 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
           highlight: '#FF5A5E',
           label: 'Sitecore'
       },
+       {
+           value: 50,
+           color: '#FF5A5E',
+           highlight: '#FF5A5E',
+           label: 'Core .NET'
+       },
       {
           value: 50,
           color: '#46BFBD',
@@ -1340,7 +1366,19 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
           color: '#FDB45C',
           highlight: '#FFC870',
           label: 'Adobe CQ'
-      }
+      },
+      {
+          value: 300,
+          color: '#FFC870',
+          highlight: '#FFC870',
+          label: 'Core Java'
+      },
+      {
+          value: 200,
+          color: 'lightgreen',
+          highlight: '#FFC870',
+          label: 'QA'
+      }           
     ];
 
     // Chart.js Options
@@ -1383,20 +1421,20 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
 
     // Chart.js Data
     $scope.ODYoYData = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        labels: ['April','May', 'June', 'July', 'August', 'Sep', 'Oct'],
         datasets: [
           {
-              label: 'My First dataset',
-              fillColor: 'rgba(220,220,220,0.2)',
+              label: 'Sold resource needs',
+              fillColor: 'rgba(320,220,220,0.2)',
               strokeColor: 'rgba(220,220,220,1)',
               pointColor: 'rgba(220,220,220,1)',
               pointStrokeColor: '#fff',
               pointHighlightFill: '#fff',
               pointHighlightStroke: 'rgba(220,220,220,1)',
-              data: [65, 59, 80, 81, 56, 55, 40]
+              data: [65, 59, 80, 81, 56, 55, 60]
           },
           {
-              label: 'My Second dataset',
+              label: 'Proposed resource needs',
               fillColor: 'rgba(151,187,205,0.2)',
               strokeColor: 'rgba(151,187,205,1)',
               pointColor: 'rgba(151,187,205,1)',
@@ -1461,5 +1499,160 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
     };
 
 
+
+}]);
+
+AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
+    var STORAGE_ID = 'Invoices';
+    $scope.EditMode = "false";
+    $scope.currentPage = 1;
+    $scope.pageSize = 5;
+
+    var InvoiceDetails = $scope.InvoiceDetails = [];
+
+    $scope.getInvoices = function () {
+        //debugger;
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
+        }).
+        success(function (data, status, headers, config) {
+
+            if (data != 'null') {
+                InvoiceDetails = $scope.InvoiceDetails = JSON.parse(JSON.parse(data));
+                //$scope.$parent.ActiveProjects = InvoiceDetails.length;
+            }
+        }).
+        error(function (data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+
+        });
+
+    };
+
+    $scope.EditInvoice= function (invoice, index) {
+        invoice.index = index;
+        $scope.InvoiceEntity = jQuery.extend(true, {}, invoice); // deep copy
+        $scope.OriginalInvoice = jQuery.extend(true, {}, invoice); // deep copy
+    }
+
+    $scope.ShowReceived = function (showReceived) {
+        if (showReceived == "Received" || showReceived == "Yes") {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    $scope.ShowPending = function (showPending) {
+        if (showPending == "Pending" || showPending == "No") {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    $scope.getInvoices();
+
+    $scope.setInvoices = function (InvoiceDetails) {
+        var referenceData = new Object();
+        referenceData.storageId = STORAGE_ID;
+        referenceData.storageData = JSON.stringify(InvoiceDetails);
+        $http({
+            url: 'api/Dashboard/SetReferenceData',
+            method: "POST",
+            data: JSON.stringify(JSON.stringify(referenceData))
+        })
+            .then(function (response) {
+                $scope.getInvoices();
+            },
+                function (response) { // optional
+                }
+            );
+    };
+
+    $scope.$watch('InvoiceDetails', function (newValue, oldValue) {
+        if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
+            $scope.setInvoices(InvoiceDetails);
+        }
+    }, true);
+
+    $scope.AddInvoice = function (InvoiceEntity) {
+        //debugger;
+        if (InvoiceEntity.index >= 0) {
+            InvoiceDetails[InvoiceEntity.index] = InvoiceEntity;
+        } else {
+            InvoiceDetails.push(InvoiceEntity);
+        }
+
+        $scope.InvoiceDetails = InvoiceDetails;
+        $scope.InvoiceEntity = '';
+    };
+
+
+    $scope.UploadFile = function () {
+        $http({
+            url: 'api/Dashboard/UploadFile',
+            method: "POST"            
+        })
+            .then(function (response) {
+                $scope.getInvoices();
+            },
+                function (response) { // optional
+                }
+            );
+
+    }
+
+
+    // Chart.js Data
+    $scope.InvoiceChartData = {
+        labels: ['Payment Pending','Closed','ATB Approval Pending','Processed'],
+        datasets: [
+          {
+              label: 'Invoices by Status',
+              fillColor: 'rgba(220,220,220,0.5)',
+              strokeColor: 'rgba(220,220,220,0.8)',
+              highlightFill: 'rgba(220,220,220,0.75)',
+              highlightStroke: 'rgba(220,220,220,1)',
+              data: [6, 5, 12, 23]
+          }
+        ]
+    };
+
+    // Chart.js Options
+    $scope.InvoiceChartOptions = {
+
+        // Sets the chart to be responsive
+        responsive: true,
+
+        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+        scaleBeginAtZero: true,
+
+        //Boolean - Whether grid lines are shown across the chart
+        scaleShowGridLines: true,
+
+        //String - Colour of the grid lines
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+
+        //Number - Width of the grid lines
+        scaleGridLineWidth: 1,
+
+        //Boolean - If there is a stroke on each bar
+        barShowStroke: true,
+
+        //Number - Pixel width of the bar stroke
+        barStrokeWidth: 2,
+
+        //Number - Spacing between each of the X value sets
+        barValueSpacing: 15,
+
+        //Number - Spacing between data sets within X values
+        barDatasetSpacing: 50,
+
+        //String - A legend template
+        legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+    };
 
 }]);

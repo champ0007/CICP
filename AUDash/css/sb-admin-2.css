@@ -5,7 +5,7 @@
  */
 
 body {
-    background-color: #f8f8f8;
+    background-color: #ffffff;
 }
 
 .page-header {
@@ -32,12 +32,15 @@ color:black;
     background-color: #fff;
 }
 
+.navbar-default{
+    background-color: #FFFFFF;
+}
 @media(min-width:768px) {
     #page-wrapper {
         position: inherit;
-        margin: 0 0 0 20px;
-        padding: 0 30px;
-        border-left: 1px solid #e7e7e7;
+        margin: 0 0 0 10px;
+        padding: 0 10px;
+        /*border-left: 1px solid #e7e7e7;*/
     }
 }
 
@@ -381,16 +384,16 @@ table.dataTable thead .sorting:after {
   padding-left: 0px;
 }
 
-.tc-chart-js-legend li {
+.tc-chart-js-legend tr td {
   display: block;
   float: left;
   clear:both;
   padding:10px;
 }
-.tc-chart-js-legend li span {
+.tc-chart-js-legend span {
   width:25px;
   height:25px;
-  display:block;
-  float:left;
+  display:inline-block;
+  /*float:left;*/
   margin-right:10px;
 }

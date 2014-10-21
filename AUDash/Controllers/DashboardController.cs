@@ -8,6 +8,9 @@ using System.Web.Http;
 using Newtonsoft;
 using Newtonsoft.Json;
 using AUDash.Repository;
+using OfficeOpenXml;
+using System.IO;
+
 
 namespace AUDash.Controllers
 {
@@ -63,8 +66,8 @@ namespace AUDash.Controllers
             //Resources.Add(new Resource() { FirstName = "Shakil", LastName = "Shaikh", CurrentProject = "Telstra", ProposedProject = "None", Level = "Manager", AvailableOn = "01-Dec-2014", Skills = "Adobe CQ", StartDate = "01-Mar-2014" });
             //Resources.Add(new Resource() { FirstName = "Shakil", LastName = "Shaikh", CurrentProject = "Telstra", ProposedProject = "None", Level = "Manager", AvailableOn = "01-Dec-2014", Skills = "Adobe CQ", StartDate = "01-Mar-2014" });
             //Resources.Add(new Resource() { FirstName = "Shakil", LastName = "Shaikh", CurrentProject = "Telstra", ProposedProject = "None", Level = "Manager", AvailableOn = "01-Dec-2014", Skills = "Adobe CQ", StartDate = "01-Mar-2014" });
-            
-            return JSONConcat(repo.GetAllResources()) ;
+
+            return JSONConcat(repo.GetAllResources());
         }
 
         private string JSONConcat(List<Resource> resourceList)
@@ -78,7 +81,7 @@ namespace AUDash.Controllers
             }
             concatString = concatString.Substring(0, concatString.Length - 1);
             concatString += "]";
-            
+
             return concatString;
 
         }
@@ -87,7 +90,7 @@ namespace AUDash.Controllers
         [HttpPost]
         public void AddResource([FromBody]string resource)
         {
-       
+
             repo.AddResource(resource);
         }
 
@@ -126,6 +129,52 @@ namespace AUDash.Controllers
 
             return JsonConvert.SerializeObject(kUpdates);
 
+        }
+
+        //POST api/Dashboard/UploadFile
+        [HttpPost]
+        public void UploadFile()
+        {
+            List<Invoice> invoices = new List<Invoice>();
+
+            string strError;
+            int rowCount = 6;
+            byte[] file = File.ReadAllBytes(@"C:\invoices.xlsx");
+            MemoryStream ms = new MemoryStream(file);
+            using (ExcelPackage package = new ExcelPackage(ms))
+            {
+                if (package.Workbook.Worksheets.Count <= 0)
+                    strError = "Your Excel file does not contain any work sheets";
+                else
+                {
+                    ExcelWorksheet invoiceWorkSheet = package.Workbook.Worksheets["EDC Billing & Collections"];
+                    while (invoiceWorkSheet.Cells[rowCount, 2].Value != null)
+                    {
+                        invoices.Add(new Invoice()
+                        {
+                            Project = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 2].Value),
+                            Partner = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 3].Value),
+                            Resource = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 4].Value),
+                            Period = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 5].Value),
+                            Date = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 6].Value),
+                            Hours = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 7].Value),
+                            Amount = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 8].Value),
+                            ATBApproval = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 9].Value),
+                            ATBApprovalSentOn = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 10].Value).IndexOf(" ") > 0 ? Convert.ToString(invoiceWorkSheet.Cells[rowCount, 10].Value).Substring(0, Convert.ToString(invoiceWorkSheet.Cells[rowCount, 10].Value).IndexOf(" ")) : Convert.ToString(invoiceWorkSheet.Cells[rowCount, 10].Value),
+                            InvoiceRaised = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 11].Value),
+                            InvoiceNo = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 12].Value),
+                            InvoiceRaisedOn = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 13].Value).IndexOf(" ") > 0 ? Convert.ToString(invoiceWorkSheet.Cells[rowCount, 13].Value).Substring(0, Convert.ToString(invoiceWorkSheet.Cells[rowCount, 13].Value).IndexOf(" ")) : Convert.ToString(invoiceWorkSheet.Cells[rowCount, 13].Value),
+                            Comments = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 14].Value),
+                            PaymentReceived = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 15].Value)
+                        });
+
+                        rowCount++;
+                    }
+                }
+            }
+
+            DBRepository repo = new DBRepository();
+            repo.SetReferenceData("Invoices", JsonConvert.SerializeObject(invoices));
         }
 
     }

@@ -1,0 +1,216 @@
+﻿<!--Begin Three Charts-->
+<div class="col-lg-12">
+    <div class="panel panel-blue">
+        <div class="panel-heading">
+            <i class="fa fa-bell fa-fw"></i> Upload Invoice Data
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="list-group">
+                <input type="button" value="Upload" class="btn-success btn-group-lg" ng-click="UploadFile()" />
+
+            </div>
+            <!-- /.list-group -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+    <!--End Three Charts-->
+    <div class="panel panel-blue">
+        <div class="panel-heading">
+            <i class="fa fa-info-circle fa-fw"></i> Invoices
+            <i class="fa fa-search"></i> <input ng-model="searchInvoice" class="textSearch" />
+            <span class="pull-right"> <input type="number" min="1" max="100" class="form-control" ng-model="pageSize"> <i class="fa fa-plus" data-toggle="modal" data-target=".bs-AddInvoice-modal-lg"></i>&nbsp;&nbsp;&nbsp;</span>
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped table-responsive">
+                <tr>
+                    <th>Edit</th>
+                    <th>Project</th>
+                    <th>Partner / Director</th>
+                    <th>Resource</th>
+                    <th>Period</th>
+                    <th>Date</th>
+                    <th>Hours</th>
+                    <th>Amount (USD)</th>
+                    <th>ATB Approval</th>
+                    <th>ATM Approval Sent on</th>
+                    <th>Invoice Raised</th>
+                    <th>Invoice No.</th>
+                    <th>InvoiceRaisedOn</th>
+                    <th>Comments</th>
+                    <th>Payment Received</th>
+                </tr>
+                <tr dir-paginate="invoice in InvoiceDetails  | filter: searchInvoice | itemsPerPage: pageSize" current-page="currentPage">
+                    <td><i class="fa fa-edit" ng-click="EditInvoice(invoice, $index)" data-toggle="modal" data-target=".bs-AddInvoice-modal-lg"> </i></td>
+                    <td>{{invoice.Project}}</td>
+                    <td>{{invoice.Partner}}</td>
+                    <td width="300px">{{invoice.Resource}}</td>
+                    <td>{{invoice.Period}}</td>
+                    <td>{{invoice.Date}}</td>
+                    <td>{{invoice.Hours}}</td>
+                    <td>{{invoice.Amount | currency}}</td>
+                    <td><i class="fa fa-check" ng-show="ShowReceived(invoice.ATBApproval)"></i><i class="fa fa-clock-o" ng-show="ShowPending(invoice.ATBApproval)"></i></td>
+                    <td>{{invoice.ATBApprovalSentOn}}</td>
+                    <td><i class="fa fa-check" ng-show="ShowReceived(invoice.InvoiceRaised)"></i><i class="fa fa-clock-o" ng-show="ShowPending(invoice.InvoiceRaised)"></i></td>
+                    <td>{{invoice.InvoiceNo}}</td>
+                    <td>{{invoice.InvoiceRaisedOn}}</td>
+                    <td width="300px">{{invoice.Comments}}</td>
+                    <td><i class="fa fa-check" ng-show="ShowReceived(invoice.PaymentReceived)"></i><i class="fa fa-clock-o" ng-show="ShowPending(invoice.PaymentReceived)"></i></td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <div class="text-center">
+                <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/js/dirPagination.tpl.html"></dir-pagination-controls>
+            </div>
+        </div>
+
+        <!-- /.panel-body -->
+    </div>
+
+    <div class="modal fade bs-AddInvoice-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Manage Invoice
+                        <div class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></div>
+                    </div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" name="addForm" role="form">
+                            <input type="hidden" ng-model="InvoiceEntity.index" />
+                            <div class="form-group">
+                                <label for="inputProjectName" class="col-sm-2 control-label">Project</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputProjectName" placeholder="Project" ng-model="InvoiceEntity.Project">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPartner" class="col-sm-2 control-label">Partner / Director</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputPartner" placeholder="Partner / Director" ng-model="InvoiceEntity.Partner">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputResource" class="col-sm-2 control-label">Resource</label>
+                                <div class="col-sm-10">
+                                    <textarea rows="5" class="form-control" id="inputResource" placeholder="Resource" ng-model="InvoiceEntity.Resource" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputPeriod" class="col-sm-2 control-label">Period</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputPeriod" placeholder="Period" ng-model="InvoiceEntity.Period">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputDate" class="col-sm-2 control-label">Date</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputDate" placeholder="Date Range" ng-model="InvoiceEntity.Date">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputHours" class="col-sm-2 control-label">Hours</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputHours" placeholder="Hours" ng-model="InvoiceEntity.Hours">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputAmount" class="col-sm-2 control-label">Amount (USD)</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputAmount" placeholder="USD" ng-model="InvoiceEntity.Amount">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="selectATBApproval" class="col-sm-2 control-label">ATB Approval</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="selectATBApproval" ng-model="InvoiceEntity.ATBApproval">
+                                        <option>Yes</option>
+                                        <option>Pending</option>
+                                        <option>No</option>
+                                        <option>N/A</option>
+                                        <option>Received</option>
+                                    </select>
+                                </div>
+
+                                <label for="inputATBSentOn" class="col-sm-2 control-label">ATB Approval Sent On</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="inputATBSentOn" placeholder="ATB Sent On" ng-model="InvoiceEntity.ATBApprovalSentOn">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="selectInvoiceRaised" class="col-sm-2 control-label">Invoice Raised</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="selectInvoiceRaised" ng-model="InvoiceEntity.InvoiceRaised">
+                                        <option>Yes</option>
+                                        <option>Pending</option>
+                                        <option>No</option>
+                                        <option>N/A</option>
+                                        <option>Received</option>
+                                    </select>
+                                </div>
+
+                                <label for="inputInvoiceNo" class="col-sm-2 control-label">Invoice No.</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="inputInvoiceNo" placeholder="Invoice No." ng-model="InvoiceEntity.InvoiceNo">
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="inputInvoiceRaisedOn" class="col-sm-2 control-label">Invoice Raised On</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="inputInvoiceRaisedOn" placeholder="Invoice Raised On" ng-model="InvoiceEntity.InvoiceRaisedOn">
+                                </div>
+
+                                <label for="selectPaymentReceived" class="col-sm-2 control-label">Payment Received</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="selectPaymentReceived" ng-model="InvoiceEntity.PaymentReceived">
+                                        <option>Pending</option>
+                                        <option>Received</option>
+                                        <option>N/A</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputComments" class="col-sm-2 control-label">Comments</label>
+                                <div class="col-sm-8">
+                                    <textarea rows="4" class="form-control" id="inputResources" placeholder="Comments" ng-model="InvoiceEntity.Comments" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-4 col-sm-10">
+                                    <button type="submit" class="btn btn-success" data-dismiss="modal" ng-click="AddInvoice(InvoiceEntity)">Save</button> &nbsp;
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="panel panel-blue">
+        <div class="panel-heading">
+            <i class="fa fa-ma fa-fw"></i> Standard Documents Library
+        </div>
+        <div class="panel-body">
+            <ul class="list-unstyled">
+                <li><a href="#">Work Order Template</a></li>
+                <li><a href="#">Visa Invitation Letter</a></li>
+                <li><a href="#">EDC Authorization Letter</a></li>
+                <li><a href="#">Key Travel Tips</a></li>
+
+            </ul>
+        </div>
+        <!-- /.panel-body -->
+    </div>
+</div>
+
+
+
