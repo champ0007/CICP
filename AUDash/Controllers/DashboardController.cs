@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using AUDash.Repository;
 using OfficeOpenXml;
 using System.IO;
+using System.Web;
 
 
 namespace AUDash.Controllers
@@ -135,13 +136,14 @@ namespace AUDash.Controllers
         [HttpPost]
         public void UploadFile()
         {
-            List<Invoice> invoices = new List<Invoice>();
+            HttpPostedFile uploadedFile = HttpContext.Current.Request.Files[0];
 
+            List<Invoice> invoices = new List<Invoice>();
             string strError;
             int rowCount = 6;
-            byte[] file = File.ReadAllBytes(@"C:\invoices.xlsx");
-            MemoryStream ms = new MemoryStream(file);
-            using (ExcelPackage package = new ExcelPackage(ms))
+            //byte[] file =  File.ReadAllBytes(@"C:\invoices.xlsx");
+            Stream inputStream = uploadedFile.InputStream;
+            using (ExcelPackage package = new ExcelPackage(inputStream))
             {
                 if (package.Workbook.Worksheets.Count <= 0)
                     strError = "Your Excel file does not contain any work sheets";

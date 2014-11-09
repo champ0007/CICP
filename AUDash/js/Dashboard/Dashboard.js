@@ -2,7 +2,7 @@
 /// <reference path="../jquery-1.10.2.intellisense.js" />
 var todos;
 
-var AUDashboardApp = angular.module("AUDashboardApp", ["ngRoute", "tc.chartjs", "angularUtils.directives.dirPagination"]);
+var AUDashboardApp = angular.module("AUDashboardApp", ["ngRoute", "tc.chartjs","angularFileUpload", "angularUtils.directives.dirPagination"]);
 
 AUDashboardApp.config(['$routeProvider',
     function ($routeProvider) {
@@ -40,8 +40,6 @@ AUDashboardApp.config(['$routeProvider',
         });
     }
 ]);
-
-
 
 AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($scope, $http) {
 
@@ -1502,7 +1500,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
 
 }]);
 
-AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
+AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', 'FileUploader', function ($scope, $filter, $http, FileUploader) {
     var STORAGE_ID = 'Invoices';
     $scope.EditMode = "false";
     $scope.currentPage = 1;
@@ -1590,11 +1588,30 @@ AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', f
         $scope.InvoiceEntity = '';
     };
 
+    
+    var uploader = $scope.uploader = new FileUploader({
+        url: 'api/Dashboard/UploadFile',
+        autoUpload: true,
+        removeAfterUpload: true
+    });
+
+    uploader.onCompleteItem = function (fileItem, response, status, headers) {
+         $scope.getInvoices();
+    };
+
+    // FILTERS
+
+    //uploader.filters.push({
+    //    name: 'customFilter',
+    //    fn: function(item /*{File|FileLikeObject}*/, options) {
+    //        return this.queue.length < 10;
+    //    }
+    //});
 
     $scope.UploadFile = function () {
         $http({
             url: 'api/Dashboard/UploadFile',
-            method: "POST"            
+            method: "POST"          
         })
             .then(function (response) {
                 $scope.getInvoices();

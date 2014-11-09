@@ -196,6 +196,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="images\DD_RGB_black-small.jpg" />
+    <Content Include="js\angular-file-upload.js" />
+    <Content Include="js\angular-file-upload.min.js" />
     <Content Include="js\bootstrap-datepicker.js" />
     <Content Include="js\bootstrap.js" />
     <Content Include="js\bootstrap.min.js" />
@@ -248,6 +250,7 @@
     <Content Include="font-awesome-4.1.0\scss\_stacked.scss" />
     <Content Include="font-awesome-4.1.0\scss\_variables.scss" />
     <Content Include="font-awesome-4.1.0\scss\font-awesome.scss" />
+    <Content Include="js\angular-file-upload.min.map" />
     <None Include="js\jquery-1.10.2.intellisense.js" />
     <Content Include="js\Chart.js" />
     <Content Include="js\ChartNew.js" />
