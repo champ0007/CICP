@@ -2,7 +2,7 @@
 /// <reference path="../jquery-1.10.2.intellisense.js" />
 var todos;
 
-var AUDashboardApp = angular.module("AUDashboardApp", ["ngRoute", "tc.chartjs","angularFileUpload", "angularUtils.directives.dirPagination"]);
+var AUDashboardApp = angular.module("AUDashboardApp", ["ngRoute", "tc.chartjs", "angularFileUpload", "angularUtils.directives.dirPagination"]);
 
 AUDashboardApp.config(['$routeProvider',
     function ($routeProvider) {
@@ -483,7 +483,7 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
     var keyUpdates = $scope.keyUpdates = [];
 
     $scope.getKeyUpdates = function () {
-        
+
         $http({
             method: 'GET',
             url: 'api/Dashboard/GetReferenceData?storageId=KeyUpdates'
@@ -695,7 +695,7 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', '$http'
     //});
 
     $scope.getTodos = function () {
-        
+
         $http({
             method: 'GET',
             url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
@@ -934,19 +934,23 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
 
 }]);
 
-AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', function ($scope, $http) {
-
+AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'FileUploader', function ($scope, $http, FileUploader) {
+    var STORAGE_ID = 'Resources';
     $scope.EditMode = "false";
 
-    $scope.GetResource = function () {
+    var resources = $scope.AllResources = [];
+
+    $scope.getResources = function () {
         $http({
             method: 'GET',
-            url: 'api/Dashboard/GetResourceList'
+            url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
         }).
         success(function (data, status, headers, config) {
-            $scope.AllResources = JSON.parse(JSON.parse(data));
-            $scope.$parent.ActiveResources = $scope.AllResources.length;
-            $scope.UpdateChart(1, 1, 1);
+            if (data != null) {
+                resources = $scope.AllResources = JSON.parse(JSON.parse(data));
+                $scope.$parent.ActiveResources = $scope.AllResources.length;
+                $scope.UpdateChart();
+            }
         }).
         error(function (data, status, headers, config) {
             // called asynchronously if an error occurs
@@ -955,61 +959,77 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', funct
         });
     };
 
-    $scope.EditResource = function (resource) {
-        //debugger;
+
+
+    $scope.setResources = function (resourcesToBeSaved) {
+        var referenceData = new Object();
+        referenceData.storageId = STORAGE_ID;
+        referenceData.storageData = JSON.stringify(resourcesToBeSaved);
+        $http({
+            url: 'api/Dashboard/SetReferenceData',
+            method: "POST",
+            data: JSON.stringify(JSON.stringify(referenceData))
+        })
+            .then(function (response) {
+                $scope.getResources();
+            },
+                function (response) { // optional
+                }
+            );
+    };
+
+    $scope.$watch('AllResources', function (newValue, oldValue) {
+        if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
+            $scope.setResources(resources);
+        }
+    }, true);
+
+    $scope.EditResource = function (resource, index) {
+        debugger;
+        resource.index = index;
         $scope.EditMode = "true";
         //Shallow Copy - $scope.ResourceEntity = resource;
         $scope.ResourceEntity = jQuery.extend(true, {}, resource); // deep copy
-
+        $scope.OriginalResourceEntity = jQuery.extend(true, {}, resource); // deep copy
     }
 
     $scope.addResource = function (resource) {
         //debugger;
-
-        if ($scope.EditMode == "true") {
-            $http({
-                url: 'api/Dashboard/EditResource',
-                method: "POST",
-                data: "'" + JSON.stringify(resource) + "'"
-            })
-                .then(function (response) {
-
-                    $scope.GetResource();
-                    $scope.ResourceEntity = '';
-                    $scope.EditMode == "false";
-                    dialog.close;
-
-                },
-                    function (response) { // optional
-                    }
-                );
-
+        //debugger;
+        if (resource.index >= 0) {
+            resources[resource.index] = resource;
         } else {
-            $http({
-                url: 'api/Dashboard/AddResource',
-                method: "POST",
-                data: "'" + JSON.stringify(resource) + "'"
-            })
-                .then(function (response) {
-
-                    $scope.GetResource();
-                    $scope.ResourceEntity = '';
-                    dialog.close;
-
-                },
-                    function (response) { // optional
-                    }
-                );
+            resources.push(resource);
         }
-
-
+        $scope.AllResources = resources;
+        $scope.ResourceEntity = '';
 
     };
 
+    var chartLabels, chartData;
+
     $scope.UpdateChart = function () {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetResourceChartData'
+        }).
+      success(function (data, status, headers, config) {
+          if (data != null) {
+              debugger;
+              chartLabels = JSON.parse(data[0]);
+              chartData = JSON.parse(data[1]);
+          }
+      }).
+      error(function (data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+          $scope.AllResources = -1;
+      });
+
+
         // Chart.js Data
         $scope.ResourceChartData = {
-            labels: ['AMP', 'Telstra', 'QUU', 'AusSuper', 'ANZ', 'Caltex'],
+            labels: chartLabels, // ['AMP', 'Telstra', 'QUU', 'AusSuper', 'ANZ', 'Caltex'],
             datasets: [
               {
                   label: 'My First dataset',
@@ -1017,7 +1037,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', funct
                   strokeColor: '#000000',
                   highlightFill: '#000000',
                   highlightStroke: '#FFFFFF',
-                  data: [65, 59, 80, 81, 56, 55]
+                  data: chartData //[65, 59, 80, 81, 56, 55]
               }
 
             ]
@@ -1059,9 +1079,18 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', funct
 
     };
 
-    $scope.GetResource();
+    //File upload functionality
+    var uploader = $scope.uploader = new FileUploader({
+        url: 'api/Dashboard/UploadResources',
+        autoUpload: true
+        //removeAfterUpload: true
+    });
 
+    uploader.onCompleteItem = function (fileItem, response, status, headers) {
+        $scope.getResources();
+    };
 
+    $scope.getResources();
 
 }]);
 
@@ -1376,7 +1405,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
           color: 'lightgreen',
           highlight: '#FFC870',
           label: 'QA'
-      }           
+      }
     ];
 
     // Chart.js Options
@@ -1419,7 +1448,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
 
     // Chart.js Data
     $scope.ODYoYData = {
-        labels: ['April','May', 'June', 'July', 'August', 'Sep', 'Oct'],
+        labels: ['April', 'May', 'June', 'July', 'August', 'Sep', 'Oct'],
         datasets: [
           {
               label: 'Sold resource needs',
@@ -1529,7 +1558,7 @@ AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', '
 
     };
 
-    $scope.EditInvoice= function (invoice, index) {
+    $scope.EditInvoice = function (invoice, index) {
         invoice.index = index;
         $scope.InvoiceEntity = jQuery.extend(true, {}, invoice); // deep copy
         $scope.OriginalInvoice = jQuery.extend(true, {}, invoice); // deep copy
@@ -1588,15 +1617,16 @@ AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', '
         $scope.InvoiceEntity = '';
     };
 
-    
+
+    //File upload functionality
     var uploader = $scope.uploader = new FileUploader({
-        url: 'api/Dashboard/UploadFile',
-        autoUpload: true,
-        removeAfterUpload: true
+        url: 'api/Dashboard/UploadInvoices',
+        autoUpload: true
+        //removeAfterUpload: true
     });
 
     uploader.onCompleteItem = function (fileItem, response, status, headers) {
-         $scope.getInvoices();
+        $scope.getInvoices();
     };
 
     // FILTERS
@@ -1608,24 +1638,12 @@ AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', '
     //    }
     //});
 
-    $scope.UploadFile = function () {
-        $http({
-            url: 'api/Dashboard/UploadFile',
-            method: "POST"          
-        })
-            .then(function (response) {
-                $scope.getInvoices();
-            },
-                function (response) { // optional
-                }
-            );
 
-    }
 
 
     // Chart.js Data
     $scope.InvoiceChartData = {
-        labels: ['Payment Pending','Closed','ATB Approval Pending','Processed'],
+        labels: ['Payment Pending', 'Closed', 'ATB Approval Pending', 'Processed'],
         datasets: [
           {
               label: 'Invoices by Status',

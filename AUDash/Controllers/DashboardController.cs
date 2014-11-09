@@ -11,6 +11,7 @@ using AUDash.Repository;
 using OfficeOpenXml;
 using System.IO;
 using System.Web;
+using System.Text;
 
 
 namespace AUDash.Controllers
@@ -48,6 +49,16 @@ namespace AUDash.Controllers
         {
             string response = repo.GetReferenceData(storageId);
             return response == string.Empty ? null : response;
+        }
+
+        //GET api/Dashboard/GetResourceChartData
+        public List<string> GetResourceChartData()
+        {
+
+            return ParseResourceData(repo.GetReferenceData("Resources"));
+
+
+
         }
 
         //POST api/Dashboard/SetReferenceData
@@ -134,7 +145,7 @@ namespace AUDash.Controllers
 
         //POST api/Dashboard/UploadFile
         [HttpPost]
-        public void UploadFile()
+        public void UploadInvoices()
         {
             HttpPostedFile uploadedFile = HttpContext.Current.Request.Files[0];
 
@@ -177,6 +188,97 @@ namespace AUDash.Controllers
 
             DBRepository repo = new DBRepository();
             repo.SetReferenceData("Invoices", JsonConvert.SerializeObject(invoices));
+        }
+
+        public void UploadResources()
+        {
+            HttpPostedFile uploadedFile = HttpContext.Current.Request.Files[0];
+            byte[] file = File.ReadAllBytes(@"C:\Availability Report - USI TAB.xlsx");
+
+            List<ResourceEntity> resources = new List<ResourceEntity>();
+            string strError;
+            int rowCount = 5;
+            MemoryStream ms = new MemoryStream(file);
+
+            //Stream inputStream = uploadedFile.InputStream;
+
+            using (ExcelPackage package = new ExcelPackage(ms))
+            {
+                if (package.Workbook.Worksheets.Count <= 0)
+                    strError = "Your Excel file does not contain any work sheets";
+                else
+                {
+                    ExcelWorksheet resourceWorkSheet = package.Workbook.Worksheets["US-I"];
+                    while (resourceWorkSheet.Cells[rowCount, 1].Value != null)
+                    {
+                        resources.Add(new ResourceEntity()
+                        {
+                            FirstName = Convert.ToString(resourceWorkSheet.Cells[rowCount, 1].Value).Split(',')[1].Trim(),
+                            LastName = Convert.ToString(resourceWorkSheet.Cells[rowCount, 1].Value).Split(',')[0].Trim(),
+                            Skills = Convert.ToString(resourceWorkSheet.Cells[rowCount, 2].Value),
+                            Level = Convert.ToString(resourceWorkSheet.Cells[rowCount, 4].Value),
+                            LastProject = String.Empty,
+                            CurrentProject = Convert.ToString(resourceWorkSheet.Cells[rowCount, 17].Value),
+                            NextProject = String.Empty,
+                            AvailableOn = Convert.ToString(resourceWorkSheet.Cells[5, 19].Value).Split(' ')[0]
+                        });
+
+                        rowCount++;
+                    }
+                }
+            }
+
+            DBRepository repo = new DBRepository();
+            repo.SetReferenceData("Resources", JsonConvert.SerializeObject(resources));
+        }
+
+        private List<string> ParseResourceData(string resourceData)
+        {
+            List<string> Projects = new List<string>();
+
+            List<ResourceEntity> resources = JsonConvert.DeserializeObject<List<ResourceEntity>>(resourceData);
+            foreach (ResourceEntity resource in resources)
+            {
+                if (resource.CurrentProject.IndexOf(",") > 0)
+                {
+
+                    foreach (string project in resource.CurrentProject.Split(','))
+                    {
+                        if (project.Contains("AU"))
+                        {
+                            Projects.Add(project.Split('(')[0].Trim().Split('_')[0]);
+                        }
+                    }
+
+                }
+                else
+                {
+                    if (resource.CurrentProject.Contains("AU"))
+                    {
+                        Projects.Add(resource.CurrentProject.Split('(')[0].Trim().Split('_')[0]);
+                    }
+
+                }
+            }
+
+            List<GroupedProject> GroupedProjects = Projects
+                .GroupBy(s => s)
+                .Select(group => new GroupedProject() { Project = group.Key, Count = group.Count() }).ToList();
+            List<string> chartLabelsb = new List<string>();
+            List<int> chartDatab = new List<int>();
+            
+            foreach (GroupedProject pro in GroupedProjects)
+            {
+                chartLabelsb.Add(pro.Project);
+                chartDatab.Add(pro.Count);
+            }
+
+            List<string> returnList = new List<string>();
+            returnList.Add(JsonConvert.SerializeObject(chartLabelsb));
+            returnList.Add(JsonConvert.SerializeObject(chartDatab));
+
+            return returnList;
+
         }
 
     }

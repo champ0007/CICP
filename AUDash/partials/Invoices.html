@@ -7,20 +7,12 @@
         <!-- /.panel-heading -->
         <div class="panel-body">
             <div class="list-group">
-               <!-- <div ng-show="uploader.isHTML5">-->
-                    <!-- 3. nv-file-over uploader="link" over-class="className" -->
-                    <!--<div class="well my-drop-zone" nv-file-over="" uploader="uploader">
-                        Drop your file here
-                    </div>
-                   
-                </div>-->
-                
                 <input type="file" nv-file-select="" uploader="uploader" />
 
-                <div class="col-md-9" style="margin-bottom: 40px">
+                <div style="margin-bottom: 40px">
                     <!--<h3>Upload queue</h3>
                     <p>Queue length: {{ uploader.queue.length }}</p>-->
-                    <table class="table" ng-show="uploader.queue.length">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th width="50%">Name</th>
@@ -76,8 +68,6 @@
                         </button>
                     </div>-->
                 </div>
-
-                <!--<input type="button"  value="Upload" class="btn-success btn-group-lg" ng-click="UploadFile()" />-->
 
             </div>
             <!-- /.list-group -->
