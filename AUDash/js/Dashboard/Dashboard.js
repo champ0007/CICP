@@ -861,39 +861,15 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
 
     // Chart.js Data
     $scope.ActiveProjectChartData = {
-        labels: ['Project Status'],
+        labels: ['Proposed','Sold', 'InProgress', 'Lost'],
         datasets: [
           {
-              label: 'Proposed',
+              label: 'Project Status',
               fillColor: 'rgba(220,220,220,0.5)',
               strokeColor: 'rgba(220,220,220,0.8)',
               highlightFill: 'rgba(220,220,220,0.75)',
               highlightStroke: 'rgba(220,220,220,1)',
-              data: [6]
-          },
-          {
-              label: 'Sold',
-              fillColor: 'rgba(151,187,205,0.5)',
-              strokeColor: 'rgba(151,187,205,0.8)',
-              highlightFill: 'rgba(151,187,205,0.75)',
-              highlightStroke: 'rgba(151,187,205,1)',
-              data: [9]
-          },
-          {
-              label: 'InProgress',
-              fillColor: 'rgba(551,187,205,0.5)',
-              strokeColor: 'rgba(551,187,205,0.8)',
-              highlightFill: 'rgba(551,187,205,0.75)',
-              highlightStroke: 'rgba(551,187,205,1)',
-              data: [8]
-          },
-          {
-              label: 'Lost',
-              fillColor: 'rgba(251,087,005,0.5)',
-              strokeColor: 'rgba(551,487,005,0.8)',
-              highlightFill: 'rgba(551,487,005,0.75)',
-              highlightStroke: 'rgba(551,487,005,1)',
-              data: [13]
+              data: [6,4,5,6]
           }
         ]
     };

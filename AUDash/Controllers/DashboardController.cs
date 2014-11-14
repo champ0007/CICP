@@ -54,11 +54,7 @@ namespace AUDash.Controllers
         //GET api/Dashboard/GetResourceChartData
         public List<string> GetResourceChartData()
         {
-
             return ParseResourceData(repo.GetReferenceData("Resources"));
-
-
-
         }
 
         //POST api/Dashboard/SetReferenceData
@@ -66,6 +62,11 @@ namespace AUDash.Controllers
         public void SetReferenceData([FromBody] string referenceData)
         {
             ReferenceData refData = JsonConvert.DeserializeObject<ReferenceData>(referenceData);
+            //Set Session Values
+            
+            HttpContext.Current.Session[refData.storageId] = refData.storageData;
+            string sessionvalue = Convert.ToString(HttpContext.Current.Session[refData.storageId]);
+
             repo.SetReferenceData(refData.storageId, refData.storageData);
         }
 
@@ -193,16 +194,16 @@ namespace AUDash.Controllers
         public void UploadResources()
         {
             HttpPostedFile uploadedFile = HttpContext.Current.Request.Files[0];
-            byte[] file = File.ReadAllBytes(@"C:\Availability Report - USI TAB.xlsx");
+            //byte[] file = File.ReadAllBytes(@"C:\Availability Report - USI TAB.xlsx");
 
             List<ResourceEntity> resources = new List<ResourceEntity>();
             string strError;
             int rowCount = 5;
-            MemoryStream ms = new MemoryStream(file);
+            //MemoryStream ms = new MemoryStream(file);
 
-            //Stream inputStream = uploadedFile.InputStream;
+            Stream inputStream = uploadedFile.InputStream;
 
-            using (ExcelPackage package = new ExcelPackage(ms))
+            using (ExcelPackage package = new ExcelPackage(inputStream))
             {
                 if (package.Workbook.Worksheets.Count <= 0)
                     strError = "Your Excel file does not contain any work sheets";
