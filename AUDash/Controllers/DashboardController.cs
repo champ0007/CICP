@@ -44,12 +44,6 @@ namespace AUDash.Controllers
             return 40;
         }
 
-        //GET api/Dashboard/GetProjectChartData //Added by Vibhav
-        public List<string> GetProjectChartData()
-        {
-            return ParseProjectData(repo.GetReferenceData("Projects"));
-        }
-
         //GET api/Dashboard/GetReferenceData
         public string GetReferenceData(string storageId)
         {
@@ -70,8 +64,8 @@ namespace AUDash.Controllers
             ReferenceData refData = JsonConvert.DeserializeObject<ReferenceData>(referenceData);
             //Set Session Values
             
-            //HttpContext.Current.Session[refData.storageId] = refData.storageData;
-            //string sessionvalue = Convert.ToString(HttpContext.Current.Session[refData.storageId]);
+            HttpContext.Current.Session[refData.storageId] = refData.storageData;
+            string sessionvalue = Convert.ToString(HttpContext.Current.Session[refData.storageId]);
 
             repo.SetReferenceData(refData.storageId, refData.storageData);
         }
@@ -288,34 +282,5 @@ namespace AUDash.Controllers
 
         }
 
-        //Added by Vibhav. Create chart data from data row
-        private List<string> ParseProjectData(string projectData)
-        {
-            List<string> Projects = new List<string>();
-            List<ProjectEntity> projs = JsonConvert.DeserializeObject<List<ProjectEntity>>(projectData);
-            
-            foreach(ProjectEntity p in projs){
-                Projects.Add(p.Stage);
-            }
-
-            List<ProjGroupedByStatus> GroupedProjects = Projects
-                .GroupBy(s => s)
-                .Select(group => new ProjGroupedByStatus() { ProjectStatus = group.Key, Count = group.Count() }).ToList();
-            List<string> chartLabelsb = new List<string>();
-            List<int> chartDatab = new List<int>();
-
-            foreach (ProjGroupedByStatus pro in GroupedProjects)
-            {
-                chartLabelsb.Add(pro.ProjectStatus);
-                chartDatab.Add(pro.Count);
-            }
-
-            List<string> returnList = new List<string>();
-            returnList.Add(JsonConvert.SerializeObject(chartLabelsb));
-            returnList.Add(JsonConvert.SerializeObject(chartDatab));
-
-            return returnList;
-
-        }
     }
 }
