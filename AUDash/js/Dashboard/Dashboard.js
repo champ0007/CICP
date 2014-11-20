@@ -806,6 +806,7 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
             if (data != 'null') {
                 ProjectDetails = $scope.ActiveProjectDetails = JSON.parse(JSON.parse(data));
                 $scope.$parent.ActiveProjects = ProjectDetails.length;
+                $scope.UpdateChart();
             }
         }).
         error(function (data, status, headers, config) {
@@ -822,8 +823,7 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
         $scope.OriginalProject = jQuery.extend(true, {}, project); // deep copy
     }
 
-    $scope.getProjects();
-
+    
     $scope.setProjects = function (ProjectDetails) {
         var referenceData = new Object();
         referenceData.storageId = STORAGE_ID;
@@ -834,7 +834,7 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
             data: JSON.stringify(JSON.stringify(referenceData))
         })
             .then(function (response) {
-                $scope.getProjects();
+                $scope.getProjects();                
             },
                 function (response) { // optional
                 }
@@ -859,54 +859,81 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
         $scope.ProjectEntity = '';
     };
 
-    // Chart.js Data
-    $scope.ActiveProjectChartData = {
-        labels: ['Proposed','Sold', 'InProgress', 'Lost'],
-        datasets: [
-          {
-              label: 'Project Status',
-              fillColor: 'rgba(220,220,220,0.5)',
-              strokeColor: 'rgba(220,220,220,0.8)',
-              highlightFill: 'rgba(220,220,220,0.75)',
-              highlightStroke: 'rgba(220,220,220,1)',
-              data: [6,4,5,6]
+    //addeb by Vibhav. set the chart data dynamically.
+ //   $scope.chartLabels, $scope.chartData;
+
+    $scope.UpdateChart = function () {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetProjectChartData'
+        }).
+      success(function (data, status, headers, config) {
+          if (data != null) {
+              debugger;
+              $scope.chartLabels = JSON.parse(data[0]);
+              $scope.chartData = JSON.parse(data[1]);
+              $scope.ActiveProjectChartData.labels = $scope.chartLabels;
+              $scope.ActiveProjectChartData.datasets[0].data = $scope.chartData;
           }
-        ]
+      }).
+      error(function (data, status, headers, config) {  
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+          $scope.AllResources = -1;
+      });
+
+
+        // Chart.js Data
+        $scope.ActiveProjectChartData = {
+            labels: $scope.chartLabels,
+            datasets: [
+              {
+                  label: 'Project Status',
+                  fillColor: 'rgba(220,220,220,0.5)',
+                  strokeColor: 'rgba(220,220,220,0.8)',
+                  highlightFill: 'rgba(220,220,220,0.75)',
+                  highlightStroke: 'rgba(220,220,220,1)',
+                  data: $scope.chartData
+              }
+            ]
+        };
+
+        // Chart.js Options
+        $scope.ActiveProjectChartOptions = {
+
+            // Sets the chart to be responsive
+            responsive: true,
+
+            //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+            scaleBeginAtZero: true,
+
+            //Boolean - Whether grid lines are shown across the chart
+            scaleShowGridLines: true,
+
+            //String - Colour of the grid lines
+            scaleGridLineColor: "rgba(0,0,0,.05)",
+
+            //Number - Width of the grid lines
+            scaleGridLineWidth: 1,
+
+            //Boolean - If there is a stroke on each bar
+            barShowStroke: true,
+
+            //Number - Pixel width of the bar stroke
+            barStrokeWidth: 2,
+
+            //Number - Spacing between each of the X value sets
+            barValueSpacing: 15,
+
+            //Number - Spacing between data sets within X values
+            barDatasetSpacing: 50,
+
+            //String - A legend template
+            legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+        };
+
     };
-
-    // Chart.js Options
-    $scope.ActiveProjectChartOptions = {
-
-        // Sets the chart to be responsive
-        responsive: true,
-
-        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
-        scaleBeginAtZero: true,
-
-        //Boolean - Whether grid lines are shown across the chart
-        scaleShowGridLines: true,
-
-        //String - Colour of the grid lines
-        scaleGridLineColor: "rgba(0,0,0,.05)",
-
-        //Number - Width of the grid lines
-        scaleGridLineWidth: 1,
-
-        //Boolean - If there is a stroke on each bar
-        barShowStroke: true,
-
-        //Number - Pixel width of the bar stroke
-        barStrokeWidth: 2,
-
-        //Number - Spacing between each of the X value sets
-        barValueSpacing: 15,
-
-        //Number - Spacing between data sets within X values
-        barDatasetSpacing: 50,
-
-        //String - A legend template
-        legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
-    };
+    $scope.getProjects();
 
 }]);
 
