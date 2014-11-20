@@ -1,5 +1,4 @@
-﻿using AUDash.SessionManagement;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -18,7 +17,7 @@ namespace AUDash
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            ).RouteHandler = new SessionStateRouteHandler();
+            );
         }
     }
 }
