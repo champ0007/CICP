@@ -806,6 +806,7 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
             if (data != 'null') {
                 ProjectDetails = $scope.ActiveProjectDetails = JSON.parse(JSON.parse(data));
                 $scope.$parent.ActiveProjects = ProjectDetails.length;
+                $scope.UpdateChart();
             }
         }).
         error(function (data, status, headers, config) {
@@ -821,8 +822,6 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
         $scope.ProjectEntity = jQuery.extend(true, {}, project); // deep copy
         $scope.OriginalProject = jQuery.extend(true, {}, project); // deep copy
     }
-
-    $scope.getProjects();
 
     $scope.setProjects = function (ProjectDetails) {
         var referenceData = new Object();
@@ -859,9 +858,31 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
         $scope.ProjectEntity = '';
     };
 
+    $scope.UpdateChart = function () {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetProjectChartData'
+        }).
+      success(function (data, status, headers, config) {
+          if (data != null) {
+              debugger;
+              $scope.chartLabels = JSON.parse(data[0]);
+              $scope.chartData = JSON.parse(data[1]);
+              $scope.ActiveProjectChartData.labels = $scope.chartLabels;
+              $scope.ActiveProjectChartData.datasets[0].data = $scope.chartData;
+          }
+      }).
+      error(function (data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+          $scope.AllResources = -1;
+      });
+    }
+
+
     // Chart.js Data
     $scope.ActiveProjectChartData = {
-        labels: ['Proposed','Sold', 'InProgress', 'Lost'],
+        labels: $scope.chartLabels,
         datasets: [
           {
               label: 'Project Status',
@@ -869,7 +890,7 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
               strokeColor: 'rgba(220,220,220,0.8)',
               highlightFill: 'rgba(220,220,220,0.75)',
               highlightStroke: 'rgba(220,220,220,1)',
-              data: [6,4,5,6]
+              data: $scope.chartData
           }
         ]
     };
@@ -907,6 +928,8 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
         //String - A legend template
         legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
     };
+
+    $scope.getProjects();
 
 }]);
 
