@@ -50,6 +50,12 @@ namespace AUDash.Controllers
             return ParseProjectData(repo.GetReferenceData("Projects"));
         }
 
+        //GET api/GetSoldProposedChartData
+        public List<string> GetSoldProposedChartData()
+        {
+            return ParseSoldProposedData(repo.GetReferenceData("Projects"));
+        }
+
         //GET api/Dashboard/GetReferenceData
         public string GetReferenceData(string storageId)
         {
@@ -69,7 +75,7 @@ namespace AUDash.Controllers
         {
             ReferenceData refData = JsonConvert.DeserializeObject<ReferenceData>(referenceData);
             //Set Session Values
-            
+
             //HttpContext.Current.Session[refData.storageId] = refData.storageData;
             //string sessionvalue = Convert.ToString(HttpContext.Current.Session[refData.storageId]);
 
@@ -271,9 +277,10 @@ namespace AUDash.Controllers
             List<GroupedProject> GroupedProjects = Projects
                 .GroupBy(s => s)
                 .Select(group => new GroupedProject() { Project = group.Key, Count = group.Count() }).ToList();
+
             List<string> chartLabelsb = new List<string>();
             List<int> chartDatab = new List<int>();
-            
+
             foreach (GroupedProject pro in GroupedProjects)
             {
                 chartLabelsb.Add(pro.Project);
@@ -318,6 +325,119 @@ namespace AUDash.Controllers
             return returnList;
 
         }
+
+        private List<string> ParseSoldProposedData(string projects)
+        {
+            List<ProjectEntity> projs = JsonConvert.DeserializeObject<List<ProjectEntity>>(projects);
+
+            Dictionary<string, int> soldProjects = new Dictionary<string, int>();
+            soldProjects.Add(((ChartMonths)DateTime.Now.Month).ToString() + DateTime.Now.Year.ToString(), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(1).Month).ToString() + DateTime.Now.AddMonths(1).Year.ToString(), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(2).Month).ToString() + DateTime.Now.AddMonths(2).Year.ToString(), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(3).Month).ToString() + DateTime.Now.AddMonths(3).Year.ToString(), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(4).Month).ToString() + DateTime.Now.AddMonths(4).Year.ToString(), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(5).Month).ToString() + DateTime.Now.AddMonths(5).Year.ToString(), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(6).Month).ToString() + DateTime.Now.AddMonths(6).Year.ToString(), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(7).Month).ToString() + DateTime.Now.AddMonths(7).Year.ToString(), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(8).Month).ToString() + DateTime.Now.AddMonths(8).Year.ToString(), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(9).Month).ToString() + DateTime.Now.AddMonths(9).Year.ToString(), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(10).Month).ToString() + DateTime.Now.AddMonths(10).Year.ToString(), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(11).Month).ToString() + DateTime.Now.AddMonths(11).Year.ToString(), 0);
+
+
+            Dictionary<string, int> proposedProjects = new Dictionary<string, int>();
+
+            proposedProjects.Add(((ChartMonths)DateTime.Now.Month).ToString() + DateTime.Now.Year.ToString(), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(1).Month).ToString() + DateTime.Now.AddMonths(1).Year.ToString(), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(2).Month).ToString() + DateTime.Now.AddMonths(2).Year.ToString(), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(3).Month).ToString() + DateTime.Now.AddMonths(3).Year.ToString(), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(4).Month).ToString() + DateTime.Now.AddMonths(4).Year.ToString(), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(5).Month).ToString() + DateTime.Now.AddMonths(5).Year.ToString(), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(6).Month).ToString() + DateTime.Now.AddMonths(6).Year.ToString(), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(7).Month).ToString() + DateTime.Now.AddMonths(7).Year.ToString(), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(8).Month).ToString() + DateTime.Now.AddMonths(8).Year.ToString(), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(9).Month).ToString() + DateTime.Now.AddMonths(9).Year.ToString(), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(10).Month).ToString() + DateTime.Now.AddMonths(10).Year.ToString(), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(11).Month).ToString() + DateTime.Now.AddMonths(11).Year.ToString(), 0);
+
+            foreach (ProjectEntity project in projs)
+            {
+                if (ParseProjectStatus(project.Stage) == "Sold")
+                {
+                    PopulateProjects(soldProjects, project);
+                    PopulateProjects(proposedProjects, project);
+                }
+                else
+                {
+                    PopulateProjects(proposedProjects, project);
+                }
+            }
+
+            List<string> chartData = new List<string>();
+
+            chartData.Add(JsonConvert.SerializeObject(soldProjects.Keys.ToList<string>()));
+            chartData.Add(JsonConvert.SerializeObject(soldProjects.Values.ToList<int>()));
+            chartData.Add(JsonConvert.SerializeObject(proposedProjects.Values.ToList<int>()));
+
+            return chartData;
+
+        }
+
+        private string ParseProjectStatus(string projectStage)
+        {
+            string projectStatus = string.Empty;
+
+            switch (projectStage)
+            {
+                case "Contacted":
+                    projectStatus = "Proposed";
+                    break;
+                case "Qualified":
+                    projectStatus = "Proposed";
+                    break;
+                case "Proposal":
+                    projectStatus = "Proposed";
+                    break;
+                case "Verbal Commit":
+                    projectStatus = "Proposed";
+                    break;
+                case "Sold":
+                    projectStatus = "Sold";
+                    break;
+                case "Design":
+                    projectStatus = "Sold";
+                    break;
+                case "Development":
+                    projectStatus = "Sold";
+                    break;
+                case "UAT":
+                    projectStatus = "Sold";
+                    break;
+                case "Completed":
+                    projectStatus = "Sold";
+                    break;
+                case "Abandoned / Lost":
+                    projectStatus = "Lost";
+                    break;
+            }
+
+            return projectStatus;
+
+        }
+
+
+        private static void PopulateProjects(Dictionary<string, int> projects, ProjectEntity project)
+        {
+            for (DateTime projectDate = Convert.ToDateTime(project.StartDate); projectDate <= Convert.ToDateTime(project.EndDate); projectDate = projectDate.AddMonths(1))
+            {
+                if (projects.ContainsKey(((ChartMonths)projectDate.Month).ToString() + projectDate.Year.ToString()))
+                {
+                    projects[((ChartMonths)projectDate.Month).ToString() + projectDate.Year.ToString()] += Convert.ToInt32(project.TotalResources);
+                }
+            }
+        }
+
+
 
     }
 }

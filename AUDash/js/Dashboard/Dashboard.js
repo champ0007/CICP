@@ -877,7 +877,7 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
           // or server returns response with an error status.
           $scope.AllResources = -1;
       });
-    }
+    };
 
 
     // Chart.js Data
@@ -1445,9 +1445,36 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
 
     //End
 
+
+    $scope.UpdateSoldProposedChart = function () {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetSoldProposedChartData'
+        }).
+      success(function (data, status, headers, config) {
+          if (data != null) {
+              debugger;
+              $scope.SoldProposedChartLabels = JSON.parse(data[0]);
+              $scope.SoldProjectsChartData = JSON.parse(data[1]);
+              $scope.ProposedProjectsChartData = JSON.parse(data[2]);
+
+              $scope.ODYoYData.labels = $scope.SoldProposedChartLabels;
+              $scope.ODYoYData.datasets[0].data = $scope.SoldProjectsChartData;
+              $scope.ODYoYData.datasets[1].data = $scope.ProposedProjectsChartData;
+          }
+      }).
+      error(function (data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+          $scope.AllResources = -1;
+      });
+    };
+
+    $scope.UpdateSoldProposedChart();
+
     // Chart.js Data
     $scope.ODYoYData = {
-        labels: ['April', 'May', 'June', 'July', 'August', 'Sep', 'Oct'],
+        labels: $scope.SoldProposedChartLabels,
         datasets: [
           {
               label: 'Sold resource needs',
@@ -1457,7 +1484,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
               pointStrokeColor: '#fff',
               pointHighlightFill: '#fff',
               pointHighlightStroke: 'rgba(220,220,220,1)',
-              data: [65, 59, 80, 81, 56, 55, 60]
+              data: $scope.SoldProjectsChartData
           },
           {
               label: 'Proposed resource needs',
@@ -1467,7 +1494,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
               pointStrokeColor: '#fff',
               pointHighlightFill: '#fff',
               pointHighlightStroke: 'rgba(151,187,205,1)',
-              data: [28, 48, 40, 19, 86, 27, 90]
+              data: $scope.ProposedProjectsChartData
           }
         ]
     };

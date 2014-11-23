@@ -15,6 +15,8 @@ namespace AUDash.Models
         public string Technology { get; set; }
         public string TotalResources { get; set; }
         public string WorkOrderStatus { get; set; }
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
 
     }
 
