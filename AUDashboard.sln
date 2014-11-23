@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AUDashboard", "AUDashboard\AUDashboard.csproj", "{8261F291-1DCF-42F1-910C-B0DCF9759D45}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AUDash", "AUDash\AUDash.csproj", "{AEDBA319-011E-4EE8-B99B-BBFBD11FF722}"
 EndProject
 Global
@@ -13,10 +11,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8261F291-1DCF-42F1-910C-B0DCF9759D45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8261F291-1DCF-42F1-910C-B0DCF9759D45}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8261F291-1DCF-42F1-910C-B0DCF9759D45}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8261F291-1DCF-42F1-910C-B0DCF9759D45}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AEDBA319-011E-4EE8-B99B-BBFBD11FF722}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AEDBA319-011E-4EE8-B99B-BBFBD11FF722}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEDBA319-011E-4EE8-B99B-BBFBD11FF722}.Release|Any CPU.ActiveCfg = Release|Any CPU
