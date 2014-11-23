@@ -132,131 +132,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\DashboardController.cs" />
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AccountBindingModels.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Resource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="css\bootstrap.css" />
-    <Content Include="css\bootstrap.min.css" />
-    <Content Include="css\plugins\dataTables.bootstrap.css" />
-    <Content Include="css\plugins\metisMenu\metisMenu.css" />
-    <Content Include="css\plugins\metisMenu\metisMenu.min.css" />
-    <Content Include="css\plugins\morris.css" />
-    <Content Include="css\plugins\social-buttons.css" />
-    <Content Include="css\plugins\timeline.css" />
-    <Content Include="css\sb-admin-2.css" />
-    <Content Include="Dashboard.html" />
-    <Content Include="favicon.ico" />
-    <Content Include="font-awesome-4.1.0\css\font-awesome.css" />
-    <Content Include="font-awesome-4.1.0\css\font-awesome.min.css" />
-    <Content Include="font-awesome-4.1.0\fonts\fontawesome-webfont.svg" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Global.asax" />
-    <Content Include="js\bootstrap.js" />
-    <Content Include="js\bootstrap.min.js" />
-    <Content Include="font-awesome-4.1.0\fonts\fontawesome-webfont.eot" />
-    <Content Include="font-awesome-4.1.0\fonts\fontawesome-webfont.ttf" />
-    <Content Include="font-awesome-4.1.0\fonts\fontawesome-webfont.woff" />
-    <Content Include="font-awesome-4.1.0\fonts\FontAwesome.otf" />
-    <Content Include="font-awesome-4.1.0\less\bordered-pulled.less" />
-    <Content Include="font-awesome-4.1.0\less\core.less" />
-    <Content Include="font-awesome-4.1.0\less\fixed-width.less" />
-    <Content Include="font-awesome-4.1.0\less\font-awesome.less" />
-    <Content Include="font-awesome-4.1.0\less\icons.less" />
-    <Content Include="font-awesome-4.1.0\less\larger.less" />
-    <Content Include="font-awesome-4.1.0\less\list.less" />
-    <Content Include="font-awesome-4.1.0\less\mixins.less" />
-    <Content Include="font-awesome-4.1.0\less\path.less" />
-    <Content Include="font-awesome-4.1.0\less\rotated-flipped.less" />
-    <Content Include="font-awesome-4.1.0\less\spinning.less" />
-    <Content Include="font-awesome-4.1.0\less\stacked.less" />
-    <Content Include="font-awesome-4.1.0\less\variables.less" />
-    <Content Include="font-awesome-4.1.0\scss\font-awesome.scss" />
-    <Content Include="font-awesome-4.1.0\scss\_bordered-pulled.scss" />
-    <Content Include="font-awesome-4.1.0\scss\_core.scss" />
-    <Content Include="font-awesome-4.1.0\scss\_fixed-width.scss" />
-    <Content Include="font-awesome-4.1.0\scss\_icons.scss" />
-    <Content Include="font-awesome-4.1.0\scss\_larger.scss" />
-    <Content Include="font-awesome-4.1.0\scss\_list.scss" />
-    <Content Include="font-awesome-4.1.0\scss\_mixins.scss" />
-    <Content Include="font-awesome-4.1.0\scss\_path.scss" />
-    <Content Include="font-awesome-4.1.0\scss\_rotated-flipped.scss" />
-    <Content Include="font-awesome-4.1.0\scss\_spinning.scss" />
-    <Content Include="font-awesome-4.1.0\scss\_stacked.scss" />
-    <Content Include="font-awesome-4.1.0\scss\_variables.scss" />
-    <Content Include="js\Dashboard\Dashboard.js" />
-    <Content Include="js\jquery-1.11.0.js" />
-    <Content Include="js\plugins\dataTables\dataTables.bootstrap.js" />
-    <Content Include="js\plugins\dataTables\jquery.dataTables.js" />
-    <Content Include="js\plugins\flot\excanvas.min.js" />
-    <Content Include="js\plugins\flot\flot-data.js" />
-    <Content Include="js\plugins\flot\jquery.flot.js" />
-    <Content Include="js\plugins\flot\jquery.flot.pie.js" />
-    <Content Include="js\plugins\flot\jquery.flot.resize.js" />
-    <Content Include="js\plugins\flot\jquery.flot.tooltip.min.js" />
-    <Content Include="js\plugins\metisMenu\metisMenu.js" />
-    <Content Include="js\plugins\metisMenu\metisMenu.min.js" />
-    <Content Include="js\plugins\morris\morris-data.js" />
-    <Content Include="js\plugins\morris\morris.js" />
-    <Content Include="js\plugins\morris\morris.min.js" />
-    <Content Include="js\plugins\morris\raphael.min.js" />
-    <Content Include="js\sb-admin-2.js" />
-    <Content Include="less\mixins.less" />
-    <Content Include="less\sb-admin-2.less" />
-    <Content Include="less\variables.less" />
-    <Content Include="Widgets\ActionItems.html" />
-    <Content Include="Widgets\ActiveProjects.html" />
-    <Content Include="Widgets\ActiveResources.html" />
-    <Content Include="Widgets\PendingInvoices.html" />
-    <None Include="js\jquery-1.10.2.intellisense.js" />
-    <Content Include="js\jquery-1.10.2.js" />
-    <Content Include="js\jquery-1.10.2.min.js" />
-    <None Include="js\jquery.validate-vsdoc.js" />
-    <Content Include="js\jquery.validate.js" />
-    <Content Include="js\jquery.validate.min.js" />
-    <Content Include="js\jquery.validate.unobtrusive.js" />
-    <Content Include="js\jquery.validate.unobtrusive.min.js" />
-    <Content Include="js\modernizr-2.6.2.js" />
-    <Content Include="js\respond.js" />
-    <Content Include="js\respond.min.js" />
-    <Content Include="js\angular-mocks.js" />
-    <Content Include="js\angular.js" />
-    <Content Include="js\angular.min.js" />
-    <Content Include="Web.config" />
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="css\Site.css" />
-    <Content Include="js\_references.js" />
-    <Content Include="js\jquery-1.10.2.min.map" />
-    <Content Include="js\angular.min.js.map" />
     <None Include="Properties\PublishProfiles\AUDashboard.pubxml" />
     <None Include="Properties\PublishProfiles\AzurePublish.pubxml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="packages.config" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
