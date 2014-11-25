@@ -29,17 +29,17 @@ body {
 #page-wrapper {
     padding: 0 15px;
     min-height: 568px;
-    background-color: #fff;
+    background-color: #343434;
 }
 
 .navbar-default {
-    background-color: #FFFFFF;
+    background-color: #343434;
 }
 
 @media(min-width:768px) {
     #page-wrapper {
         position: inherit;
-        margin: 0 0 0 10px;
+        margin: 0 0 0 0px;
         padding: 0 10px;
         /*border-left: 1px solid #e7e7e7;*/
     }
@@ -222,6 +222,7 @@ body {
 .chat-panel .panel-body {
     height: 350px;
     overflow-y: scroll;
+
 }
 
 .login-panel {
@@ -309,13 +310,13 @@ table.dataTable thead .sorting_desc_disabled {
 }
 
 .panel-green {
-    border-color: #5cb85c;
+    border-color: #7ec351;
 }
 
     .panel-green .panel-heading {
-        border-color: #5cb85c;
+        border-color: #7ec351;
         color: #fff;
-        background-color: #5cb85c;
+        background-color: #7ec351;
     }
 
     .panel-green a {
@@ -345,13 +346,13 @@ table.dataTable thead .sorting_desc_disabled {
         }
 
 .panel-yellow {
-    border-color: #f0ad4e;
+    border-color: #e9a213;
 }
 
     .panel-yellow .panel-heading {
         border-color: #f0ad4e;
         color: #fff;
-        background-color: #f0ad4e;
+        background-color: #e9a213;
     }
 
     .panel-yellow a {
@@ -363,13 +364,13 @@ table.dataTable thead .sorting_desc_disabled {
         }
 
 .panel-blue {
-    border-color: #428bca;
+    border-color: #00b0f0;
 }
 
     .panel-blue .panel-heading {
         border-color: #428bca;
         color: #fff;
-        background-color: #428bca;
+        background-color: #00b0f0;
     }
 
     .panel-blue a {
@@ -383,7 +384,15 @@ table.dataTable thead .sorting_desc_disabled {
 .tc-chart-js-legend {
     list-style-type: none;
     padding-left: 0px;
+    margin-top: 15px;
+    float: left;
+    color: #fff;
 }
+
+    .tc-chart-js-legend li {
+        display: inline-block;
+        margin-right: 15px;
+    }
 
     .tc-chart-js-legend tr td {
         display: block;
@@ -393,11 +402,12 @@ table.dataTable thead .sorting_desc_disabled {
     }
 
     .tc-chart-js-legend span {
-        width: 25px;
-        height: 25px;
+        width: 10px;
+        height: 10px;
         display: inline-block;
         /*float:left;*/
-        margin-right: 10px;
+        margin-right: 5px;
+        margin-left: 5px;
     }
 
 .my-drop-zone {

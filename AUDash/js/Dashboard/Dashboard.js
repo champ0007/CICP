@@ -1300,9 +1300,9 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
         datasets: [
           {
               label: 'FY15 Business',
-              fillColor: 'lightblue',//rgba(69,201,102,0.75)',
+              fillColor: '#0cc09f',//rgba(69,201,102,0.75)',
               strokeColor: 'rgba(220,220,220,0.8)',
-              highlightFill: 'rgba(69,201,102,0.9)',
+              highlightFill: '#0aac8e',
               highlightStroke: 'rgba(220,220,220,1)',
               data: [40, 66, 65, 81, 75, 75, 80]
           }
@@ -1371,20 +1371,20 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
     $scope.ProjectChartData = [
       {
           value: 300,
-          color: '#F7464A',
-          highlight: '#FF5A5E',
+          color: '#d9534f',
+          highlight: '#F7464A',
           label: 'Sitecore'
-      },
+      },    
        {
            value: 50,
-           color: '#FF5A5E',
-           highlight: '#FF5A5E',
+           color: '#f8c705',
+           highlight: '#FFC870',
            label: 'Core .NET'
        },
       {
           value: 50,
-          color: '#46BFBD',
-          highlight: '#5AD3D1',
+          color: '#00b0f0',
+          highlight: '#46BFBD',
           label: 'Hybris'
       },
       {
@@ -1395,14 +1395,14 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
       },
       {
           value: 300,
-          color: '#FFC870',
-          highlight: '#FFC870',
+          color: '#fe6f54',
+          highlight: '#E32400',
           label: 'Core Java'
       },
       {
           value: 200,
-          color: 'lightgreen',
-          highlight: '#FFC870',
+          color: '#7ec351',
+          highlight: 'lightgreen',
           label: 'QA'
       }
     ];
