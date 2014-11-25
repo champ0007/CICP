@@ -1309,9 +1309,33 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
         ]
     };
 
+    // added by Vibhav. To update skill revenue chart 
+    $scope.UpdateRevenueChart = function () {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetRevenueChartData'
+        }).
+      success(function (data, status, headers, config) {
+          if (data != null) {
+              debugger;
+              $scope.revenueChartPrevData = JSON.parse(data[1]);
+              $scope.revenueChartCurrData = JSON.parse(data[0]);
+              $scope.skillChartData.datasets[0].data = $scope.revenueChartCurrData;
+              $scope.skillChartData.datasets[1].data = $scope.revenueChartPrevData;
+              $scope.skillChartData.datasets[0].label = JSON.parse(data[2]);
+              $scope.skillChartData.datasets[1].label = JSON.parse(data[3]);
+          }
+      }).
+      error(function (data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+          $scope.AllResources = -1;
+      });
+    };
+
     // Chart.js Data
     $scope.skillChartData = {
-        labels: ['April', 'May', 'June', 'July', 'August', 'September', 'October'],
+        labels: ['April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'Feb', 'March'],
         datasets: [
           {
               label: 'FY15 Business',
@@ -1319,7 +1343,8 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
               strokeColor: 'rgba(220,220,220,0.8)',
               highlightFill: 'rgba(69,201,102,0.9)',
               highlightStroke: 'rgba(220,220,220,1)',
-              data: [65, 59, 80, 81, 56, 55, 40]
+              data: $scope.revenueChartCurrData//[65, 59, 80, 81, 56, 55, 40]
+              //data: [0, 10764, 7866, 18819, 20674, 7494, 54873, 22355, 147398, 47036, 125764, 126168]
           },
           {
               label: 'FY14 Business',
@@ -1327,7 +1352,8 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
               strokeColor: 'rgba(321, 176, 0, 0.8)',
               highlightFill: 'rgba(38, 208, 255, 0.75)',
               highlightStroke: 'rgba(151,187,205,1)',
-              data: [28, 48, 40, 19, 86, 27, 30]
+              //data: [28, 48, 40, 19, 86, 27, 30,12,12,12,12,12]
+              data: $scope.revenueChartPrevData
           }
         ]
     };
@@ -1367,6 +1393,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
         //legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
     };
 
+    $scope.UpdateRevenueChart();
     // Chart.js Data
     $scope.ProjectChartData = [
       {

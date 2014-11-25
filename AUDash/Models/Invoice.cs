@@ -22,4 +22,15 @@ namespace AUDash.Models
         public string Comments { get; set; }
         public string PaymentReceived { get; set; }
     }
+
+    public class RevenueByYear
+    {
+        public int year { get; set; }
+        List<RevenueByMonth> revenue { get; set; }
+    }
+    public class RevenueByMonth
+    {
+        public int month { get; set; }
+        public double amount { get; set; }
+    }
 }
