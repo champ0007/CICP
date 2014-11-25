@@ -13,7 +13,7 @@ namespace AUDash.Repository
             //string azureConnection = "Server=tcp:e5r6frgs22.database.windows.net,1433;Database=audashbAMiWR6WOt;User ID=tushar@e5r6frgs22;Password=India@123;Trusted_Connection=False;Encrypt=True;Connection Timeout=50;";
             //SqlConnection conn = new SqlConnection(azureConnection);
 
-           SqlConnection conn = new SqlConnection("Data Source=USHYDTUSHARMA4\\SQLEXPRESS;Initial Catalog=AUDashboard;User ID=sa;Password=India@123");
+           SqlConnection conn = new SqlConnection("Data Source=.;Initial Catalog=AUDashboard;Integrated Security = true");
             return conn;
         }
 
