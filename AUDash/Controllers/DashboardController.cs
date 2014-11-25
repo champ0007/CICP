@@ -41,7 +41,7 @@ namespace AUDash.Controllers
         //GET api/Dashboard/getactiveresources
         public int GetActiveResources()
         {
-            return 40;
+            return 400;
         }
 
         //GET api/Dashboard/GetProjectChartData //Added by Vibhav
