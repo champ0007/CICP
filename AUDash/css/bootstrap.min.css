@@ -1446,7 +1446,7 @@ th {
     }
 
 .table-striped > tbody > tr:nth-child(odd) > td, .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: #f9f9f9;
+    /*background-color: #f9f9f9;*/
 }
 
 .table-hover > tbody > tr:hover > td, .table-hover > tbody > tr:hover > th {
@@ -4974,6 +4974,7 @@ a.list-group-item {
     padding: 15px;
     padding-left: 0;
     background-color: #343434;
+    color: #E0E0E0;
 }
 
     .panel-body:before, .panel-body:after {
