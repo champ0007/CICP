@@ -1206,7 +1206,7 @@ AUDashboardApp.controller('NewActionItemsController', ['$scope', '$filter', '$ht
             animationSteps: 100,
 
             //String - Animation easing effect
-            animationEasing: 'easeOutBounce',
+            animationEasing: 'easeOutQuint',
 
             //Boolean - Whether we animate the rotation of the Doughnut
             animateRotate: true,
@@ -1392,7 +1392,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
-              //debugger;
+              debugger;
               $scope.revenueChartPrevData = JSON.parse(data[1]);
               $scope.revenueChartCurrData = JSON.parse(data[0]);
               $scope.skillChartData.datasets[0].data = $scope.revenueChartCurrData;
@@ -1410,7 +1410,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
 
     // Chart.js Data
     $scope.skillChartData = {
-        labels: ['April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'Feb', 'March'],
+        labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
         datasets: [
           {
               label: 'FY15 Business',

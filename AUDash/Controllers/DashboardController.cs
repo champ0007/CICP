@@ -601,8 +601,8 @@ namespace AUDash.Controllers
                     currentYear = currentYear + 1;
                 }
             }
-            string currentFY = "FY" + (currentYear).ToString().Substring(2, 2) + "Business";
-            string prevFY = "FY" + (currentYear - 1).ToString().Substring(2, 2) + "Business";
+            string currentFY = "FY" + (currentYear).ToString().Substring(2, 2);
+            string prevFY = "FY" + (currentYear - 1).ToString().Substring(2, 2);
             List<string> returnList = new List<string>();
             //send current year data
             returnList.Add(JsonConvert.SerializeObject(currYrData.Select(e => e.amount)));
