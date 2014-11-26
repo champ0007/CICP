@@ -69,6 +69,14 @@ namespace AUDash.Controllers
             return ParseResourceData(repo.GetReferenceData("Resources"));
         }
 
+        //GET api/Dashboard/GetProjectDistributionChartData
+        public List<string> GetProjectDistributionChartData()
+        {
+            return ParseProjectDistributionData(repo.GetReferenceData("Projects"));
+        }
+
+
+
         //POST api/Dashboard/SetReferenceData
         [HttpPost]
         public void SetReferenceData([FromBody] string referenceData)
@@ -331,45 +339,45 @@ namespace AUDash.Controllers
             List<ProjectEntity> projs = JsonConvert.DeserializeObject<List<ProjectEntity>>(projects);
 
             Dictionary<string, int> soldProjects = new Dictionary<string, int>();
-            soldProjects.Add(((ChartMonths)DateTime.Now.Month).ToString() + DateTime.Now.Year.ToString(), 0);
-            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(1).Month).ToString() + DateTime.Now.AddMonths(1).Year.ToString(), 0);
-            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(2).Month).ToString() + DateTime.Now.AddMonths(2).Year.ToString(), 0);
-            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(3).Month).ToString() + DateTime.Now.AddMonths(3).Year.ToString(), 0);
-            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(4).Month).ToString() + DateTime.Now.AddMonths(4).Year.ToString(), 0);
-            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(5).Month).ToString() + DateTime.Now.AddMonths(5).Year.ToString(), 0);
-            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(6).Month).ToString() + DateTime.Now.AddMonths(6).Year.ToString(), 0);
-            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(7).Month).ToString() + DateTime.Now.AddMonths(7).Year.ToString(), 0);
-            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(8).Month).ToString() + DateTime.Now.AddMonths(8).Year.ToString(), 0);
-            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(9).Month).ToString() + DateTime.Now.AddMonths(9).Year.ToString(), 0);
-            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(10).Month).ToString() + DateTime.Now.AddMonths(10).Year.ToString(), 0);
-            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(11).Month).ToString() + DateTime.Now.AddMonths(11).Year.ToString(), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.Month).ToString() + DateTime.Now.Year.ToString().Substring(2,2), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(1).Month).ToString() + DateTime.Now.AddMonths(1).Year.ToString().Substring(2,2), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(2).Month).ToString() + DateTime.Now.AddMonths(2).Year.ToString().Substring(2, 2), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(3).Month).ToString() + DateTime.Now.AddMonths(3).Year.ToString().Substring(2, 2), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(4).Month).ToString() + DateTime.Now.AddMonths(4).Year.ToString().Substring(2, 2), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(5).Month).ToString() + DateTime.Now.AddMonths(5).Year.ToString().Substring(2, 2), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(6).Month).ToString() + DateTime.Now.AddMonths(6).Year.ToString().Substring(2, 2), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(7).Month).ToString() + DateTime.Now.AddMonths(7).Year.ToString().Substring(2, 2), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(8).Month).ToString() + DateTime.Now.AddMonths(8).Year.ToString().Substring(2, 2), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(9).Month).ToString() + DateTime.Now.AddMonths(9).Year.ToString().Substring(2, 2), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(10).Month).ToString() + DateTime.Now.AddMonths(10).Year.ToString().Substring(2, 2), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(11).Month).ToString() + DateTime.Now.AddMonths(11).Year.ToString().Substring(2, 2), 0);
 
 
             Dictionary<string, int> proposedProjects = new Dictionary<string, int>();
 
-            proposedProjects.Add(((ChartMonths)DateTime.Now.Month).ToString() + DateTime.Now.Year.ToString(), 0);
-            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(1).Month).ToString() + DateTime.Now.AddMonths(1).Year.ToString(), 0);
-            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(2).Month).ToString() + DateTime.Now.AddMonths(2).Year.ToString(), 0);
-            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(3).Month).ToString() + DateTime.Now.AddMonths(3).Year.ToString(), 0);
-            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(4).Month).ToString() + DateTime.Now.AddMonths(4).Year.ToString(), 0);
-            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(5).Month).ToString() + DateTime.Now.AddMonths(5).Year.ToString(), 0);
-            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(6).Month).ToString() + DateTime.Now.AddMonths(6).Year.ToString(), 0);
-            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(7).Month).ToString() + DateTime.Now.AddMonths(7).Year.ToString(), 0);
-            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(8).Month).ToString() + DateTime.Now.AddMonths(8).Year.ToString(), 0);
-            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(9).Month).ToString() + DateTime.Now.AddMonths(9).Year.ToString(), 0);
-            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(10).Month).ToString() + DateTime.Now.AddMonths(10).Year.ToString(), 0);
-            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(11).Month).ToString() + DateTime.Now.AddMonths(11).Year.ToString(), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.Month).ToString() + DateTime.Now.Year.ToString().Substring(2, 2), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(1).Month).ToString() + DateTime.Now.AddMonths(1).Year.ToString().Substring(2, 2), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(2).Month).ToString() + DateTime.Now.AddMonths(2).Year.ToString().Substring(2, 2), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(3).Month).ToString() + DateTime.Now.AddMonths(3).Year.ToString().Substring(2, 2), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(4).Month).ToString() + DateTime.Now.AddMonths(4).Year.ToString().Substring(2, 2), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(5).Month).ToString() + DateTime.Now.AddMonths(5).Year.ToString().Substring(2, 2), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(6).Month).ToString() + DateTime.Now.AddMonths(6).Year.ToString().Substring(2, 2), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(7).Month).ToString() + DateTime.Now.AddMonths(7).Year.ToString().Substring(2, 2), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(8).Month).ToString() + DateTime.Now.AddMonths(8).Year.ToString().Substring(2, 2), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(9).Month).ToString() + DateTime.Now.AddMonths(9).Year.ToString().Substring(2, 2), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(10).Month).ToString() + DateTime.Now.AddMonths(10).Year.ToString().Substring(2, 2), 0);
+            proposedProjects.Add(((ChartMonths)DateTime.Now.AddMonths(11).Month).ToString() + DateTime.Now.AddMonths(11).Year.ToString().Substring(2, 2), 0);
 
             foreach (ProjectEntity project in projs)
             {
                 if (ParseProjectStatus(project.Stage) == "Sold")
                 {
-                    PopulateProjects(soldProjects, project);
-                    PopulateProjects(proposedProjects, project);
+                    PopulateProjects(soldProjects, project, ProjectAttribute.Resources);
+                    PopulateProjects(proposedProjects, project, ProjectAttribute.Resources);
                 }
                 else
                 {
-                    PopulateProjects(proposedProjects, project);
+                    PopulateProjects(proposedProjects, project, ProjectAttribute.Resources);
                 }
             }
 
@@ -426,15 +434,73 @@ namespace AUDash.Controllers
         }
 
 
-        private static void PopulateProjects(Dictionary<string, int> projects, ProjectEntity project)
+        private static void PopulateProjects(Dictionary<string, int> projects, ProjectEntity project, ProjectAttribute attribute)
         {
+            int incrementedAttribute = 0;
+
+            if (attribute.Equals(ProjectAttribute.Resources))
+            {
+                incrementedAttribute = Convert.ToInt32(project.TotalResources);
+            }
+            else if (attribute.Equals(ProjectAttribute.Project))
+            {
+                incrementedAttribute = 1;
+
+            }
+
+
             for (DateTime projectDate = Convert.ToDateTime(project.StartDate); projectDate <= Convert.ToDateTime(project.EndDate); projectDate = projectDate.AddMonths(1))
             {
-                if (projects.ContainsKey(((ChartMonths)projectDate.Month).ToString() + projectDate.Year.ToString()))
+                if (projects.ContainsKey(((ChartMonths)projectDate.Month).ToString() + projectDate.Year.ToString().Substring(2,2)))
                 {
-                    projects[((ChartMonths)projectDate.Month).ToString() + projectDate.Year.ToString()] += Convert.ToInt32(project.TotalResources);
+                    projects[((ChartMonths)projectDate.Month).ToString() + projectDate.Year.ToString().Substring(2,2)] += incrementedAttribute;
                 }
             }
+        }
+
+        private List<string> ParseProjectDistributionData(string projects)
+        {
+            int currentFY = GetFiscalYear();
+            string currentFiscalYear = currentFY.ToString().Substring(2,2);
+            string nextYear = Convert.ToString(currentFY + 1).Substring(2,2);
+
+            List<ProjectEntity> projs = JsonConvert.DeserializeObject<List<ProjectEntity>>(projects);
+
+            Dictionary<string, int> totalProjects = new Dictionary<string, int>();
+            totalProjects.Add(ChartMonths.Apr.ToString() + currentFiscalYear, 0);
+            totalProjects.Add(ChartMonths.May.ToString() + currentFiscalYear, 0);
+            totalProjects.Add(ChartMonths.Jun.ToString() + currentFiscalYear, 0);
+            totalProjects.Add(ChartMonths.Jul.ToString() + currentFiscalYear, 0);
+            totalProjects.Add(ChartMonths.Aug.ToString() + currentFiscalYear, 0);
+            totalProjects.Add(ChartMonths.Sep.ToString() + currentFiscalYear, 0);
+            totalProjects.Add(ChartMonths.Oct.ToString() + currentFiscalYear, 0);
+            totalProjects.Add(ChartMonths.Nov.ToString() + currentFiscalYear, 0);
+            totalProjects.Add(ChartMonths.Dec.ToString() + currentFiscalYear, 0);
+            totalProjects.Add(ChartMonths.Jan.ToString() + nextYear, 0);
+            totalProjects.Add(ChartMonths.Feb.ToString() + nextYear, 0);
+            totalProjects.Add(ChartMonths.Mar.ToString() + nextYear, 0);
+
+            foreach (ProjectEntity project in projs)
+            {
+                if (ParseProjectStatus(project.Stage) == "Sold")
+                {
+                    PopulateProjects(totalProjects, project, ProjectAttribute.Project);
+                }
+            }
+
+            List<string> chartData = new List<string>();
+
+            chartData.Add(JsonConvert.SerializeObject(totalProjects.Keys.ToList<string>()));
+            chartData.Add(JsonConvert.SerializeObject(totalProjects.Values.ToList<int>()));
+
+            return chartData;
+
+
+        }
+
+        private int GetFiscalYear()
+        {
+            return (DateTime.Now.Month >= 4 ? DateTime.Now.Year : (DateTime.Now.Year - 1));
         }
 
 

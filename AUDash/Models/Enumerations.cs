@@ -21,4 +21,10 @@ namespace AUDash.Models
         Dec = 12
     }
 
+    public enum ProjectAttribute
+    {
+        Resources,
+        Project
+    }
+
 }
