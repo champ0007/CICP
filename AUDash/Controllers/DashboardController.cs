@@ -50,6 +50,13 @@ namespace AUDash.Controllers
             return ParseProjectData(repo.GetReferenceData("Projects"));
         }
 
+        //GET api/Dashboard/GetRevenueChartData //Added by Vibhav
+        public List<string> GetRevenueChartData()
+        {
+            return ParseRevenueData(repo.GetReferenceData("Invoices"));
+        }
+
+
         //GET api/GetSoldProposedChartData
         public List<string> GetSoldProposedChartData()
         {
@@ -503,7 +510,110 @@ namespace AUDash.Controllers
             return (DateTime.Now.Month >= 4 ? DateTime.Now.Year : (DateTime.Now.Year - 1));
         }
 
+        //Added by Vibhav. Create chart data from data row
+        private List<string> ParseRevenueData(string projectData)
+        {
+            List<Invoice> monthlyRev = JsonConvert.DeserializeObject<List<Invoice>>(projectData);
+            //get current year
+            int currentYear = DateTime.Today.Year;
 
+            // fiscal year is from april to march, so for jan, feb, mar are in previous fiscal
+            if (DateTime.Today.Month == 1 || DateTime.Today.Month == 2 || DateTime.Today.Month == 3)
+            {
+                currentYear = currentYear - 1;
+            }
+            List<string> chartLabelsb = new List<string>();
+            List<int> chartDatab = new List<int>();
+
+            //fetch only rows with current/prev/next year data
+            List<Invoice> relevantData = new List<Invoice>();
+            //relevantData = monthlyRev
+            //    .FindAll(e => !String.IsNullOrEmpty(e.ATBApprovalSentOn) && !e.ATBApprovalSentOn.ToLower().Contains("n") && !e.ATBApprovalSentOn.ToLower().Contains("-") && (e.ATBApprovalSentOn.Substring(e.ATBApprovalSentOn.Length - 4, 4) == currentYear.ToString() || e.ATBApprovalSentOn.Substring(e.ATBApprovalSentOn.Length - 4, 4) == (currentYear - 1).ToString() || e.ATBApprovalSentOn.Substring(e.ATBApprovalSentOn.Length - 4, 4) == (currentYear + 1).ToString()));
+
+            //relevantData[1].Period.Substring(relevantData[1].Period.IndexOf('/',2)+1,4)
+
+            var a = monthlyRev.Select(i => i.Period.Substring(0,2)).Distinct();
+            var aaaaa = monthlyRev.Select(i => i.Period.Substring(i.Period.Length-4)).Distinct();//"1/10/2013".ToString().Substring("1/10/2013".LastIndexOf('/')+1)
+            
+            relevantData = monthlyRev
+                .FindAll(e => !String.IsNullOrEmpty(e.Period) && (e.Period.Substring(e.Period.LastIndexOf('/') + 1, 4) == (currentYear-1).ToString() || e.Period.Substring(e.Period.LastIndexOf('/') + 1, 4) == currentYear.ToString() || e.Period.Substring(e.Period.LastIndexOf('/') + 1, 4) == (currentYear+1).ToString()));
+
+            var b = relevantData.Select(i => i.Period.Substring(0, 2)).Distinct();
+            var bbbbb = relevantData.Select(i => i.Period.Substring(i.Period.IndexOf('/', 2) + 1, 4)).Distinct();
+
+            List<RevenueByMonth> currYrData = new List<RevenueByMonth>();
+            List<RevenueByMonth> prevYrData = new List<RevenueByMonth>();
+            RevenueByMonth currDt;
+            RevenueByMonth prevDt;
+            bool roundComplte = false;
+            //start with april
+            for (int i = 4; i <= 12; i++)
+            {
+                // when all month's data added, break the loop
+                if (roundComplte && i == 4)
+                {
+                    break;
+                }
+                double currRevenue = 0.0;
+                double prevRevenue = 0.0;
+                currDt = new RevenueByMonth();
+                prevDt = new RevenueByMonth();
+                foreach (var rec in relevantData)
+                {
+                    //Console.WriteLine("i= " + i + " : " + rec.Period);
+                    //if data is for current(latest) year
+                    //if (rec.ATBApprovalSentOn.Substring(rec.ATBApprovalSentOn.Length - 4, 4) == currentYear.ToString())
+                    if (rec.Period.Substring(rec.Period.LastIndexOf('/') + 1, 4) == (currentYear).ToString())
+                    {
+                        //if data is for selected month
+                       // if (rec.ATBApprovalSentOn.Substring(0, rec.ATBApprovalSentOn.IndexOf('/')) == i.ToString() || rec.ATBApprovalSentOn.Substring(0, rec.ATBApprovalSentOn.IndexOf('/')) == "0" + i.ToString())
+                        if (rec.Period.Substring(0, rec.Period.IndexOf('/')) == i.ToString() || rec.Period.Substring(0, rec.Period.IndexOf('/')) == "0" + i.ToString())
+                        {
+                            //add revenue to month's total
+                            currRevenue = currRevenue + Convert.ToDouble(rec.Amount);
+                        }
+                    }
+                    //if data is for previous year
+                    //if (rec.ATBApprovalSentOn.Substring(rec.ATBApprovalSentOn.Length - 4, 4) == (currentYear - 1).ToString())
+                    if (rec.Period.Substring(rec.Period.LastIndexOf('/') + 1, 4) == (currentYear - 1).ToString())
+                    {
+                        //if (rec.ATBApprovalSentOn.Substring(0, rec.ATBApprovalSentOn.IndexOf('/')) == i.ToString() || rec.ATBApprovalSentOn.Substring(0, rec.ATBApprovalSentOn.IndexOf('/')) == "0" + i.ToString())
+                        if (rec.Period.Substring(0, rec.Period.IndexOf('/')) == i.ToString() || rec.Period.Substring(0, rec.Period.IndexOf('/')) == "0" + i.ToString())
+                        {
+                            prevRevenue = prevRevenue + Convert.ToDouble(rec.Amount);
+                        }
+                    }
+                }
+
+                currDt.amount = Math.Round(currRevenue);
+                currDt.month = i;
+                prevDt.amount = Math.Round(prevRevenue);
+                prevDt.month = i;
+
+                currYrData.Add(currDt);
+                prevYrData.Add(prevDt);
+
+                //use this to fetch data for jan, feb. mar at the end
+                if (i == 12)
+                {
+                    i = 0;
+                    roundComplte = true;
+                    currentYear = currentYear + 1;
+                }
+            }
+            string currentFY = "FY" + (currentYear).ToString().Substring(2, 2) + "Business";
+            string prevFY = "FY" + (currentYear - 1).ToString().Substring(2, 2) + "Business";
+            List<string> returnList = new List<string>();
+            //send current year data
+            returnList.Add(JsonConvert.SerializeObject(currYrData.Select(e => e.amount)));
+            //send previous year data
+            returnList.Add(JsonConvert.SerializeObject(prevYrData.Select(e => e.amount)));
+            //send current, prev year FY
+            returnList.Add(JsonConvert.SerializeObject(currentFY));
+            returnList.Add(JsonConvert.SerializeObject(prevFY));
+            return returnList;
+
+        }
 
     }
 }
