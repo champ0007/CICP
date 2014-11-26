@@ -236,7 +236,7 @@ namespace AUDash.Controllers
                     strError = "Your Excel file does not contain any work sheets";
                 else
                 {
-                    ExcelWorksheet resourceWorkSheet = package.Workbook.Worksheets["US-I"];
+                    ExcelWorksheet resourceWorkSheet = package.Workbook.Worksheets.Where(x=>x.Name.Contains("USI")).First();
                     while (resourceWorkSheet.Cells[rowCount, 1].Value != null)
                     {
                         resources.Add(new ResourceEntity()
