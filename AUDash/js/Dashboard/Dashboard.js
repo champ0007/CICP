@@ -719,7 +719,7 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', '$http'
 
     $scope.setTodos = function (todos) {
         //localStorage.setItem(STORAGE_ID, JSON.stringify(todos));
-        //debugger;
+        ////debugger;
         var referenceData = new Object();
         referenceData.storageId = STORAGE_ID;
         referenceData.storageData = JSON.stringify(todos);
@@ -735,7 +735,7 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', '$http'
     };
 
     $scope.addTodo = function () {
-        //debugger;
+        ////debugger;
         var newTodo = $scope.newTodo.trim();
         var newAssignedTo = $scope.newAssignedTo.trim();
         if (!newTodo.length && !newTodo.length) {
@@ -796,7 +796,7 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
     var ProjectDetails = $scope.ActiveProjectDetails = [];
 
     $scope.getProjects = function () {
-        //debugger;
+        ////debugger;
         $http({
             method: 'GET',
             url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
@@ -847,7 +847,7 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
     }, true);
 
     $scope.AddProject = function (ProjectEntity) {
-        //debugger;
+        ////debugger;
         if (ProjectEntity.index >= 0) {
             ProjectDetails[ProjectEntity.index] = ProjectEntity;
         } else {
@@ -865,7 +865,7 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
-              debugger;
+              //debugger;
               $scope.chartLabels = JSON.parse(data[0]);
               $scope.chartData = JSON.parse(data[1]);
               $scope.ActiveProjectChartData.labels = $scope.chartLabels;
@@ -936,6 +936,8 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
 AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'FileUploader', function ($scope, $http, FileUploader) {
     var STORAGE_ID = 'Resources';
     $scope.EditMode = "false";
+    $scope.currentPage = 1;
+    $scope.pageSize = 10;
 
     var resources = $scope.AllResources = [];
 
@@ -957,8 +959,6 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
             $scope.AllResources = -1;
         });
     };
-
-
 
     $scope.setResources = function (resourcesToBeSaved) {
         var referenceData = new Object();
@@ -984,7 +984,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
     }, true);
 
     $scope.EditResource = function (resource, index) {
-        debugger;
+        //debugger;
         resource.index = index;
         $scope.EditMode = "true";
         //Shallow Copy - $scope.ResourceEntity = resource;
@@ -993,8 +993,8 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
     }
 
     $scope.addResource = function (resource) {
-        //debugger;
-        //debugger;
+        ////debugger;
+        ////debugger;
         if (resource.index >= 0) {
             resources[resource.index] = resource;
         } else {
@@ -1014,7 +1014,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
-              debugger;
+              //debugger;
               chartLabels = JSON.parse(data[0]);
               chartData = JSON.parse(data[1]);
           }
@@ -1230,7 +1230,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
     var keyUpdates = $scope.keyUpdates = [];
 
     $scope.getKeyUpdates = function () {
-        //debugger;
+        ////debugger;
         $http({
             method: 'GET',
             url: 'api/Dashboard/GetReferenceData?storageId=KeyUpdates'
@@ -1302,7 +1302,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
-              debugger;
+              //debugger;
 
               $scope.ProjectDistLabels = JSON.parse(data[0]);
               $scope.ProjectDistData = JSON.parse(data[1]);
@@ -1392,7 +1392,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
-              debugger;
+              //debugger;
               $scope.revenueChartPrevData = JSON.parse(data[1]);
               $scope.revenueChartCurrData = JSON.parse(data[0]);
               $scope.skillChartData.datasets[0].data = $scope.revenueChartCurrData;
@@ -1555,7 +1555,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
-              debugger;
+              //debugger;
               $scope.SoldProposedChartLabels = JSON.parse(data[0]);
               $scope.SoldProjectsChartData = JSON.parse(data[1]);
               $scope.ProposedProjectsChartData = JSON.parse(data[2]);
@@ -1661,12 +1661,12 @@ AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', '
     var STORAGE_ID = 'Invoices';
     $scope.EditMode = "false";
     $scope.currentPage = 1;
-    $scope.pageSize = 5;
+    $scope.pageSize = 10;
 
     var InvoiceDetails = $scope.InvoiceDetails = [];
 
     $scope.getInvoices = function () {
-        //debugger;
+        ////debugger;
         $http({
             method: 'GET',
             url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
@@ -1734,7 +1734,7 @@ AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', '
     }, true);
 
     $scope.AddInvoice = function (InvoiceEntity) {
-        //debugger;
+        ////debugger;
         if (InvoiceEntity.index >= 0) {
             InvoiceDetails[InvoiceEntity.index] = InvoiceEntity;
         } else {

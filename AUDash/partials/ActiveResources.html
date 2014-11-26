@@ -100,7 +100,7 @@
                     <th class="hidden-sm hidden-xs">Last Project</th>
                     <th>Available On</th>
                 </tr>
-                <tr ng-repeat="resource in AllResources | filter: searchResource">
+                <tr dir-paginate="resource in AllResources | filter: searchResource |itemsPerPage: 10" current-page="currentPage">
                     <td><i class="fa fa-edit" ng-click="EditResource(resource, $index)" data-toggle="modal" data-target=".bs-AddResource-modal-lg"> </i></td>
                     <td>{{resource.FirstName}} {{resource.LastName}}</td>
                     <td class="hidden-sm hidden-xs">{{resource.Skills}}</td>
@@ -111,6 +111,11 @@
                     <td>{{resource.AvailableOn | date:"MM/dd/yyyy" }}</td>
                 </tr>
             </table>
+        </div>
+        <div>
+            <div class="text-center">
+                <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/js/dirPagination.tpl.html"></dir-pagination-controls>
+            </div>
         </div>
     </div>
 
