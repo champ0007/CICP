@@ -604,25 +604,66 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
         legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
     };
 
+    $scope.UpdateProjChart = function () {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetProjChartData'
+        }).
+      success(function (data, status, headers, config) {
+          if (data != null) {
+              debugger;
+              var ProjectChartDataList = JSON.parse(data[0]);
+              for (i = 0; i <= ProjectChartDataList.length; i++) {
+                  $scope.ProjectChartData[i].value = ProjectChartDataList[i].Count;
+                  $scope.ProjectChartData[i].label = ProjectChartDataList[i].ProjectStatus;
+              }
+              //$scope.revenueChartPrevData = JSON.parse(data[1]);
+              //$scope.revenueChartCurrData = JSON.parse(data[0]);
+              //$scope.skillChartData.datasets[0].data = $scope.revenueChartCurrData;
+              //$scope.skillChartData.datasets[1].data = $scope.revenueChartPrevData;
+              //$scope.skillChartData.datasets[0].label = JSON.parse(data[2]);
+              //$scope.skillChartData.datasets[1].label = JSON.parse(data[3]);
+          }
+      }).
+      error(function (data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+          $scope.AllResources = -1;
+      });
+    };
+    $scope.UpdateProjChart();
+
     // Chart.js Data
     $scope.ProjectChartData = [
       {
-          value: 300,
+          value: 0,
           color: '#F7464A',
           highlight: '#FF5A5E',
           label: 'Sitecore'
       },
       {
-          value: 50,
+          value: 0,
           color: '#46BFBD',
           highlight: '#5AD3D1',
           label: 'Hybris'
       },
       {
-          value: 100,
+          value: 0,
           color: '#FDB45C',
           highlight: '#FFC870',
           label: 'Adobe CQ'
+      },
+      {
+          value: 0,
+          color: '#46BFBA',
+          highlight: '#5AD3D1',
+          label: 'Biztalk'
+      },
+      {
+          value: 0,
+          color: '#FDB4AC',
+          highlight: '#FFC870',
+          label: 'Mobile'
       }
     ];
 
@@ -1394,40 +1435,70 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
     };
 
     $scope.UpdateRevenueChart();
+
+    $scope.UpdateTechChart = function () {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetTechChartData'
+        }).
+      success(function (data, status, headers, config) {
+          if (data != null) {
+              debugger;
+              var ProjectChartDataList = JSON.parse(data[0]);
+              for (i = 0; i <= ProjectChartDataList.length;i++){
+                  $scope.ProjectChartData[i].value = ProjectChartDataList[i].value;
+                  $scope.ProjectChartData[i].label = ProjectChartDataList[i].label;
+              }
+              //$scope.revenueChartPrevData = JSON.parse(data[1]);
+              //$scope.revenueChartCurrData = JSON.parse(data[0]);
+              //$scope.skillChartData.datasets[0].data = $scope.revenueChartCurrData;
+              //$scope.skillChartData.datasets[1].data = $scope.revenueChartPrevData;
+              //$scope.skillChartData.datasets[0].label = JSON.parse(data[2]);
+              //$scope.skillChartData.datasets[1].label = JSON.parse(data[3]);
+          }
+      }).
+      error(function (data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+          $scope.AllResources = -1;
+      });
+    };
+    $scope.UpdateTechChart();
+
     // Chart.js Data
     $scope.ProjectChartData = [
       {
-          value: 300,
+          value: 0,
           color: '#d9534f',
           highlight: '#F7464A',
           label: 'Sitecore'
       },    
        {
-           value: 50,
+           value: 0,
            color: '#f8c705',
            highlight: '#FFC870',
            label: 'Core .NET'
        },
       {
-          value: 50,
+          value: 0,
           color: '#00b0f0',
           highlight: '#46BFBD',
           label: 'Hybris'
       },
       {
-          value: 100,
+          value: 0,
           color: '#FDB45C',
           highlight: '#FFC870',
           label: 'Adobe CQ'
       },
       {
-          value: 300,
+          value: 0,
           color: '#fe6f54',
           highlight: '#E32400',
           label: 'Core Java'
       },
       {
-          value: 200,
+          value: 0,
           color: '#7ec351',
           highlight: 'lightgreen',
           label: 'QA'
