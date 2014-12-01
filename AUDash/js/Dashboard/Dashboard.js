@@ -760,7 +760,7 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', '$http'
 
     $scope.setTodos = function (todos) {
         //localStorage.setItem(STORAGE_ID, JSON.stringify(todos));
-        //debugger;
+        ////debugger;
         var referenceData = new Object();
         referenceData.storageId = STORAGE_ID;
         referenceData.storageData = JSON.stringify(todos);
@@ -776,7 +776,7 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', '$http'
     };
 
     $scope.addTodo = function () {
-        //debugger;
+        ////debugger;
         var newTodo = $scope.newTodo.trim();
         var newAssignedTo = $scope.newAssignedTo.trim();
         if (!newTodo.length && !newTodo.length) {
@@ -837,7 +837,7 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
     var ProjectDetails = $scope.ActiveProjectDetails = [];
 
     $scope.getProjects = function () {
-        //debugger;
+        ////debugger;
         $http({
             method: 'GET',
             url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
@@ -888,7 +888,7 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
     }, true);
 
     $scope.AddProject = function (ProjectEntity) {
-        //debugger;
+        ////debugger;
         if (ProjectEntity.index >= 0) {
             ProjectDetails[ProjectEntity.index] = ProjectEntity;
         } else {
@@ -906,7 +906,7 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
-              debugger;
+              //debugger;
               $scope.chartLabels = JSON.parse(data[0]);
               $scope.chartData = JSON.parse(data[1]);
               $scope.ActiveProjectChartData.labels = $scope.chartLabels;
@@ -977,6 +977,8 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
 AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'FileUploader', function ($scope, $http, FileUploader) {
     var STORAGE_ID = 'Resources';
     $scope.EditMode = "false";
+    $scope.currentPage = 1;
+    $scope.pageSize = 10;
 
     var resources = $scope.AllResources = [];
 
@@ -998,8 +1000,6 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
             $scope.AllResources = -1;
         });
     };
-
-
 
     $scope.setResources = function (resourcesToBeSaved) {
         var referenceData = new Object();
@@ -1025,7 +1025,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
     }, true);
 
     $scope.EditResource = function (resource, index) {
-        debugger;
+        //debugger;
         resource.index = index;
         $scope.EditMode = "true";
         //Shallow Copy - $scope.ResourceEntity = resource;
@@ -1034,8 +1034,8 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
     }
 
     $scope.addResource = function (resource) {
-        //debugger;
-        //debugger;
+        ////debugger;
+        ////debugger;
         if (resource.index >= 0) {
             resources[resource.index] = resource;
         } else {
@@ -1055,7 +1055,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
-              debugger;
+              //debugger;
               chartLabels = JSON.parse(data[0]);
               chartData = JSON.parse(data[1]);
           }
@@ -1247,7 +1247,7 @@ AUDashboardApp.controller('NewActionItemsController', ['$scope', '$filter', '$ht
             animationSteps: 100,
 
             //String - Animation easing effect
-            animationEasing: 'easeOutBounce',
+            animationEasing: 'easeOutQuint',
 
             //Boolean - Whether we animate the rotation of the Doughnut
             animateRotate: true,
@@ -1271,7 +1271,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
     var keyUpdates = $scope.keyUpdates = [];
 
     $scope.getKeyUpdates = function () {
-        //debugger;
+        ////debugger;
         $http({
             method: 'GET',
             url: 'api/Dashboard/GetReferenceData?storageId=KeyUpdates'
@@ -1336,6 +1336,81 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
 
     //Start 
 
+    $scope.UpdateProjectDistributionChart = function () {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetProjectDistributionChartData'
+        }).
+      success(function (data, status, headers, config) {
+          if (data != null) {
+              //debugger;
+
+              $scope.ProjectDistLabels = JSON.parse(data[0]);
+              $scope.ProjectDistData = JSON.parse(data[1]);
+              
+              $scope.ProjectDistributionData.labels = JSON.parse(data[0]);
+              $scope.ProjectDistributionData.datasets[0].data = JSON.parse(data[1]);
+              
+          }
+      }).
+      error(function (data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+         
+      });
+    };
+
+    $scope.UpdateProjectDistributionChart();
+
+
+    $scope.ProjectDistributionData = {
+        labels: $scope.ProjectDistLabels,
+        datasets: [
+          {
+              label: 'No. of projects by month',
+              fillColor: '#0cc09f',
+              strokeColor: 'rgba(220,220,220,0.8)',
+              highlightFill: '#0aac8e',
+              highlightStroke: 'rgba(220,220,220,1)',
+              data: $scope.ProjectDistData
+          }
+        ]
+    };
+
+    $scope.ProjectDistributionOptions = {
+
+        // Sets the chart to be responsive
+        responsive: true,
+
+        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+        scaleBeginAtZero: true,
+
+        //Boolean - Whether grid lines are shown across the chart
+        scaleShowGridLines: true,
+
+        //String - Colour of the grid lines
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+
+        //Number - Width of the grid lines
+        scaleGridLineWidth: 1,
+
+        //Boolean - If there is a stroke on each bar
+        barShowStroke: true,
+
+        //Number - Pixel width of the bar stroke
+        barStrokeWidth: 2,
+
+        //Number - Spacing between each of the X value sets
+        barValueSpacing: 5,
+
+        //Number - Spacing between data sets within X values
+        barDatasetSpacing: 1,
+
+        //String - A legend template
+        legendTemplate: '<div class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i+=3){%><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(i<datasets.length){%><%=datasets[i].label%><%}%><%if(i+1<datasets.length){%><span style="background-color:<%=datasets[i+1].fillColor%>"></span> &nbsp; <%=datasets[i+1].label%><%}%><%if(i+2<datasets.length){%><span style="background-color:<%=datasets[i+2].fillColor%>"></span><%=datasets[i+2].label%><%}%><%}%></div>'
+    };
+
+
     $scope.ResourceDeploymentData = {
         labels: ['April', 'May', 'June', 'July', 'August', 'September', 'October'],
         datasets: [
@@ -1376,7 +1451,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
 
     // Chart.js Data
     $scope.skillChartData = {
-        labels: ['April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'Feb', 'March'],
+        labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
         datasets: [
           {
               label: 'FY15 Business',
@@ -1551,14 +1626,14 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
-              debugger;
+              //debugger;
               $scope.SoldProposedChartLabels = JSON.parse(data[0]);
               $scope.SoldProjectsChartData = JSON.parse(data[1]);
               $scope.ProposedProjectsChartData = JSON.parse(data[2]);
 
-              $scope.ODYoYData.labels = $scope.SoldProposedChartLabels;
-              $scope.ODYoYData.datasets[0].data = $scope.SoldProjectsChartData;
-              $scope.ODYoYData.datasets[1].data = $scope.ProposedProjectsChartData;
+              $scope.SoldProposedData.labels = $scope.SoldProposedChartLabels;
+              $scope.SoldProposedData.datasets[0].data = $scope.SoldProjectsChartData;
+              $scope.SoldProposedData.datasets[1].data = $scope.ProposedProjectsChartData;
           }
       }).
       error(function (data, status, headers, config) {
@@ -1571,7 +1646,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
     $scope.UpdateSoldProposedChart();
 
     // Chart.js Data
-    $scope.ODYoYData = {
+    $scope.SoldProposedData = {
         labels: $scope.SoldProposedChartLabels,
         datasets: [
           {
@@ -1598,7 +1673,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
     };
 
     // Chart.js Options
-    $scope.ODYoYOptions = {
+    $scope.SoldProposedOptions = {
 
         // Sets the chart to be responsive
         responsive: true,
@@ -1657,12 +1732,12 @@ AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', '
     var STORAGE_ID = 'Invoices';
     $scope.EditMode = "false";
     $scope.currentPage = 1;
-    $scope.pageSize = 5;
+    $scope.pageSize = 10;
 
     var InvoiceDetails = $scope.InvoiceDetails = [];
 
     $scope.getInvoices = function () {
-        //debugger;
+        ////debugger;
         $http({
             method: 'GET',
             url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
@@ -1730,7 +1805,7 @@ AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', '
     }, true);
 
     $scope.AddInvoice = function (InvoiceEntity) {
-        //debugger;
+        ////debugger;
         if (InvoiceEntity.index >= 0) {
             InvoiceDetails[InvoiceEntity.index] = InvoiceEntity;
         } else {
