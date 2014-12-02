@@ -45,21 +45,29 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
 
     $http({
         method: 'GET',
-        url: 'api/Dashboard/getactiveprojects'
+        url: 'api/Dashboard/GetDashboardCounts'
     }).
     success(function (data, status, headers, config) {
-        $scope.ActiveProjects = data;
+        $scope.PendingInvoices = JSON.parse(JSON.parse(data))[0];
+        $scope.ActiveProjects = JSON.parse(JSON.parse(data))[1];
+        $scope.OpenActionItems = JSON.parse(JSON.parse(data))[2];
+        $scope.ActiveResources = JSON.parse(JSON.parse(data))[3];
+        
     }).
     error(function (data, status, headers, config) {
         // called asynchronously if an error occurs
         // or server returns response with an error status.
         $scope.ActiveProjects = -1;
+        $scope.PendingInvoices = -1;
+        $scope.ActiveResources = -1;
+        $scope.OpenActionItems = -1;
     });
 
 
-    $scope.PendingInvoices = 9;
-    $scope.ActiveResources = 32;
-    $scope.OpenActionItems = 5;
+    //$scope.PendingInvoices = 9;
+    //$scope.ActiveResources = 32;
+    //$scope.OpenActionItems = 5;
+  
     var ProjectEntity;
 
     var FakeNotifications = [{
@@ -89,396 +97,7 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
     }];
 
     $scope.notifications = FakeNotifications;
-
-
-    var InvoicesData = [{
-        Project: 'Time Saver App',
-        Partner: 'Hallam/Enderby',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2012',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Aus Super Spt',
-        Partner: 'Milesi / Lipman',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2012',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'ANZ',
-        Partner: 'Carlisle / Adappa',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2012',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Time Saver App',
-        Partner: 'Hallam/Enderby',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2012',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Time Saver App',
-        Partner: 'Hallam/Enderby',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2012',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Time Saver App',
-        Partner: 'Hallam/Enderby',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2012',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Time Saver App',
-        Partner: 'Hallam/Enderby',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2013',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Time Saver App',
-        Partner: 'Hallam/Enderby',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2013',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Time Saver App',
-        Partner: 'Hallam/Enderby',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2013',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2013',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Time Saver App',
-        Partner: 'Hallam/Enderby',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2012',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Time Saver App',
-        Partner: 'Hallam/Enderby',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2012',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Pending'
-    }, {
-        Project: 'Time Saver App',
-        Partner: 'Hallam/Enderby',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2014',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Time Saver App',
-        Partner: 'Hallam/Enderby',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2014',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Time Saver App',
-        Partner: 'Hallam/Enderby',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2014',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Time Saver App',
-        Partner: 'Hallam/Enderby',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2012',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Time Saver App',
-        Partner: 'Hallam/Enderby',
-        Resource: 'Sharma, Tushar',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2012',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Pending'
-    }, {
-        Project: 'Time Saver App',
-        Partner: 'Hallam/Enderby',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2012',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Time Saver App',
-        Partner: 'Hallam/Enderby',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2012',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Time Saver App',
-        Partner: 'Hallam/Enderby',
-        Resource: 'Tiwari Harsha, Harkala Ram',
-        Period: 'P10_FY12',
-        Date: '02/20/12 - 03/02/12',
-        AmountUSD: 4860,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2012',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '3000079888',
-        InvoiceRaisedOn: '11/27/2012',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }];
-
-
-    var FakeInvoicesData = [{
-        Project: 'Project 1',
-        Partner: 'Partner 1',
-        Resource: 'Resource 1, Resource 2',
-        Period: 'P10_FY13',
-        Date: '02/20/17 - 03/02/17',
-        AmountUSD: 1234,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2017',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '123456789',
-        InvoiceRaisedOn: '11/27/2017',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Project 2',
-        Partner: 'Partner 2',
-        Resource: 'Resource 2, Resource 3',
-        Period: 'P10_FY13',
-        Date: '02/20/18 - 03/02/18',
-        AmountUSD: 5678,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2018',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '987654321',
-        InvoiceRaisedOn: '11/27/2017',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Project 3',
-        Partner: 'Partner 3',
-        Resource: 'Resource 3, Resource 4',
-        Period: 'P10_FY13',
-        Date: '02/20/19 - 03/02/19',
-        AmountUSD: 9012,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2019',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '111111111',
-        InvoiceRaisedOn: '11/27/2017',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Project 4',
-        Partner: 'Partner 4',
-        Resource: 'Resource 3, Resource 2',
-        Period: 'P10_FY13',
-        Date: '02/20/18 - 03/02/18',
-        AmountUSD: 1234,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2017',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '987654321',
-        InvoiceRaisedOn: '11/27/2017',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Project 5',
-        Partner: 'Partner 1',
-        Resource: 'Resource 1, Resource 4',
-        Period: 'P10_FY13',
-        Date: '02/20/19 - 03/02/19',
-        AmountUSD: 5678,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2018',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '222222222',
-        InvoiceRaisedOn: '11/27/2017',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Project 6',
-        Partner: 'Partner 2',
-        Resource: 'Resource 1, Resource 2',
-        Period: 'P10_FY13',
-        Date: '02/20/18 - 03/02/18',
-        AmountUSD: 9876,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2019',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '987654321',
-        InvoiceRaisedOn: '11/27/2017',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Project 7',
-        Partner: 'Partner 3',
-        Resource: 'Resource 1, Resource 2',
-        Period: 'P10_FY13',
-        Date: '02/20/19 - 03/02/19',
-        AmountUSD: 5432,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2017',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '112233445',
-        InvoiceRaisedOn: '11/27/2017',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    }, {
-        Project: 'Project 8',
-        Partner: 'Partner 4',
-        Resource: 'Resource 1, Resource 2',
-        Period: 'P10_FY13',
-        Date: '02/20/18 - 03/02/18',
-        AmountUSD: 4321,
-        ATBApproval: 'Received',
-        ATBSentOn: '11/26/2018',
-        InvoiceRaised: 'Yes',
-        InvoiceNumber: '987654321',
-        InvoiceRaisedOn: '11/27/2017',
-        Comments: '---',
-        PaymentReceived: 'Received'
-    },
-
-    ];
-
-
-    $scope.AllInvoices = FakeInvoicesData;
-
+    
     //Start Key Updates
     var keyUpdates = $scope.keyUpdates = [];
 
@@ -1369,12 +988,12 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
         legendTemplate: '<div class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i+=3){%><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(i<datasets.length){%><%=datasets[i].label%><%}%><%if(i+1<datasets.length){%><span style="background-color:<%=datasets[i+1].fillColor%>"></span> &nbsp; <%=datasets[i+1].label%><%}%><%if(i+2<datasets.length){%><span style="background-color:<%=datasets[i+2].fillColor%>"></span><%=datasets[i+2].label%><%}%><%}%></div>'
     };
 
-
+    //Resource Deployment
     $scope.ResourceDeploymentData = {
-        labels: ['April', 'May', 'June', 'July', 'August', 'September', 'October'],
+        labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
         datasets: [
           {
-              label: 'FY15 Business',
+              label: 'No. Of resources by month',
               fillColor: '#0cc09f',//rgba(69,201,102,0.75)',
               strokeColor: 'rgba(220,220,220,0.8)',
               highlightFill: '#0aac8e',
@@ -1382,6 +1001,40 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
               data: [40, 66, 65, 81, 75, 75, 80]
           }
         ]
+    };
+
+    $scope.ResourceDeploymentOptions = {
+        // Sets the chart to be responsive
+        responsive: true,
+
+        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+        scaleBeginAtZero: true,
+
+        //Boolean - Whether grid lines are shown across the chart
+        scaleShowGridLines: false,
+
+        //String - Colour of the grid lines
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+
+        //Number - Width of the grid lines
+        scaleGridLineWidth: 1,
+
+        //Boolean - If there is a stroke on each bar
+        barShowStroke: true,
+
+        //Number - Pixel width of the bar stroke
+        barStrokeWidth: 2,
+
+        //Number - Spacing between each of the X value sets
+        barValueSpacing: 5,
+
+        //Number - Spacing between data sets within X values
+        barDatasetSpacing: 1,
+
+        //String - A legend template
+        legendTemplate: '<div class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i+=3){%><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(i<datasets.length){%><%=datasets[i].label%><%}%><%if(i+1<datasets.length){%><span style="background-color:<%=datasets[i+1].fillColor%>"></span> &nbsp; <%=datasets[i+1].label%><%}%><%if(i+2<datasets.length){%><span style="background-color:<%=datasets[i+2].fillColor%>"></span><%=datasets[i+2].label%><%}%><%}%></div>'
+        //legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+
     };
 
     // added by Vibhav. To update skill revenue chart 
@@ -1666,7 +1319,7 @@ AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', '
     var InvoiceDetails = $scope.InvoiceDetails = [];
 
     $scope.getInvoices = function () {
-        ////debugger;
+        debugger;
         $http({
             method: 'GET',
             url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
@@ -1675,7 +1328,8 @@ AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', '
 
             if (data != 'null') {
                 InvoiceDetails = $scope.InvoiceDetails = JSON.parse(JSON.parse(data));
-                //$scope.$parent.ActiveProjects = InvoiceDetails.length;
+                $scope.$parent.PendingInvoices = InvoiceDetails.length;
+                
             }
         }).
         error(function (data, status, headers, config) {
@@ -1687,6 +1341,7 @@ AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', '
     };
 
     $scope.EditInvoice = function (invoice, index) {
+        debugger;
         invoice.index = index;
         $scope.InvoiceEntity = jQuery.extend(true, {}, invoice); // deep copy
         $scope.OriginalInvoice = jQuery.extend(true, {}, invoice); // deep copy
@@ -1711,6 +1366,7 @@ AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', '
     $scope.getInvoices();
 
     $scope.setInvoices = function (InvoiceDetails) {
+        debugger;
         var referenceData = new Object();
         referenceData.storageId = STORAGE_ID;
         referenceData.storageData = JSON.stringify(InvoiceDetails);

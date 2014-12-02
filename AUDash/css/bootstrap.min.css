@@ -4972,9 +4972,13 @@ a.list-group-item {
 
 .panel-body {
     padding: 15px;
-    padding-left: 0;
+    /*padding-left: 0;*/
     background-color: #343434;
     color: #E0E0E0;
+}
+
+.panel-chart {
+    padding-left: 0;
 }
 
     .panel-body:before, .panel-body:after {

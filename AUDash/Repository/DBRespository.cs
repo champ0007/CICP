@@ -82,5 +82,24 @@ namespace AUDash.Repository
 
 
         }
+
+
+        internal Dictionary<string, string> GetDashboardCounts()
+        {
+            Dictionary<string, string> dashboardCounts = new Dictionary<string, string>();
+            SqlCommand cmd = new SqlCommand("select * from ReferenceData where StorageId in ('Invoices','NewToDoItems','Resources','Projects')", GetConnection());
+            cmd.Connection.Open();
+            SqlDataReader rdr = cmd.ExecuteReader();
+
+            while (rdr.Read())
+            {
+                dashboardCounts.Add(rdr.GetString(0), HttpUtility.HtmlDecode(rdr.GetString(1)));                
+            }
+
+            cmd.Connection.Close();
+
+            return dashboardCounts;
+            
+        }
     }
 }

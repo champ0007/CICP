@@ -20,28 +20,13 @@ namespace AUDash.Controllers
     {
         DBRepository repo = new DBRepository();
 
-        //GET api/Dashboard/getactiveprojects
-        public int GetActiveProjects()
+        //GET api/Dashboard/GetDashboardCounts
+        public string GetDashboardCounts()
         {
-            return 11;
-        }
+            List<string> dashboardCounts = ParseDashboardCounts(repo.GetDashboardCounts());
 
-        //GET api/Dashboard/getopentasks
-        public int GetOpenTasks()
-        {
-            return 20;
-        }
-
-        //GET api/Dashboard/getpendinginvoices
-        public int GetPendingInvoices()
-        {
-            return 30;
-        }
-
-        //GET api/Dashboard/getactiveresources
-        public int GetActiveResources()
-        {
-            return 400;
+            return JsonConvert.SerializeObject(dashboardCounts);
+            
         }
 
         //GET api/Dashboard/GetProjectChartData //Added by Vibhav
@@ -81,8 +66,6 @@ namespace AUDash.Controllers
         {
             return ParseProjectDistributionData(repo.GetReferenceData("Projects"));
         }
-
-
 
         //POST api/Dashboard/SetReferenceData
         [HttpPost]
@@ -613,6 +596,19 @@ namespace AUDash.Controllers
             returnList.Add(JsonConvert.SerializeObject(prevFY));
             return returnList;
 
+        }
+
+        private List<string> ParseDashboardCounts(Dictionary<string, string> dashboardData)
+        {
+            List<string> dashboardCounts = new List<string>();
+
+            dashboardCounts.Add(JsonConvert.DeserializeObject<List<Invoice>>(dashboardData["Invoices"]).Where(x=>x.PaymentReceived == "Pending").Count().ToString());
+            dashboardCounts.Add(JsonConvert.DeserializeObject<List<ProjectEntity>>(dashboardData["Projects"]).Count.ToString());
+            dashboardCounts.Add(JsonConvert.DeserializeObject<List<ActionItem>>(dashboardData["NewToDoItems"]).Where(x=>x.Status == "Open").Count().ToString());
+            dashboardCounts.Add(JsonConvert.DeserializeObject<List<ResourceEntity>>(dashboardData["Resources"]).Count.ToString());
+
+            return dashboardCounts;
+           
         }
 
     }
