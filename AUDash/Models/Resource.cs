@@ -36,4 +36,11 @@ namespace AUDash.Models
         public int Count { get; set; }
     }
 
+    public class ResourceBySkill
+    {
+        public int value { get; set; }
+        public string label { get; set; }
+        public string color { get; set; }
+        public string highlight { get; set; }
+    }
 }

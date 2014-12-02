@@ -26,7 +26,7 @@ namespace AUDash.Controllers
             List<string> dashboardCounts = ParseDashboardCounts(repo.GetDashboardCounts());
 
             return JsonConvert.SerializeObject(dashboardCounts);
-            
+
         }
 
         //GET api/Dashboard/GetProjectChartData //Added by Vibhav
@@ -41,7 +41,17 @@ namespace AUDash.Controllers
             return ParseRevenueData(repo.GetReferenceData("Invoices"));
         }
 
+        //GET api/Dashboard/GetTechChartData //Added by Vibhav
+        public List<string> GetTechChartData()
+        {
+            return ParseSKillData(repo.GetReferenceData("Projects"));
+        }
 
+        //GET api/Dashboard/GetProjChartData //Added by Vibhav
+        public List<string> GetProjChartData()
+        {
+            return ParseProjBySkillData(repo.GetReferenceData("Projects"));
+        }
         //GET api/GetSoldProposedChartData
         public List<string> GetSoldProposedChartData()
         {
@@ -515,14 +525,14 @@ namespace AUDash.Controllers
 
             //relevantData[1].Period.Substring(relevantData[1].Period.IndexOf('/',2)+1,4)
 
-            var a = monthlyRev.Select(i => i.Period.Substring(0,2)).Distinct();
-            var aaaaa = monthlyRev.Select(i => i.Period.Substring(i.Period.Length-4)).Distinct();//"1/10/2013".ToString().Substring("1/10/2013".LastIndexOf('/')+1)
+            //var a = monthlyRev.Select(i => i.Period.Substring(0,2)).Distinct();
+            //var aaaaa = monthlyRev.Select(i => i.Period.Substring(i.Period.Length-4)).Distinct();//"1/10/2013".ToString().Substring("1/10/2013".LastIndexOf('/')+1)
             
             relevantData = monthlyRev
                 .FindAll(e => !String.IsNullOrEmpty(e.Period) && (e.Period.Substring(e.Period.LastIndexOf('/') + 1, 4) == (currentYear-1).ToString() || e.Period.Substring(e.Period.LastIndexOf('/') + 1, 4) == currentYear.ToString() || e.Period.Substring(e.Period.LastIndexOf('/') + 1, 4) == (currentYear+1).ToString()));
 
-            var b = relevantData.Select(i => i.Period.Substring(0, 2)).Distinct();
-            var bbbbb = relevantData.Select(i => i.Period.Substring(i.Period.IndexOf('/', 2) + 1, 4)).Distinct();
+            //var b = relevantData.Select(i => i.Period.Substring(0, 2)).Distinct();
+            //var bbbbb = relevantData.Select(i => i.Period.Substring(i.Period.IndexOf('/', 2) + 1, 4)).Distinct();
 
             List<RevenueByMonth> currYrData = new List<RevenueByMonth>();
             List<RevenueByMonth> prevYrData = new List<RevenueByMonth>();
@@ -594,6 +604,59 @@ namespace AUDash.Controllers
             //send current, prev year FY
             returnList.Add(JsonConvert.SerializeObject(currentFY));
             returnList.Add(JsonConvert.SerializeObject(prevFY));
+            return returnList;
+
+        }
+
+        //Added by Vibhav. 
+        private List<string> ParseSKillData(string skillData)
+        {
+            List<ProjectEntity> projs = JsonConvert.DeserializeObject<List<ProjectEntity>>(skillData);
+            
+            List<ResourceBySkill> resourceList = projs.GroupBy(e => e.Technology)
+               .Select(ls => new ResourceBySkill()
+               {
+                   label = ls.Key,
+                   value = ls.Sum(w => Convert.ToInt32(w.TotalResources))
+               }).ToList();
+
+            //foreach (var data in resourceList)
+            //{
+            //    data.color = "";
+            //}
+            
+            List<string> returnList = new List<string>();
+            
+            returnList.Add(JsonConvert.SerializeObject(resourceList));
+
+            return returnList;
+
+        }
+
+        //Added by Vibhav. 
+        private List<string> ParseProjBySkillData(string projectData)
+        {
+            List<string> Projects = new List<string>();
+            List<ProjectEntity> projs = JsonConvert.DeserializeObject<List<ProjectEntity>>(projectData);
+
+            foreach (ProjectEntity p in projs)
+            {
+                Projects.Add(p.Technology);
+            }
+
+            List<ProjGroupedByStatus> GroupedProjects = Projects
+                .GroupBy(s => s)
+                .Select(group => new ProjGroupedByStatus() { ProjectStatus = group.Key, Count = group.Count() }).ToList();
+
+            //foreach (var data in resourceList)
+            //{
+            //    data.color = "";
+            //}
+
+            List<string> returnList = new List<string>();
+
+            returnList.Add(JsonConvert.SerializeObject(GroupedProjects));
+
             return returnList;
 
         }
