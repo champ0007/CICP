@@ -781,6 +781,7 @@ AUDashboardApp.controller('NewActionItemsController', ['$scope', '$filter', '$ht
     };
 
     $scope.EditToDoItem = function (ToDoItem, index) {
+        debugger;
         ToDoItem.index = index;
         $scope.ToDoItem = jQuery.extend(true, {}, ToDoItem); // deep copy
         $scope.OriginalToDoItem = jQuery.extend(true, {}, ToDoItem); // deep copy
@@ -810,10 +811,12 @@ AUDashboardApp.controller('NewActionItemsController', ['$scope', '$filter', '$ht
     }, true);
 
     $scope.AddToDoItem = function (ToDoItem) {
-        ToDoItem.Status = 'Open';
+        debugger;
+        
         if (ToDoItem.index >= 0) {
             NewToDos[ToDoItem.index] = ToDoItem;
         } else {
+            ToDoItem.Status = 'Open';
             NewToDos.push(ToDoItem);
         }
 
