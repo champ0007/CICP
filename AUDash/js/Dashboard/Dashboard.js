@@ -71,29 +71,25 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
     var ProjectEntity;
 
     var FakeNotifications = [{
-        message: '7 tasks added',
-        eventdate: '47 mins ago',
-        type: 'fa fa-tasks fa-fw'
+        message: 'Frank Farrall USI Visit - Mumbai',
+        eventdate: '8-Dec',
+        type: 'fa fa-calendar fa-fw'
     }, {
-        message: 'AMP India visit',
-        eventdate: '18-Aug',
-        type: 'fa fa-tasks fa-fw'
+        message: 'Frank Farrall USI Visit - Hyderabad',
+        eventdate: '10-Dec',
+        type: 'fa fa-calendar fa-fw'
     }, {
         message: 'Submit Project Report',
-        eventdate: '20-Aug',
+        eventdate: '20-Dec',
         type: 'fa fa-twitter fa-fw'
     }, {
-        message: 'Telstra India Visit',
-        eventdate: '1-Sep',
-        type: 'fa fa-comment fa-fw'
-    }, {
         message: 'EDC-AU meet',
-        eventdate: '12-Sep',
+        eventdate: '5-Jan',
         type: 'fa fa-calendar fa-fw'
     }, {
         message: 'EDC Upcoming Holiday',
-        eventdate: '2-Oct',
-        type: 'fa fa-tasks fa-fw'
+        eventdate: '26-Dec',
+        type: 'fa fa-calendar fa-fw'
     }];
 
     $scope.notifications = FakeNotifications;
