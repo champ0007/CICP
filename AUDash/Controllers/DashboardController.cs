@@ -229,7 +229,7 @@ namespace AUDash.Controllers
                     strError = "Your Excel file does not contain any work sheets";
                 else
                 {
-                    ExcelWorksheet resourceWorkSheet = package.Workbook.Worksheets.Where(x=>x.Name.Contains("USI")).First();
+                    ExcelWorksheet resourceWorkSheet = package.Workbook.Worksheets.Where(x => x.Name.Contains("USI")).First();
                     while (resourceWorkSheet.Cells[rowCount, 1].Value != null)
                     {
                         resources.Add(new ResourceEntity()
@@ -339,8 +339,8 @@ namespace AUDash.Controllers
             List<ProjectEntity> projs = JsonConvert.DeserializeObject<List<ProjectEntity>>(projects);
 
             Dictionary<string, int> soldProjects = new Dictionary<string, int>();
-            soldProjects.Add(((ChartMonths)DateTime.Now.Month).ToString() + DateTime.Now.Year.ToString().Substring(2,2), 0);
-            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(1).Month).ToString() + DateTime.Now.AddMonths(1).Year.ToString().Substring(2,2), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.Month).ToString() + DateTime.Now.Year.ToString().Substring(2, 2), 0);
+            soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(1).Month).ToString() + DateTime.Now.AddMonths(1).Year.ToString().Substring(2, 2), 0);
             soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(2).Month).ToString() + DateTime.Now.AddMonths(2).Year.ToString().Substring(2, 2), 0);
             soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(3).Month).ToString() + DateTime.Now.AddMonths(3).Year.ToString().Substring(2, 2), 0);
             soldProjects.Add(((ChartMonths)DateTime.Now.AddMonths(4).Month).ToString() + DateTime.Now.AddMonths(4).Year.ToString().Substring(2, 2), 0);
@@ -451,9 +451,9 @@ namespace AUDash.Controllers
 
             for (DateTime projectDate = Convert.ToDateTime(project.StartDate); projectDate <= Convert.ToDateTime(project.EndDate); projectDate = projectDate.AddMonths(1))
             {
-                if (projects.ContainsKey(((ChartMonths)projectDate.Month).ToString() + projectDate.Year.ToString().Substring(2,2)))
+                if (projects.ContainsKey(((ChartMonths)projectDate.Month).ToString() + projectDate.Year.ToString().Substring(2, 2)))
                 {
-                    projects[((ChartMonths)projectDate.Month).ToString() + projectDate.Year.ToString().Substring(2,2)] += incrementedAttribute;
+                    projects[((ChartMonths)projectDate.Month).ToString() + projectDate.Year.ToString().Substring(2, 2)] += incrementedAttribute;
                 }
             }
         }
@@ -461,8 +461,8 @@ namespace AUDash.Controllers
         private List<string> ParseProjectDistributionData(string projects)
         {
             int currentFY = GetFiscalYear();
-            string currentFiscalYear = currentFY.ToString().Substring(2,2);
-            string nextYear = Convert.ToString(currentFY + 1).Substring(2,2);
+            string currentFiscalYear = currentFY.ToString().Substring(2, 2);
+            string nextYear = Convert.ToString(currentFY + 1).Substring(2, 2);
 
             List<ProjectEntity> projs = JsonConvert.DeserializeObject<List<ProjectEntity>>(projects);
 
@@ -527,9 +527,9 @@ namespace AUDash.Controllers
 
             //var a = monthlyRev.Select(i => i.Period.Substring(0,2)).Distinct();
             //var aaaaa = monthlyRev.Select(i => i.Period.Substring(i.Period.Length-4)).Distinct();//"1/10/2013".ToString().Substring("1/10/2013".LastIndexOf('/')+1)
-            
+
             relevantData = monthlyRev
-                .FindAll(e => !String.IsNullOrEmpty(e.Period) && (e.Period.Substring(e.Period.LastIndexOf('/') + 1, 4) == (currentYear-1).ToString() || e.Period.Substring(e.Period.LastIndexOf('/') + 1, 4) == currentYear.ToString() || e.Period.Substring(e.Period.LastIndexOf('/') + 1, 4) == (currentYear+1).ToString()));
+                .FindAll(e => !String.IsNullOrEmpty(e.Period) && (e.Period.Substring(e.Period.LastIndexOf('/') + 1, 4) == (currentYear - 1).ToString() || e.Period.Substring(e.Period.LastIndexOf('/') + 1, 4) == currentYear.ToString() || e.Period.Substring(e.Period.LastIndexOf('/') + 1, 4) == (currentYear + 1).ToString()));
 
             //var b = relevantData.Select(i => i.Period.Substring(0, 2)).Distinct();
             //var bbbbb = relevantData.Select(i => i.Period.Substring(i.Period.IndexOf('/', 2) + 1, 4)).Distinct();
@@ -559,7 +559,7 @@ namespace AUDash.Controllers
                     if (rec.Period.Substring(rec.Period.LastIndexOf('/') + 1, 4) == (currentYear).ToString())
                     {
                         //if data is for selected month
-                       // if (rec.ATBApprovalSentOn.Substring(0, rec.ATBApprovalSentOn.IndexOf('/')) == i.ToString() || rec.ATBApprovalSentOn.Substring(0, rec.ATBApprovalSentOn.IndexOf('/')) == "0" + i.ToString())
+                        // if (rec.ATBApprovalSentOn.Substring(0, rec.ATBApprovalSentOn.IndexOf('/')) == i.ToString() || rec.ATBApprovalSentOn.Substring(0, rec.ATBApprovalSentOn.IndexOf('/')) == "0" + i.ToString())
                         if (rec.Period.Substring(0, rec.Period.IndexOf('/')) == i.ToString() || rec.Period.Substring(0, rec.Period.IndexOf('/')) == "0" + i.ToString())
                         {
                             //add revenue to month's total
@@ -604,6 +604,8 @@ namespace AUDash.Controllers
             //send current, prev year FY
             returnList.Add(JsonConvert.SerializeObject(currentFY));
             returnList.Add(JsonConvert.SerializeObject(prevFY));
+            returnList.Add(JsonConvert.SerializeObject(new List<string> { prevYrData.Sum(e => e.amount).ToString(), currYrData.Sum(e => e.amount).ToString() }));
+            returnList.Add(JsonConvert.SerializeObject(new List<string> { prevFY, currentFY}));
             return returnList;
 
         }
@@ -612,7 +614,7 @@ namespace AUDash.Controllers
         private List<string> ParseSKillData(string skillData)
         {
             List<ProjectEntity> projs = JsonConvert.DeserializeObject<List<ProjectEntity>>(skillData);
-            
+
             List<ResourceBySkill> resourceList = projs.GroupBy(e => e.Technology)
                .Select(ls => new ResourceBySkill()
                {
@@ -624,9 +626,9 @@ namespace AUDash.Controllers
             //{
             //    data.color = "";
             //}
-            
+
             List<string> returnList = new List<string>();
-            
+
             returnList.Add(JsonConvert.SerializeObject(resourceList));
 
             return returnList;
@@ -665,13 +667,13 @@ namespace AUDash.Controllers
         {
             List<string> dashboardCounts = new List<string>();
 
-            dashboardCounts.Add(JsonConvert.DeserializeObject<List<Invoice>>(dashboardData["Invoices"]).Where(x=>x.PaymentReceived == "Pending").Count().ToString());
+            dashboardCounts.Add(JsonConvert.DeserializeObject<List<Invoice>>(dashboardData["Invoices"]).Where(x => x.PaymentReceived == "Pending").Count().ToString());
             dashboardCounts.Add(JsonConvert.DeserializeObject<List<ProjectEntity>>(dashboardData["Projects"]).Count.ToString());
-            dashboardCounts.Add(JsonConvert.DeserializeObject<List<ActionItem>>(dashboardData["NewToDoItems"]).Where(x=>x.Status == "Open").Count().ToString());
+            dashboardCounts.Add(JsonConvert.DeserializeObject<List<ActionItem>>(dashboardData["NewToDoItems"]).Where(x => x.Status == "Open").Count().ToString());
             dashboardCounts.Add(JsonConvert.DeserializeObject<List<ResourceEntity>>(dashboardData["Resources"]).Count.ToString());
 
             return dashboardCounts;
-           
+
         }
 
     }

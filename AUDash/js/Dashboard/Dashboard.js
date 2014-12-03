@@ -246,6 +246,7 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
           $scope.AllResources = -1;
       });
     };
+
     $scope.UpdateProjChart();
 
     // Chart.js Data
@@ -1038,7 +1039,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
               strokeColor: 'rgba(220,220,220,0.8)',
               highlightFill: '#0aac8e',
               highlightStroke: 'rgba(220,220,220,1)',
-              data: [40, 66, 65, 81, 75, 75, 80]
+              data: [30, 40, 45, 45, 51, 51, 51, 51, 51]
           }
         ]
     };
@@ -1092,6 +1093,11 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
               $scope.skillChartData.datasets[1].data = $scope.revenueChartPrevData;
               $scope.skillChartData.datasets[0].label = JSON.parse(data[2]);
               $scope.skillChartData.datasets[1].label = JSON.parse(data[3]);
+
+              $scope.YoYInnerData = JSON.parse(data[4]);
+              $scope.YoYLabels = JSON.parse(data[5]);
+              $scope.YoYData.datasets[0].data = $scope.YoYInnerData;
+              $scope.YoYData.labels = $scope.YoYLabels;
           }
       }).
       error(function (data, status, headers, config) {
@@ -1162,6 +1168,53 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
     };
 
     $scope.UpdateRevenueChart();
+
+    $scope.YoYData = {
+        labels:$scope.YoYLabels,
+        datasets: [
+          {
+              label: 'YoY Revenue(million USD)',
+              fillColor: '#0cc09f',
+              strokeColor: 'rgba(220,220,220,0.8)',
+              highlightFill: '#0aac8e',
+              highlightStroke: 'rgba(220,220,220,1)',
+              data: $scope.YoYInnerData
+          }
+        ]
+    };
+
+    $scope.YoYOptions = {
+
+        // Sets the chart to be responsive
+        responsive: true,
+
+        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+        scaleBeginAtZero: true,
+
+        //Boolean - Whether grid lines are shown across the chart
+        scaleShowGridLines: true,
+
+        //String - Colour of the grid lines
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+
+        //Number - Width of the grid lines
+        scaleGridLineWidth: 1,
+
+        //Boolean - If there is a stroke on each bar
+        barShowStroke: true,
+
+        //Number - Pixel width of the bar stroke
+        barStrokeWidth: 2,
+
+        //Number - Spacing between each of the X value sets
+        barValueSpacing: 5,
+
+        //Number - Spacing between data sets within X values
+        barDatasetSpacing: 1,
+
+        //String - A legend template
+        legendTemplate: '<div class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i+=3){%><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(i<datasets.length){%><%=datasets[i].label%><%}%><%if(i+1<datasets.length){%><span style="background-color:<%=datasets[i+1].fillColor%>"></span> &nbsp; <%=datasets[i+1].label%><%}%><%if(i+2<datasets.length){%><span style="background-color:<%=datasets[i+2].fillColor%>"></span><%=datasets[i+2].label%><%}%><%}%></div>'
+    };
 
     $scope.UpdateTechChart = function () {
         $http({
