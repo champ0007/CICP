@@ -11,17 +11,22 @@
     </div>
     <!-- /.panel -->
 
-    <div class="panel panel-blue">
+    <div class="panel panel-red">
         <div class="panel-heading">
             <i class="fa fa-bell fa-fw"></i> Upload Resource Report
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body">
             <input type="file" nv-file-select="" uploader="uploader" />
+            <div ng-repeat="item in uploader.queue">
+                <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+            </div>
 
-            <div style="margin-bottom: 40px">
-                <!--<h3>Upload queue</h3>
-                <p>Queue length: {{ uploader.queue.length }}</p>-->
+            <!--<div style="margin-bottom: 40px">
+                <h3>Upload queue</h3>
+                <p>Queue length: {{ uploader.queue.length }}</p>
                 <table class="table">
                     <thead>
                         <tr>
@@ -60,18 +65,8 @@
                         </tr>
                     </tbody>
                 </table>
-                <!--<div>
-                </div>
-                <!--<div class="list-group">
-                    <a href="#" class="list-group-item" ng-repeat="notification in notifications">
-                        <i class={{notification.type}}></i> {{notification.message}}
-                        <span class="pull-right text-muted small">
-                            <em>{{notification.eventdate}}</em>
-                        </span>
-                    </a>
-                </div>-->
-                <!-- /.list-group -->
-            </div>
+                <!-- /.list-group
+            </div>-->
             <!-- /.panel-body -->
         </div>
         <!-- /.panel -->
@@ -175,7 +170,7 @@
                                     <input type="text" class="form-control" id="inputNextProject" placeholder="Next Project" ng-model="ResourceEntity.NextProject">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
 
                                 <label for="inputEndDate" class="col-sm-3 control-label">Available On</label>
