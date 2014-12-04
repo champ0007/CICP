@@ -229,7 +229,7 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
       success(function (data, status, headers, config) {
           if (data != null) {
               debugger;
-              
+              $scope.ProjectChartData = [];
               var ProjectChartDataList = JSON.parse(data[0]);
               for (i = 0; i <= ProjectChartDataList.length; i++) {
                   var dataItem = new Object();
