@@ -52,7 +52,7 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
         $scope.ActiveProjects = JSON.parse(JSON.parse(data))[1];
         $scope.OpenActionItems = JSON.parse(JSON.parse(data))[2];
         $scope.ActiveResources = JSON.parse(JSON.parse(data))[3];
-        
+
     }).
     error(function (data, status, headers, config) {
         // called asynchronously if an error occurs
@@ -67,7 +67,7 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
     //$scope.PendingInvoices = 9;
     //$scope.ActiveResources = 32;
     //$scope.OpenActionItems = 5;
-  
+
     var ProjectEntity;
 
     var FakeNotifications = [{
@@ -93,7 +93,7 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
     }];
 
     $scope.notifications = FakeNotifications;
-    
+
     //Start Key Updates
     var keyUpdates = $scope.keyUpdates = [];
 
@@ -219,6 +219,8 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
         legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
     };
 
+    $scope.ProjectChartData = [];
+
     $scope.UpdateProjChart = function () {
         $http({
             method: 'GET',
@@ -227,10 +229,15 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
       success(function (data, status, headers, config) {
           if (data != null) {
               debugger;
+              
               var ProjectChartDataList = JSON.parse(data[0]);
               for (i = 0; i <= ProjectChartDataList.length; i++) {
-                  $scope.ProjectChartData[i].value = ProjectChartDataList[i].Count;
-                  $scope.ProjectChartData[i].label = ProjectChartDataList[i].ProjectStatus;
+                  var dataItem = new Object();
+                  dataItem.value = ProjectChartDataList[i].Count;
+                  dataItem.label = ProjectChartDataList[i].ProjectStatus;
+                  dataItem.color = colors[i];
+                  dataItem.highlight = highlights[i];
+                  $scope.ProjectChartData.push(dataItem);
               }
               //$scope.revenueChartPrevData = JSON.parse(data[1]);
               //$scope.revenueChartCurrData = JSON.parse(data[0]);
@@ -247,41 +254,41 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
       });
     };
 
-    $scope.UpdateProjChart();
+    //$scope.UpdateProjChart();
 
-    // Chart.js Data
-    $scope.ProjectChartData = [
-      {
-          value: 0,
-          color: '#F7464A',
-          highlight: '#FF5A5E',
-          label: 'Sitecore'
-      },
-      {
-          value: 0,
-          color: '#46BFBD',
-          highlight: '#5AD3D1',
-          label: 'Hybris'
-      },
-      {
-          value: 0,
-          color: '#FDB45C',
-          highlight: '#FFC870',
-          label: 'Adobe CQ'
-      },
-      {
-          value: 0,
-          color: '#46BFBA',
-          highlight: '#5AD3D1',
-          label: 'Biztalk'
-      },
-      {
-          value: 0,
-          color: '#FDB4AC',
-          highlight: '#FFC870',
-          label: 'Mobile'
-      }
-    ];
+    //// Chart.js Data
+    //$scope.ProjectChartData = [
+    //  {
+    //      value: 0,
+    //      color: '#F7464A',
+    //      highlight: '#FF5A5E',
+    //      label: 'Sitecore'
+    //  }];
+    //  {
+    //      value: 0,
+    //      color: '#46BFBD',
+    //      highlight: '#5AD3D1',
+    //      label: 'Hybris'
+    //  },
+    //  {
+    //      value: 0,
+    //      color: '#FDB45C',
+    //      highlight: '#FFC870',
+    //      label: 'Adobe CQ'
+    //  },
+    //  {
+    //      value: 0,
+    //      color: '#46BFBA',
+    //      highlight: '#5AD3D1',
+    //      label: 'Biztalk'
+    //  },
+    //  {
+    //      value: 0,
+    //      color: '#FDB4AC',
+    //      highlight: '#FFC870',
+    //      label: 'Mobile'
+    //  }
+    //];
 
     // Chart.js Options
     $scope.ProjectChartOptions = {
@@ -809,7 +816,7 @@ AUDashboardApp.controller('NewActionItemsController', ['$scope', '$filter', '$ht
 
     $scope.AddToDoItem = function (ToDoItem) {
         debugger;
-        
+
         if (ToDoItem.index >= 0) {
             NewToDos[ToDoItem.index] = ToDoItem;
         } else {
@@ -966,16 +973,16 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
 
               $scope.ProjectDistLabels = JSON.parse(data[0]);
               $scope.ProjectDistData = JSON.parse(data[1]);
-              
+
               $scope.ProjectDistributionData.labels = JSON.parse(data[0]);
               $scope.ProjectDistributionData.datasets[0].data = JSON.parse(data[1]);
-              
+
           }
       }).
       error(function (data, status, headers, config) {
           // called asynchronously if an error occurs
           // or server returns response with an error status.
-         
+
       });
     };
 
@@ -1170,7 +1177,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
     $scope.UpdateRevenueChart();
 
     $scope.YoYData = {
-        labels:$scope.YoYLabels,
+        labels: $scope.YoYLabels,
         datasets: [
           {
               label: 'YoY Revenue(million USD)',
@@ -1224,10 +1231,18 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
       success(function (data, status, headers, config) {
           if (data != null) {
               debugger;
+              var colors = ['#F7464A', '#46BFBD', '#FDB45C', '#46BFBA', '#FDB4AC', '#F7464A', '#46BFBD', '#FDB45C', '#46BFBA', '#FDB4AC', '#F7464A', '#46BFBD', '#FDB45C', '#46BFBA', '#FDB4AC', '#F7464A', '#46BFBD', '#FDB45C', '#46BFBA', '#FDB4AC'];
+              var highlights = ['#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870', '#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870', '#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870', '#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870'];
+              
               var ProjectChartDataList = JSON.parse(data[0]);
-              for (i = 0; i <= ProjectChartDataList.length;i++){
-                  $scope.ProjectChartData[i].value = ProjectChartDataList[i].value;
-                  $scope.ProjectChartData[i].label = ProjectChartDataList[i].label;
+              for (i = 0; i <= ProjectChartDataList.length; i++) {
+                 
+                  var dataItem = new Object();
+                  dataItem.value = ProjectChartDataList[i].value;
+                  dataItem.label = ProjectChartDataList[i].label;
+                  dataItem.color = colors[i];
+                  dataItem.highlight = highlights[i];
+                  $scope.ProjectChartData.push(dataItem);
               }
               //$scope.revenueChartPrevData = JSON.parse(data[1]);
               //$scope.revenueChartCurrData = JSON.parse(data[0]);
@@ -1243,47 +1258,48 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
           $scope.AllResources = -1;
       });
     };
+
     $scope.UpdateTechChart();
 
     // Chart.js Data
-    $scope.ProjectChartData = [
-      {
-          value: 0,
-          color: '#d9534f',
-          highlight: '#F7464A',
-          label: 'Sitecore'
-      },    
-       {
-           value: 0,
-           color: '#f8c705',
-           highlight: '#FFC870',
-           label: 'Core .NET'
-       },
-      {
-          value: 0,
-          color: '#00b0f0',
-          highlight: '#46BFBD',
-          label: 'Hybris'
-      },
-      {
-          value: 0,
-          color: '#FDB45C',
-          highlight: '#FFC870',
-          label: 'Adobe CQ'
-      },
-      {
-          value: 0,
-          color: '#fe6f54',
-          highlight: '#E32400',
-          label: 'Core Java'
-      },
-      {
-          value: 0,
-          color: '#7ec351',
-          highlight: 'lightgreen',
-          label: 'QA'
-      }
-    ];
+    //$scope.ProjectChartData = [
+    //  {
+    //      value: 0,
+    //      color: '#d9534f',
+    //      highlight: '#F7464A',
+    //      label: 'Sitecore'
+    //  },    
+    //   {
+    //       value: 0,
+    //       color: '#f8c705',
+    //       highlight: '#FFC870',
+    //       label: 'Core .NET'
+    //   },
+    //  {
+    //      value: 0,
+    //      color: '#00b0f0',
+    //      highlight: '#46BFBD',
+    //      label: 'Hybris'
+    //  },
+    //  {
+    //      value: 0,
+    //      color: '#FDB45C',
+    //      highlight: '#FFC870',
+    //      label: 'Adobe CQ'
+    //  },
+    //  {
+    //      value: 0,
+    //      color: '#fe6f54',
+    //      highlight: '#E32400',
+    //      label: 'Core Java'
+    //  },
+    //  {
+    //      value: 0,
+    //      color: '#7ec351',
+    //      highlight: 'lightgreen',
+    //      label: 'QA'
+    //  }
+    //];
 
     // Chart.js Options
     $scope.ProjectChartOptions = {
@@ -1452,7 +1468,7 @@ AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', '
             if (data != 'null') {
                 InvoiceDetails = $scope.InvoiceDetails = JSON.parse(JSON.parse(data));
                 $scope.$parent.PendingInvoices = InvoiceDetails.length;
-                
+
             }
         }).
         error(function (data, status, headers, config) {
