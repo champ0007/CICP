@@ -229,19 +229,20 @@ namespace AUDash.Controllers
                     strError = "Your Excel file does not contain any work sheets";
                 else
                 {
-                    ExcelWorksheet resourceWorkSheet = package.Workbook.Worksheets.Where(x => x.Name.Contains("USI")).First();
+                    ExcelWorksheet resourceWorkSheet = package.Workbook.Worksheets.Where(x => x.Name.Contains("US-I")).First();
                     while (resourceWorkSheet.Cells[rowCount, 1].Value != null)
                     {
                         resources.Add(new ResourceEntity()
                         {
                             FirstName = Convert.ToString(resourceWorkSheet.Cells[rowCount, 1].Value).Split(',')[1].Trim(),
                             LastName = Convert.ToString(resourceWorkSheet.Cells[rowCount, 1].Value).Split(',')[0].Trim(),
-                            Skills = Convert.ToString(resourceWorkSheet.Cells[rowCount, 2].Value),
-                            Level = Convert.ToString(resourceWorkSheet.Cells[rowCount, 4].Value),
+                            EmpId = Convert.ToString(resourceWorkSheet.Cells[rowCount, 2].Value),
+                            Skills = Convert.ToString(resourceWorkSheet.Cells[rowCount, 3].Value),
+                            Level = Convert.ToString(resourceWorkSheet.Cells[rowCount, 5].Value),
                             LastProject = String.Empty,
-                            CurrentProject = Convert.ToString(resourceWorkSheet.Cells[rowCount, 17].Value),
+                            CurrentProject = Convert.ToString(resourceWorkSheet.Cells[rowCount, 19].Value),
                             NextProject = String.Empty,
-                            AvailableOn = Convert.ToString(resourceWorkSheet.Cells[5, 19].Value).Split(' ')[0]
+                            AvailableOn = Convert.ToString(resourceWorkSheet.Cells[rowCount, 21].Value).Split(' ')[0]
                         });
 
                         rowCount++;

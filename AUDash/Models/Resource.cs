@@ -28,6 +28,7 @@ namespace AUDash.Models
         public string CurrentProject { get; set; }
         public string NextProject { get; set; }
         public string AvailableOn { get; set; }
+        public string EmpId { get; set; }
     }
 
     public class GroupedProject
