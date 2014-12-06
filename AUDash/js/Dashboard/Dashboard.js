@@ -530,6 +530,7 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
       success(function (data, status, headers, config) {
           if (data != null) {
               //debugger;
+              $scope.ProjectChartData = [];
               $scope.chartLabels = JSON.parse(data[0]);
               $scope.chartData = JSON.parse(data[1]);
               $scope.ActiveProjectChartData.labels = $scope.chartLabels;
@@ -1211,13 +1212,13 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
         barShowStroke: true,
 
         //Number - Pixel width of the bar stroke
-        barStrokeWidth: 2,
+        barStrokeWidth: 1,
 
         //Number - Spacing between each of the X value sets
-        barValueSpacing: 5,
+        barValueSpacing: 50,
 
         //Number - Spacing between data sets within X values
-        barDatasetSpacing: 1,
+        barDatasetSpacing: 5,
 
         //String - A legend template
         legendTemplate: '<div class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i+=3){%><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(i<datasets.length){%><%=datasets[i].label%><%}%><%if(i+1<datasets.length){%><span style="background-color:<%=datasets[i+1].fillColor%>"></span> &nbsp; <%=datasets[i+1].label%><%}%><%if(i+2<datasets.length){%><span style="background-color:<%=datasets[i+2].fillColor%>"></span><%=datasets[i+2].label%><%}%><%}%></div>'
@@ -1233,10 +1234,9 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
               debugger;
               var colors = ['#F7464A', '#46BFBD', '#FDB45C', '#46BFBA', '#FDB4AC', '#F7464A', '#46BFBD', '#FDB45C', '#46BFBA', '#FDB4AC', '#F7464A', '#46BFBD', '#FDB45C', '#46BFBA', '#FDB4AC', '#F7464A', '#46BFBD', '#FDB45C', '#46BFBA', '#FDB4AC'];
               var highlights = ['#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870', '#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870', '#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870', '#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870'];
-              
+              $scope.ProjectChartData = [];
               var ProjectChartDataList = JSON.parse(data[0]);
-              for (i = 0; i <= ProjectChartDataList.length; i++) {
-                 
+              for (i = 0; i <= ProjectChartDataList.length; i++) {                  
                   var dataItem = new Object();
                   dataItem.value = ProjectChartDataList[i].value;
                   dataItem.label = ProjectChartDataList[i].label;
@@ -1246,7 +1246,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
               }
               //$scope.revenueChartPrevData = JSON.parse(data[1]);
               //$scope.revenueChartCurrData = JSON.parse(data[0]);
-              //$scope.skillChartData.datasets[0].data = $scope.revenueChartCurrData;
+              //$scope.skillChartData.datasets[0].data = $scope.revenueChartCurrData;S
               //$scope.skillChartData.datasets[1].data = $scope.revenueChartPrevData;
               //$scope.skillChartData.datasets[0].label = JSON.parse(data[2]);
               //$scope.skillChartData.datasets[1].label = JSON.parse(data[3]);

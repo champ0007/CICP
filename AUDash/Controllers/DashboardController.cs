@@ -604,7 +604,7 @@ namespace AUDash.Controllers
             //send current, prev year FY
             returnList.Add(JsonConvert.SerializeObject(currentFY));
             returnList.Add(JsonConvert.SerializeObject(prevFY));
-            returnList.Add(JsonConvert.SerializeObject(new List<string> { prevYrData.Sum(e => e.amount).ToString(), currYrData.Sum(e => e.amount).ToString() }));
+            returnList.Add(JsonConvert.SerializeObject(new List<string> { prevYrData.Sum(e => Math.Round(e.amount/1000000, 2)).ToString(), currYrData.Sum(e => Math.Round(e.amount/1000000,2)).ToString() }));
             returnList.Add(JsonConvert.SerializeObject(new List<string> { prevFY, currentFY}));
             return returnList;
 
