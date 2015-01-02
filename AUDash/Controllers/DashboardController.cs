@@ -238,10 +238,10 @@ namespace AUDash.Controllers
                             LastName = Convert.ToString(resourceWorkSheet.Cells[rowCount, 1].Value).Split(',')[0].Trim(),
                             EmpId = Convert.ToString(resourceWorkSheet.Cells[rowCount, 2].Value),
                             Skills = Convert.ToString(resourceWorkSheet.Cells[rowCount, 3].Value),
-                            Level = Convert.ToString(resourceWorkSheet.Cells[rowCount, 5].Value),
+                            Level = Convert.ToString(resourceWorkSheet.Cells[rowCount, 6].Value),
                             LastProject = String.Empty,
-                            CurrentProject = Convert.ToString(resourceWorkSheet.Cells[rowCount, 19].Value),
-                            NextProject = String.Empty,
+                            CurrentProject = ParseProject(Convert.ToString(resourceWorkSheet.Cells[rowCount, 19].Value)),
+                            NextProject = ParseProject(Convert.ToString(resourceWorkSheet.Cells[rowCount, 20].Value)),
                             AvailableOn = Convert.ToString(resourceWorkSheet.Cells[rowCount, 21].Value).Split(' ')[0]
                         });
 
@@ -259,30 +259,9 @@ namespace AUDash.Controllers
             List<string> Projects = new List<string>();
 
             List<ResourceEntity> resources = JsonConvert.DeserializeObject<List<ResourceEntity>>(resourceData);
-            foreach (ResourceEntity resource in resources)
-            {
-                if (resource.CurrentProject.IndexOf(",") > 0)
-                {
 
-                    foreach (string project in resource.CurrentProject.Split(','))
-                    {
-                        if (project.Contains("AU"))
-                        {
-                            Projects.Add(project.Split('(')[0].Trim().Split('_')[0]);
-                        }
-                    }
-
-                }
-                else
-                {
-                    if (resource.CurrentProject.Contains("AU"))
-                    {
-                        Projects.Add(resource.CurrentProject.Split('(')[0].Trim().Split('_')[0]);
-                    }
-
-                }
-            }
-
+            Projects = resources.Select(x => x.CurrentProject).ToList();
+            
             List<GroupedProject> GroupedProjects = Projects
                 .GroupBy(s => s)
                 .Select(group => new GroupedProject() { Project = group.Key, Count = group.Count() }).ToList();
@@ -675,6 +654,34 @@ namespace AUDash.Controllers
 
             return dashboardCounts;
 
+        }
+
+        private string ParseProject(string currentProject)
+        {
+            string cProject = string.Empty;
+
+            if (currentProject.IndexOf(",") > 0)
+            {
+
+                foreach (string project in currentProject.Split(','))
+                {
+                    if (project.Contains("AU"))
+                    {
+                        cProject = project.Split('(')[0].Trim().Split('_')[0];
+                    }
+                }
+
+            }
+            else
+            {
+                if (currentProject.Contains("AU"))
+                {
+                    cProject = currentProject.Split('(')[0].Trim().Split('_')[0];
+                }
+
+            }
+
+            return cProject;
         }
 
     }

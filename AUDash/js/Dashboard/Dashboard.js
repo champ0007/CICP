@@ -94,72 +94,7 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
 
     $scope.notifications = FakeNotifications;
 
-    //Start Key Updates
-    var keyUpdates = $scope.keyUpdates = [];
 
-    $scope.getKeyUpdates = function () {
-
-        $http({
-            method: 'GET',
-            url: 'api/Dashboard/GetReferenceData?storageId=KeyUpdates'
-        }).
-        success(function (data, status, headers, config) {
-
-            if (data != 'null') {
-                keyUpdates = $scope.keyUpdates = JSON.parse(JSON.parse(data));
-            }
-        }).
-        error(function (data, status, headers, config) {
-            // called asynchronously if an error occurs
-            // or server returns response with an error status.
-
-        });
-
-    };
-
-    $scope.EditKeyUpdates = function (keyUpdate, index) {
-        keyUpdate.index = index;
-        $scope.keyUpdate = jQuery.extend(true, {}, keyUpdate); // deep copy
-        $scope.OriginalKeyUpdate = jQuery.extend(true, {}, keyUpdate); // deep copy
-
-    }
-
-    $scope.getKeyUpdates();
-
-    $scope.setKeyUpdates = function (keyUpdates) {
-        var referenceData = new Object();
-        referenceData.storageId = 'KeyUpdates';
-        referenceData.storageData = JSON.stringify(keyUpdates);
-        $http({
-            url: 'api/Dashboard/SetReferenceData',
-            method: "POST",
-            data: JSON.stringify(JSON.stringify(referenceData))
-        })
-            .then(function (response) {
-                $scope.getKeyUpdates();
-            },
-                function (response) { // optional
-                }
-            );
-    };
-
-    $scope.$watch('keyUpdates', function (newValue, oldValue) {
-        if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
-            $scope.setKeyUpdates(keyUpdates);
-        }
-    }, true);
-
-    $scope.AddKeyUpdate = function (keyUpdate) {
-        if (keyUpdate.index >= 0) {
-            keyUpdates[keyUpdate.index] = keyUpdate;
-        } else {
-            keyUpdates.push(keyUpdate);
-        }
-
-        $scope.keyUpdates = keyUpdates;
-        $scope.keyUpdate = '';
-    };
-    //End Key updates
 
     //Start 
     // Chart.js Data
@@ -521,6 +456,76 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
         $scope.ActiveProjectDetails = ProjectDetails;
         $scope.ProjectEntity = '';
     };
+
+    //Start Key Updates
+    var keyUpdates = $scope.keyUpdates = [];
+
+    $scope.getKeyUpdates = function () {
+
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetReferenceData?storageId=KeyUpdates'
+        }).
+        success(function (data, status, headers, config) {
+
+            if (data != 'null') {
+                keyUpdates = $scope.keyUpdates = JSON.parse(JSON.parse(data));
+            }
+        }).
+        error(function (data, status, headers, config) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+
+        });
+
+    };
+
+    $scope.EditKeyUpdates = function (keyUpdate, index) {
+        keyUpdate.index = index;
+        $scope.keyUpdate = jQuery.extend(true, {}, keyUpdate); // deep copy
+        $scope.OriginalKeyUpdate = jQuery.extend(true, {}, keyUpdate); // deep copy
+
+    }
+
+    $scope.getKeyUpdates();
+
+    $scope.setKeyUpdates = function (keyUpdates) {
+        var referenceData = new Object();
+        referenceData.storageId = 'KeyUpdates';
+        referenceData.storageData = JSON.stringify(keyUpdates);
+        $http({
+            url: 'api/Dashboard/SetReferenceData',
+            method: "POST",
+            data: JSON.stringify(JSON.stringify(referenceData))
+        })
+            .then(function (response) {
+                $scope.getKeyUpdates();
+            },
+                function (response) { // optional
+                }
+            );
+    };
+
+    $scope.$watch('keyUpdates', function (newValue, oldValue) {
+        if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
+            $scope.setKeyUpdates(keyUpdates);
+        }
+    }, true);
+
+    $scope.AddKeyUpdate = function (keyUpdate) {
+        if (keyUpdate.index >= 0) {
+            keyUpdates[keyUpdate.index] = keyUpdate;
+        } else {
+            keyUpdates.push(keyUpdate);
+        }
+
+        $scope.keyUpdates = keyUpdates;
+        $scope.keyUpdate = '';
+    };
+    //End Key updates
+
+
+
 
     $scope.UpdateChart = function () {
         $http({
@@ -1236,7 +1241,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
               var highlights = ['#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870', '#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870', '#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870', '#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870'];
               $scope.ProjectChartData = [];
               var ProjectChartDataList = JSON.parse(data[0]);
-              for (i = 0; i <= ProjectChartDataList.length; i++) {                  
+              for (i = 0; i <= ProjectChartDataList.length; i++) {
                   var dataItem = new Object();
                   dataItem.value = ProjectChartDataList[i].value;
                   dataItem.label = ProjectChartDataList[i].label;
