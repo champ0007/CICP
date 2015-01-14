@@ -648,7 +648,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
                 }
             );
     };
-
+    
     $scope.$watch('AllResources', function (newValue, oldValue) {
         if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
             $scope.setResources(resources);
@@ -759,6 +759,16 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
 
     uploader.onCompleteItem = function (fileItem, response, status, headers) {
         $scope.getResources();
+    };
+    $scope.ShowCurrent = true;
+
+    $scope.DisplayContent = function (activeTab) {
+        if (activeTab == 'Unallocated') {
+            $scope.ShowCurrent = false;
+        }
+        else {
+            $scope.ShowCurrent = true;
+        }
     };
 
     $scope.getResources();
