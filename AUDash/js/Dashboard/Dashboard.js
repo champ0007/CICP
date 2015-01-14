@@ -41,6 +41,8 @@ AUDashboardApp.config(['$routeProvider',
     }
 ]);
 
+
+
 AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($scope, $http) {
 
     $http({
