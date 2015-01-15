@@ -2,7 +2,7 @@
 /// <reference path="../jquery-1.10.2.intellisense.js" />
 var todos;
 
-var AUDashboardApp = angular.module("AUDashboardApp", ["ngRoute", "tc.chartjs", "angularFileUpload", "angularUtils.directives.dirPagination"]);
+var AUDashboardApp = angular.module("AUDashboardApp", ["ngGrid","ngRoute", "tc.chartjs", "angularFileUpload", "angularUtils.directives.dirPagination"]);
 
 AUDashboardApp.config(['$routeProvider',
     function ($routeProvider) {
@@ -415,7 +415,25 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
             // or server returns response with an error status.
 
         });
-
+        $scope.gridOptions = {
+            data: 'ActiveProjectDetails', showFilter: true,
+            showColumnMenu: true,
+            enableCellSelection: true,
+            enableCellEdit: true,
+            //showSelectionCheckbox: true,
+            //selectWithCheckboxOnly: true,
+            selectedItems: $scope.mySelections,
+            //showFooter: true,
+            enablePaging:true,
+            columnDefs:
+                [{ field: 'Client', displayName: 'Client' },
+                 { field: 'ProjectName', displayName: 'Project Name' },
+                 { field: 'Stage', displayName: 'Project Stage' },
+                 { field: 'Technology', displayName: 'Technology' },
+                 { field: 'TotalResources', displayName: 'Total Resources' },
+                 { field: 'GDM', displayName: 'EDC GDM' }
+                ]
+        };
     };
 
     $scope.EditProject = function (project, index) {
@@ -457,7 +475,11 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
 
         $scope.ActiveProjectDetails = ProjectDetails;
         $scope.ProjectEntity = '';
+
+        $('#projectTable').dataTable().fnDestroy();
+        $('#projectTable').dataTable();
     };
+
 
     //Start Key Updates
     var keyUpdates = $scope.keyUpdates = [];
@@ -1631,3 +1653,20 @@ AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', '
     };
 
 }]);
+
+AUDashboardApp.directive('datatableInit', function ($timeout) {
+    return {
+        restrict: "A",
+        link: function ($scope, element, attributes) {
+            if ($scope.$last === true) {
+                $timeout(function () {
+                    $('#' + element.parents('table').prop('id')).dataTable({
+                        "bDestroy": true
+                });
+                }, 1000);
+            }
+            
+            
+        }
+    }
+});

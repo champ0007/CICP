@@ -222,7 +222,6 @@ body {
 .chat-panel .panel-body {
     height: 350px;
     overflow-y: scroll;
-
 }
 
 .login-panel {
@@ -420,4 +419,26 @@ table.dataTable thead .sorting_desc_disabled {
 /* Default class applied to drop zones on over */
 .another-file-over-class {
     border: dotted 3px green;
+}
+
+/* Datatable css*/
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+    color: inherit;
+}
+
+table.dataTableClass {
+    background-color: rgb(52, 52, 52);
+    color: rgb(224, 224, 224);
+    border-bottom: 1px solid #ECECEC;
+}
+
+table.dataTable tbody tr {
+    background-color: rgb(52, 52, 52);
+    color: rgb(224, 224, 224);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    color: inherit !important;
+    border: 1px solid;
 }

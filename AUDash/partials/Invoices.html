@@ -83,48 +83,55 @@
             <span class="pull-right"> <i class="fa fa-plus" data-toggle="modal" data-target=".bs-AddInvoice-modal-lg"></i>&nbsp;&nbsp;&nbsp;</span>
         </div>
         <div class="panel-body">
-            <table class="table table-striped table-responsive">
-                <tr>
-                    <th>Edit</th>
-                    <th>Project</th>
-                    <th>Partner / Director</th>
-                    <th>Resource</th>
-                    <th>Period</th>
-                    <th>Date</th>
-                    <th>Hours</th>
-                    <th>Amount (USD)</th>
-                    <th>ATB Approval</th>
-                    <th>ATM Approval Sent on</th>
-                    <th>Invoice Raised</th>
-                    <th>Invoice No.</th>
-                    <th>InvoiceRaisedOn</th>
-                    <th>Comments</th>
-                    <th>Payment Received</th>
-                </tr>
-                <tr dir-paginate="invoice in InvoiceDetails  | filter: searchInvoice | itemsPerPage: 10" current-page="currentPage">
-                    <td><i class="fa fa-edit" ng-click="EditInvoice(invoice, $index)" data-toggle="modal" data-target=".bs-AddInvoice-modal-lg"> </i></td>
-                    <td>{{invoice.Project}}</td>
-                    <td>{{invoice.Partner}}</td>
-                    <td width="300px">{{invoice.Resource}}</td>
-                    <td>{{invoice.Period}}</td>
-                    <td>{{invoice.Date}}</td>
-                    <td>{{invoice.Hours}}</td>
-                    <td>{{invoice.Amount | currency}}</td>
-                    <td><i class="fa fa-check" ng-show="ShowReceived(invoice.ATBApproval)"></i><i class="fa fa-clock-o" ng-show="ShowPending(invoice.ATBApproval)"></i></td>
-                    <td>{{invoice.ATBApprovalSentOn}}</td>
-                    <td><i class="fa fa-check" ng-show="ShowReceived(invoice.InvoiceRaised)"></i><i class="fa fa-clock-o" ng-show="ShowPending(invoice.InvoiceRaised)"></i></td>
-                    <td>{{invoice.InvoiceNo}}</td>
-                    <td>{{invoice.InvoiceRaisedOn}}</td>
-                    <td width="300px">{{invoice.Comments}}</td>
-                    <td><i class="fa fa-check" ng-show="ShowReceived(invoice.PaymentReceived)"></i><i class="fa fa-clock-o" ng-show="ShowPending(invoice.PaymentReceived)"></i></td>
-                </tr>
-            </table>
+            <div class="table-responsive">
+                <table class="dataTableClass table table-striped" id="invoiceTable">
+                    <thead>
+                        <tr>
+                            <th>Edit</th>
+                            <th>Project</th>
+                            <th>Partner / Director</th>
+                            <th>Resource</th>
+                            <th>Period</th>
+                            <th>Date</th>
+                            <th>Hours</th>
+                            <th>Amount (USD)</th>
+                            <th>ATB Approval</th>
+                            <th>ATM Approval Sent on</th>
+                            <th>Invoice Raised</th>
+                            <th>Invoice No.</th>
+                            <th>InvoiceRaisedOn</th>
+                            <th>Comments</th>
+                            <th>Payment Received</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!--<tr dir-paginate="invoice in InvoiceDetails  | filter: searchInvoice | itemsPerPage: 10" current-page="currentPage" datatable-init>-->
+                        <tr datatable-init ng-repeat="invoice in InvoiceDetails">
+                            <td><i class="fa fa-edit" ng-click="EditInvoice(invoice, $index)" data-toggle="modal" data-target=".bs-AddInvoice-modal-lg"> </i></td>
+                            <td>{{invoice.Project}}</td>
+                            <td>{{invoice.Partner}}</td>
+                            <td width="300px">{{invoice.Resource}}</td>
+                            <td>{{invoice.Period}}</td>
+                            <td>{{invoice.Date}}</td>
+                            <td>{{invoice.Hours}}</td>
+                            <td>{{invoice.Amount | currency}}</td>
+                            <td><i class="fa fa-check" ng-show="ShowReceived(invoice.ATBApproval)"></i><i class="fa fa-clock-o" ng-show="ShowPending(invoice.ATBApproval)"></i></td>
+                            <td>{{invoice.ATBApprovalSentOn}}</td>
+                            <td><i class="fa fa-check" ng-show="ShowReceived(invoice.InvoiceRaised)"></i><i class="fa fa-clock-o" ng-show="ShowPending(invoice.InvoiceRaised)"></i></td>
+                            <td>{{invoice.InvoiceNo}}</td>
+                            <td>{{invoice.InvoiceRaisedOn}}</td>
+                            <td width="300px">{{invoice.Comments}}</td>
+                            <td><i class="fa fa-check" ng-show="ShowReceived(invoice.PaymentReceived)"></i><i class="fa fa-clock-o" ng-show="ShowPending(invoice.PaymentReceived)"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div>
+        <!--<div>
             <div class="text-center">
                 <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/js/dirPagination.tpl.html"></dir-pagination-controls>
             </div>
-        </div>
+        </div>-->
 
         <!-- /.panel-body -->
     </div>
