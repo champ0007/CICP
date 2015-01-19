@@ -609,6 +609,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
     var STORAGE_ID = 'Resources';
     $scope.EditMode = "false";
     $scope.currentPage = 1;
+    $scope.currentGSSPage = 1;
     $scope.pageSize = 10;
 
     var resources = $scope.AllResources = [];
@@ -620,9 +621,8 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
         }).
         success(function (data, status, headers, config) {
             if (data != null) {
-                resources = $scope.AllResources = JSON.parse(JSON.parse(data));
-                $scope.$parent.ActiveResources = $scope.AllResources.length;
-                $scope.UpdateChart();
+                resources = $scope.AllResources = JSON.parse(JSON.parse(data));               
+                //$scope.UpdateChart();
             }
         }).
         error(function (data, status, headers, config) {
@@ -630,6 +630,24 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
             // or server returns response with an error status.
             $scope.AllResources = -1;
         });
+
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetReferenceData?storageId=GSSResources'
+        }).
+       success(function (data, status, headers, config) {
+           if (data != null) {
+               $scope.AllGSSResources = JSON.parse(JSON.parse(data));
+               $scope.$parent.ActiveResources = $scope.AllGSSResources.length;
+               $scope.UpdateChart();
+           }
+       }).
+       error(function (data, status, headers, config) {
+           // called asynchronously if an error occurs
+           // or server returns response with an error status.
+           $scope.AllResources = -1;
+       });
+
     };
 
     $scope.setResources = function (resourcesToBeSaved) {
@@ -686,7 +704,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
-              //debugger;
+              debugger;
               chartLabels = JSON.parse(data[0]);
               chartData = JSON.parse(data[1]);
           }
@@ -694,7 +712,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
       error(function (data, status, headers, config) {
           // called asynchronously if an error occurs
           // or server returns response with an error status.
-          $scope.AllResources = -1;
+          $scope.AllGSSResources = -1;
       });
 
 

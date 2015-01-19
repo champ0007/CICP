@@ -293,6 +293,7 @@
     <Content Include="js\ChartNew.js" />
     <Content Include="js\Dashboard\Dashboard.js" />
     <Content Include="js\dirPagination.js" />
+    <Content Include="js\dirPagination.spec.js" />
     <Content Include="js\dirPagination.tpl.html" />
     <Content Include="js\jquery-1.10.2.js" />
     <Content Include="js\jquery-1.10.2.min.js" />

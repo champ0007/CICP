@@ -68,7 +68,7 @@ namespace AUDash.Controllers
         //GET api/Dashboard/GetResourceChartData
         public List<string> GetResourceChartData()
         {
-            return ParseResourceData(repo.GetReferenceData("Resources"));
+            return ParseResourceData(repo.GetReferenceData("GSSResources"));
         }
 
         //GET api/Dashboard/GetProjectDistributionChartData
@@ -251,7 +251,7 @@ namespace AUDash.Controllers
             }
 
             DBRepository repo = new DBRepository();
-            repo.SetReferenceData("Resources", JsonConvert.SerializeObject(resources));
+            repo.SetReferenceData("GSSResources", JsonConvert.SerializeObject(resources));
         }
 
         private List<string> ParseResourceData(string resourceData)
@@ -650,7 +650,7 @@ namespace AUDash.Controllers
             dashboardCounts.Add(JsonConvert.DeserializeObject<List<Invoice>>(dashboardData["Invoices"]).Where(x => x.PaymentReceived == "Pending").Count().ToString());
             dashboardCounts.Add(JsonConvert.DeserializeObject<List<ProjectEntity>>(dashboardData["Projects"]).Count.ToString());
             dashboardCounts.Add(JsonConvert.DeserializeObject<List<ActionItem>>(dashboardData["NewToDoItems"]).Where(x => x.Status == "Open").Count().ToString());
-            dashboardCounts.Add(JsonConvert.DeserializeObject<List<ResourceEntity>>(dashboardData["Resources"]).Count.ToString());
+            dashboardCounts.Add(JsonConvert.DeserializeObject<List<ResourceEntity>>(dashboardData["GSSResources"]).Count.ToString());
 
             return dashboardCounts;
 

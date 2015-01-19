@@ -89,6 +89,35 @@
         <div class="panel-body" ng-show="ShowCurrent">
             <table class="table table-striped table-responsive">
                 <tr>
+                    <!--<th>Edit</th>-->
+                    <th>Name</th>
+                    <th class="hidden-sm hidden-xs">Primary Skill</th>
+                    <th class="hidden-sm hidden-xs">Level</th>
+                    <th>Current Project</th>
+                    <th class="hidden-sm hidden-xs">Proposed Project</th>
+                    <th class="hidden-sm hidden-xs">Last Project</th>
+                    <th>Available On</th>
+                </tr>
+                <tr dir-paginate="resource in AllGSSResources | filter: searchResource |itemsPerPage: 10" current-page="currentGSSPage" pagination-id="GSSPagination">
+                    <!--<td><i class="fa fa-edit" ng-click="EditResource(resource, $index)" data-toggle="modal" data-target=".bs-AddResource-modal-lg"> </i></td>-->
+                    <td>{{resource.FirstName}} {{resource.LastName}}</td>
+                    <td class="hidden-sm hidden-xs">{{resource.Skills}}</td>
+                    <td class="hidden-sm hidden-xs">{{resource.Level}}</td>
+                    <td>{{resource.CurrentProject}}</td>
+                    <td class="hidden-sm hidden-xs">{{resource.NextProject}}</td>
+                    <td class="hidden-sm hidden-xs">{{resource.LastProject}}</td>
+                    <td>{{resource.AvailableOn | date:"MM/dd/yyyy" }}</td>
+                </tr>
+            </table>
+            <div class="text-center">
+                <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/js/dirPagination.tpl.html" pagination-id="GSSPagination"></dir-pagination-controls>
+            </div>
+
+        </div>
+
+        <div class="panel-body" ng-hide="ShowCurrent">
+            <table class="table table-striped table-responsive">
+                <tr>
                     <th>Edit</th>
                     <th>Name</th>
                     <th class="hidden-sm hidden-xs">Primary Skill</th>
@@ -98,7 +127,7 @@
                     <th class="hidden-sm hidden-xs">Last Project</th>
                     <th>Available On</th>
                 </tr>
-                <tr dir-paginate="resource in AllResources | filter: searchResource |itemsPerPage: 10" current-page="currentPage">
+                <tr dir-paginate="resource in AllResources | filter: searchResource |itemsPerPage: 10" current-page="currentPage" pagination-id="ResourcesPagination">
                     <td><i class="fa fa-edit" ng-click="EditResource(resource, $index)" data-toggle="modal" data-target=".bs-AddResource-modal-lg"> </i></td>
                     <td>{{resource.FirstName}} {{resource.LastName}}</td>
                     <td class="hidden-sm hidden-xs">{{resource.Skills}}</td>
@@ -109,37 +138,15 @@
                     <td>{{resource.AvailableOn | date:"MM/dd/yyyy" }}</td>
                 </tr>
             </table>
+            <div class="text-center">
+                <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/js/dirPagination.tpl.html" pagination-id="ResourcesPagination"></dir-pagination-controls>
+            </div>
         </div>
-
-        <div class="panel-body" ng-hide="ShowCurrent">
-            <table class="table table-striped table-responsive">
-                <tr>
-                    <th>OPen Edit</th>
-                    <th>Open Name</th>
-                    <th class="hidden-sm hidden-xs">Primary Skill</th>
-                    <th class="hidden-sm hidden-xs">Level</th>
-                    <th>Current Project</th>
-                    <th class="hidden-sm hidden-xs">Proposed Project</th>
-                    <th class="hidden-sm hidden-xs">Last Project</th>
-                    <th>Available On</th>
-                </tr>
-                <tr dir-paginate="resource in AllResources | filter: searchResource |itemsPerPage: 10" current-page="currentPage">
-                    <td><i class="fa fa-edit" ng-click="EditResource(resource, $index)" data-toggle="modal" data-target=".bs-AddResource-modal-lg"> </i></td>
-                    <td>{{resource.FirstName}} {{resource.LastName}}</td>
-                    <td class="hidden-sm hidden-xs">{{resource.Skills}}</td>
-                    <td class="hidden-sm hidden-xs">{{resource.Level}}</td>
-                    <td>{{resource.CurrentProject}}</td>
-                    <td class="hidden-sm hidden-xs">{{resource.NextProject}}</td>
-                    <td class="hidden-sm hidden-xs">{{resource.LastProject}}</td>
-                    <td>{{resource.AvailableOn | date:"MM/dd/yyyy" }}</td>
-                </tr>
-            </table>
-        </div>
-        <div>
+        <!--<div>
             <div class="text-center">
                 <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/js/dirPagination.tpl.html"></dir-pagination-controls>
             </div>
-        </div>
+        </div>-->
     </div>
 
 
