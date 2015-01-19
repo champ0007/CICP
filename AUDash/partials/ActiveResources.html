@@ -75,13 +75,13 @@
 </div>
 
 <div class="col-lg-8">
-    
+
     <div class="panel panel-red">
         <div class="panel-heading">
-            
-                <span  ng-click="DisplayContent('Allocated')">Current Resources</span>
-                <span ng-click="DisplayContent('Unallocated')">Unallocated Roles</span>
-                <i class="fa fa-search"></i><input ng-model="searchResource" class="textSearch" />
+
+            <span class="resourceTab activeTab" ng-class="{'activeTab': ShowCurrent}" ng-click="DisplayContent('Allocated')">Current Resources</span>
+            <span class="resourceTab" ng-class="{'activeTab': !ShowCurrent}" ng-click="DisplayContent('Unallocated')">Unallocated Roles</span>
+            <i class="fa fa-search"></i><input ng-model="searchResource" class="textSearch" />
             <span class="pull-right" ng-hide="ShowCurrent"><i class="fa fa-plus" ng-click="IsHidden='true'" data-toggle="modal" data-target=".bs-AddResource-modal-lg"></i>&nbsp;&nbsp;&nbsp;</span>
 
         </div>
@@ -142,7 +142,7 @@
         </div>
     </div>
 
-    
+
 
     <!--Projects - Manage Projects Modal Popup-->
     <div class="modal fade bs-AddResource-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
