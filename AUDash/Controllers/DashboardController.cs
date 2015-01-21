@@ -543,7 +543,10 @@ namespace AUDash.Controllers
                         if (rec.Period.Substring(0, rec.Period.IndexOf('/')) == i.ToString() || rec.Period.Substring(0, rec.Period.IndexOf('/')) == "0" + i.ToString())
                         {
                             //add revenue to month's total
-                            currRevenue = currRevenue + Convert.ToDouble(rec.Amount);
+                            if (rec.Amount != String.Empty)
+                            {
+                                currRevenue = currRevenue + Convert.ToDouble(rec.Amount);
+                            }
                         }
                     }
                     //if data is for previous year
