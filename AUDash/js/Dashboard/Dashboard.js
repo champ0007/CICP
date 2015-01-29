@@ -1078,16 +1078,44 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
     };
 
     //Resource Deployment
+
+    $scope.UpdateResourceDeploymentChart = function () {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetResourceDeploymentChartData'
+        }).
+      success(function (data, status, headers, config) {
+          if (data != null) {
+              //debugger;
+
+              $scope.ResourceMonthLabels = JSON.parse(data[0]);
+              $scope.ResourceMonthData = JSON.parse(data[1]);
+              $scope.ResourceDeploymentData.labels = JSON.parse(data[0]);
+              $scope.ResourceDeploymentData.datasets[0].data = JSON.parse(data[1]);
+
+          }
+      }).
+      error(function (data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+
+      });
+    };
+
+    $scope.UpdateResourceDeploymentChart();
+
+
+
     $scope.ResourceDeploymentData = {
-        labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
+        labels: $scope.ResourceMonthLabels,
         datasets: [
           {
-              label: 'No. Of resources by month',
+              label: 'No. of resources by month',
               fillColor: '#0cc09f',//rgba(69,201,102,0.75)',
               strokeColor: 'rgba(220,220,220,0.8)',
               highlightFill: '#0aac8e',
               highlightStroke: 'rgba(220,220,220,1)',
-              data: [30, 40, 45, 45, 51, 51, 51, 51, 51, 35]
+              data: $scope.ResourceMonthData
           }
         ]
     };

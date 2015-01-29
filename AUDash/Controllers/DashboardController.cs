@@ -77,6 +77,12 @@ namespace AUDash.Controllers
             return ParseProjectDistributionData(repo.GetReferenceData("Projects"));
         }
 
+        //GET api/Dashboard/GetResourceDeploymentChartData
+        public List<string> GetResourceDeploymentChartData()
+        {
+            return ParseResourceDeploymentChartData(repo.GetReferenceData("ResourceDataCount"));
+        } 
+
         //POST api/Dashboard/SetReferenceData
         [HttpPost]
         public void SetReferenceData([FromBody] string referenceData)
@@ -732,6 +738,19 @@ namespace AUDash.Controllers
             }
 
             return cProject;
+        }
+
+        private List<string> ParseResourceDeploymentChartData(string ResourceDataCount)
+        {
+            List<string> returnList = new List<string>();
+
+            Dictionary<string, int> SavedCollection = JsonConvert.DeserializeObject<Dictionary<string, int>>(ResourceDataCount);
+
+            returnList.Add(JsonConvert.SerializeObject(SavedCollection.Keys.ToList<string>()));
+            returnList.Add(JsonConvert.SerializeObject(SavedCollection.Values.ToList<int>()));
+
+            return returnList;
+
         }
 
     }
