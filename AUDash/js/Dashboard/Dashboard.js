@@ -1087,7 +1087,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
               strokeColor: 'rgba(220,220,220,0.8)',
               highlightFill: '#0aac8e',
               highlightStroke: 'rgba(220,220,220,1)',
-              data: [30, 40, 45, 45, 51, 51, 51, 51, 51]
+              data: [30, 40, 45, 45, 51, 51, 51, 51, 51, 35]
           }
         ]
     };
