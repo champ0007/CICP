@@ -598,7 +598,7 @@ namespace AUDash.Controllers
         {
             List<ProjectEntity> projs = JsonConvert.DeserializeObject<List<ProjectEntity>>(skillData);
 
-            List<ResourceBySkill> resourceList = projs.GroupBy(e => e.Technology)
+            List<ResourceBySkill> resourceList = projs.Where(p=> p.Stage == "Sold").GroupBy(e => e.Technology)
                .Select(ls => new ResourceBySkill()
                {
                    label = ls.Key,

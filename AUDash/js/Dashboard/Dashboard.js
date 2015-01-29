@@ -459,6 +459,11 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
         $scope.ProjectEntity = '';
     };
 
+    $scope.OpenAddProject = function () {
+        $scope.ProjectEntity = '';
+    };
+
+
     //Start Key Updates
     var keyUpdates = $scope.keyUpdates = [];
 
