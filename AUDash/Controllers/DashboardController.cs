@@ -252,6 +252,53 @@ namespace AUDash.Controllers
 
             DBRepository repo = new DBRepository();
             repo.SetReferenceData("GSSResources", JsonConvert.SerializeObject(resources));
+            repo.SetReferenceData("ResourceDataCount", GetResourceDataCount(resources.Count(), DateTime.Now.ToString("MMMyy")));
+        }
+
+        private string GetResourceDataCount(int resourceCount, string currentDate)
+        {
+            int currentFY = GetFiscalYear();
+            string currentFiscalYear = currentFY.ToString().Substring(2, 2);
+            string nextYear = Convert.ToString(currentFY + 1).Substring(2, 2);
+
+            Dictionary<string, int> resourceMonths = new Dictionary<string, int>();
+            resourceMonths.Add(ChartMonths.Apr.ToString() + currentFiscalYear, 0);
+            resourceMonths.Add(ChartMonths.May.ToString() + currentFiscalYear, 0);
+            resourceMonths.Add(ChartMonths.Jun.ToString() + currentFiscalYear, 0);
+            resourceMonths.Add(ChartMonths.Jul.ToString() + currentFiscalYear, 0);
+            resourceMonths.Add(ChartMonths.Aug.ToString() + currentFiscalYear, 0);
+            resourceMonths.Add(ChartMonths.Sep.ToString() + currentFiscalYear, 0);
+            resourceMonths.Add(ChartMonths.Oct.ToString() + currentFiscalYear, 0);
+            resourceMonths.Add(ChartMonths.Nov.ToString() + currentFiscalYear, 0);
+            resourceMonths.Add(ChartMonths.Dec.ToString() + currentFiscalYear, 0);
+            resourceMonths.Add(ChartMonths.Jan.ToString() + nextYear, 0);
+            resourceMonths.Add(ChartMonths.Feb.ToString() + nextYear, 0);
+            resourceMonths.Add(ChartMonths.Mar.ToString() + nextYear, 0);
+
+
+
+            string serializedObject = JsonConvert.SerializeObject(resourceMonths);
+            string savedData = repo.GetReferenceData("ResourceDataCount");
+                //"{\"Apr14\":30,\"May14\":30,\"Jun14\":45,\"Jul14\":45,\"Aug14\":51,\"Sep14\":51,\"Oct14\":51,\"Nov14\":51,\"Dec14\":51,\"Jan15\":0,\"Feb15\":0,\"Mar15\":0}";
+            //string baseData1 = "{\"Jan14\":30,\"Feb14\":30,\"Mar14\":45,\"Jul14\":45,\"Aug14\":51,\"Sep14\":51,\"Oct14\":51,\"Nov14\":51,\"Dec14\":51,\"Jan15\":35,\"Feb15\":0,\"Mar15\":0}";
+            Dictionary<string, int> SavedCollection = JsonConvert.DeserializeObject<Dictionary<string, int>>(savedData);
+            Dictionary<string, int> updatedCollection = JsonConvert.DeserializeObject<Dictionary<string, int>>(serializedObject);
+
+            foreach (KeyValuePair<string, int> entry in resourceMonths)
+            {
+                if (SavedCollection.ContainsKey(entry.Key))
+                {
+                    updatedCollection[entry.Key] = SavedCollection[entry.Key];
+                }
+            }
+
+            if (updatedCollection.ContainsKey(currentDate))
+            {
+                updatedCollection[currentDate] = resourceCount;
+            }
+
+            return JsonConvert.SerializeObject(updatedCollection);
+
         }
 
         private List<string> ParseResourceData(string resourceData)
@@ -261,7 +308,7 @@ namespace AUDash.Controllers
             List<ResourceEntity> resources = JsonConvert.DeserializeObject<List<ResourceEntity>>(resourceData);
 
             Projects = resources.Select(x => x.CurrentProject).ToList();
-            
+
             List<GroupedProject> GroupedProjects = Projects
                 .GroupBy(s => s)
                 .Select(group => new GroupedProject() { Project = group.Key, Count = group.Count() }).ToList();
@@ -587,8 +634,8 @@ namespace AUDash.Controllers
             //send current, prev year FY
             returnList.Add(JsonConvert.SerializeObject(currentFY));
             returnList.Add(JsonConvert.SerializeObject(prevFY));
-            returnList.Add(JsonConvert.SerializeObject(new List<string> { prevYrData.Sum(e => Math.Round(e.amount/1000000, 2)).ToString(), currYrData.Sum(e => Math.Round(e.amount/1000000,2)).ToString() }));
-            returnList.Add(JsonConvert.SerializeObject(new List<string> { prevFY, currentFY}));
+            returnList.Add(JsonConvert.SerializeObject(new List<string> { prevYrData.Sum(e => Math.Round(e.amount / 1000000, 2)).ToString(), currYrData.Sum(e => Math.Round(e.amount / 1000000, 2)).ToString() }));
+            returnList.Add(JsonConvert.SerializeObject(new List<string> { prevFY, currentFY }));
             return returnList;
 
         }
@@ -598,7 +645,7 @@ namespace AUDash.Controllers
         {
             List<ProjectEntity> projs = JsonConvert.DeserializeObject<List<ProjectEntity>>(skillData);
 
-            List<ResourceBySkill> resourceList = projs.Where(p=> p.Stage == "Sold").GroupBy(e => e.Technology)
+            List<ResourceBySkill> resourceList = projs.Where(p => p.Stage == "Sold").GroupBy(e => e.Technology)
                .Select(ls => new ResourceBySkill()
                {
                    label = ls.Key,
