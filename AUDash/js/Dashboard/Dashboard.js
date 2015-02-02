@@ -688,7 +688,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
     }
 
     $scope.addResource = function (resource) {
-        ////debugger;
+        debugger;
         ////debugger;
         if (resource.index >= 0) {
             resources[resource.index] = resource;
@@ -793,6 +793,11 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
             $scope.ShowCurrent = true;
         }
         $scope.searchResource = '';
+    };
+
+    $scope.OpenAddResource = function () {
+        $scope.ResourceEntity = '';
+        $scope.IsHidden = true;
     };
 
     $scope.getResources();
@@ -1536,7 +1541,7 @@ AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', '
 
             if (data != 'null') {
                 InvoiceDetails = $scope.InvoiceDetails = JSON.parse(JSON.parse(data));
-                $scope.$parent.PendingInvoices = InvoiceDetails.length;
+                $scope.$parent.PendingInvoices = $filter('filter')(InvoiceDetails, { PaymentReceived: "Pending" }).length;
 
             }
         }).

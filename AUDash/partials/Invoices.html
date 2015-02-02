@@ -101,7 +101,7 @@
                     <th>Comments</th>
                     <th>Payment Received</th>
                 </tr>
-                <tr dir-paginate="invoice in InvoiceDetails  | filter: searchInvoice | itemsPerPage: 10" current-page="currentPage">
+                <tr dir-paginate="invoice in InvoiceDetails  | filter: searchInvoice | itemsPerPage: 10 track by $index" current-page="currentPage">
                     <td><i class="fa fa-edit" ng-click="EditInvoice(invoice, $index)" data-toggle="modal" data-target=".bs-AddInvoice-modal-lg"> </i></td>
                     <td>{{invoice.Project}}</td>
                     <td>{{invoice.Partner}}</td>
