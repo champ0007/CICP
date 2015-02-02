@@ -39,9 +39,9 @@
                     <th>Comments</th>
                 </tr>
 
-                <tr ng-repeat="ToDoItem in NewToDos">
+                <tr ng-repeat="ToDoItem in NewToDos track by $index">
                     <td><i class="fa fa-edit" ng-click="EditToDoItem(ToDoItem, $index)" data-toggle="modal" data-target=".bs-AddActionItem-modal-lg"> </i></td>
-                    <td class="col-lg-4" >{{ToDoItem.Desc}}</td>
+                    <td class="col-lg-4">{{ToDoItem.Desc}}</td>
                     <td class="col-lg-2">{{ToDoItem.AssignedTo}}</td>
                     <td class="col-lg-2">{{ToDoItem.Status}}</td>
                     <td class="col-lg-6">{{ToDoItem.Comments}}</td>

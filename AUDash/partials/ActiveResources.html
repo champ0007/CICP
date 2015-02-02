@@ -98,7 +98,7 @@
                     <th class="hidden-sm hidden-xs">Last Project</th>
                     <th>Available On</th>
                 </tr>
-                <tr dir-paginate="resource in AllGSSResources | filter: searchResource |itemsPerPage: 10" current-page="currentGSSPage" pagination-id="GSSPagination">
+                <tr dir-paginate="resource in AllGSSResources track by $index | filter: searchResource |itemsPerPage: 10" current-page="currentGSSPage" pagination-id="GSSPagination">
                     <!--<td><i class="fa fa-edit" ng-click="EditResource(resource, $index)" data-toggle="modal" data-target=".bs-AddResource-modal-lg"> </i></td>-->
                     <td>{{resource.FirstName}} {{resource.LastName}}</td>
                     <td class="hidden-sm hidden-xs">{{resource.Skills}}</td>
@@ -127,7 +127,7 @@
                     <th class="hidden-sm hidden-xs">Last Project</th>
                     <th>Available On</th>
                 </tr>
-                <tr dir-paginate="resource in AllResources | filter: searchResource |itemsPerPage: 10" current-page="currentPage" pagination-id="ResourcesPagination">
+                <tr dir-paginate="resource in AllResources track by $index | filter: searchResource |itemsPerPage: 10" current-page="currentPage" pagination-id="ResourcesPagination">
                     <td><i class="fa fa-edit" ng-click="EditResource(resource, $index)" data-toggle="modal" data-target=".bs-AddResource-modal-lg"> </i></td>
                     <td>{{resource.FirstName}} {{resource.LastName}}</td>
                     <td class="hidden-sm hidden-xs">{{resource.Skills}}</td>
