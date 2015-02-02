@@ -792,6 +792,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
         else {
             $scope.ShowCurrent = true;
         }
+        $scope.searchResource = '';
     };
 
     $scope.getResources();
