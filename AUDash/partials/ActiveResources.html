@@ -122,7 +122,7 @@
                     <th ng-click="predicate = 'Level'; reverse=false" class="hidden-sm hidden-xs">Level</th>
                     <th ng-click="predicate = 'NextProject'; reverse=false">Proposed Project</th>
                     <th ng-click="predicate = 'RequiredFrom'; reverse=false" class="hidden-sm hidden-xs">Required From</th>
-                    <th ng-click="predicate = 'RequestDate'; reverse=false" class="hidden-sm hidden-xs">Request Received On</th>
+                    <th ng-click="predicate = 'PositionStatus'; reverse=false">Status</th>
                     <th><i class="fa fa-times"</th>
                 </tr>
                 <tr dir-paginate="resource in AllResources | filter: searchResource|orderBy:predicate:reverse |itemsPerPage: 10" current-page="currentPage" pagination-id="ResourcesPagination">
@@ -132,7 +132,7 @@
                     <td>{{resource.Level}}</td>
                     <td class="hidden-sm hidden-xs">{{resource.NextProject}}</td>
                     <td class="hidden-sm hidden-xs">{{resource.RequiredFrom | date:"MM/dd/yyyy" }}</td>
-                    <td class="hidden-sm hidden-xs">{{resource.RequestDate | date:"MM/dd/yyyy" }}</td>
+                    <td>{{resource.PositionStatus }}</td>
                     <td><i class="fa fa-times" ng-click="addResource(resource, 'Delete')"> </i></td>
                 </tr>
             </table>
