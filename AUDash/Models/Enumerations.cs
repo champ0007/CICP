@@ -21,6 +21,18 @@ namespace AUDash.Models
         Dec = 12
     }
 
+    public enum RequestedAction
+    {
+        Delete = 1,
+        Upsert = 2
+    }
+
+    public enum StorageKeys
+    {
+        Projects,
+        Resources
+    }
+
     public enum ProjectAttribute
     {
         Resources,

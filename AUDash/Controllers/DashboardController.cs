@@ -81,7 +81,7 @@ namespace AUDash.Controllers
         public List<string> GetResourceDeploymentChartData()
         {
             return ParseResourceDeploymentChartData(repo.GetReferenceData("ResourceDataCount"));
-        } 
+        }
 
         //POST api/Dashboard/SetReferenceData
         [HttpPost]
@@ -261,6 +261,71 @@ namespace AUDash.Controllers
             repo.SetReferenceData("ResourceDataCount", GetResourceDataCount(resources.Count(), DateTime.Now.ToString("MMMyy")));
         }
 
+        //POST api/Dashboard/UpsertProject
+        [HttpPost]
+        public string UpsertProject([FromBody]ProjectRequest projectRequest)
+        {
+            if (projectRequest.action == RequestedAction.Delete)
+            {
+                int index = projectRequest.Projects.FindIndex(x => x.Id == projectRequest.Project.Id);
+                projectRequest.Projects.RemoveAt(index);
+            }
+            else if (projectRequest.action == RequestedAction.Upsert)
+            {
+                if (projectRequest.Project.Id == null)
+                {
+                    projectRequest.Project.Id = DateTime.Now.ToString("dMyyHHmmss");
+                    projectRequest.Projects.Add(projectRequest.Project);
+                }
+                else
+                {
+                    int index = projectRequest.Projects.FindIndex(x => x.Id == projectRequest.Project.Id);
+                    if (index >= 0)
+                    {
+                        projectRequest.Projects[index] = projectRequest.Project;
+                    }
+                }
+            }
+
+            repo.SetReferenceData("Projects", JsonConvert.SerializeObject(projectRequest.Projects));
+            
+            return repo.GetReferenceData("Projects");
+        }
+
+
+        //POST api/Dashboard/UpsertResource
+        [HttpPost]
+        public string UpsertResource([FromBody]ResourceRequest resourceRequest)
+        {
+
+            if (resourceRequest.Action == RequestedAction.Delete)
+            {
+                int index = resourceRequest.Resources.FindIndex(x => x.Id == resourceRequest.Resource.Id);
+                resourceRequest.Resources.RemoveAt(index);
+            }
+            else if (resourceRequest.Action == RequestedAction.Upsert)
+            {
+                if (resourceRequest.Resource.Id == null)
+                {
+                    resourceRequest.Resource.Id = DateTime.Now.ToString("dMyyHHmmss");
+                    resourceRequest.Resources.Add(resourceRequest.Resource);
+                }
+                else
+                {
+                    int index = resourceRequest.Resources.FindIndex(x => x.Id == resourceRequest.Resource.Id);
+                    if (index >= 0)
+                    {
+                        resourceRequest.Resources[index] = resourceRequest.Resource;
+                    }
+                }
+            }
+
+            repo.SetReferenceData("Resources", JsonConvert.SerializeObject(resourceRequest.Resources));
+
+            return repo.GetReferenceData("Resources");
+        }
+
+
         private string GetResourceDataCount(int resourceCount, string currentDate)
         {
             int currentFY = GetFiscalYear();
@@ -285,7 +350,7 @@ namespace AUDash.Controllers
 
             string serializedObject = JsonConvert.SerializeObject(resourceMonths);
             string savedData = repo.GetReferenceData("ResourceDataCount");
-                //"{\"Apr14\":30,\"May14\":30,\"Jun14\":45,\"Jul14\":45,\"Aug14\":51,\"Sep14\":51,\"Oct14\":51,\"Nov14\":51,\"Dec14\":51,\"Jan15\":0,\"Feb15\":0,\"Mar15\":0}";
+            //"{\"Apr14\":30,\"May14\":30,\"Jun14\":45,\"Jul14\":45,\"Aug14\":51,\"Sep14\":51,\"Oct14\":51,\"Nov14\":51,\"Dec14\":51,\"Jan15\":0,\"Feb15\":0,\"Mar15\":0}";
             //string baseData1 = "{\"Jan14\":30,\"Feb14\":30,\"Mar14\":45,\"Jul14\":45,\"Aug14\":51,\"Sep14\":51,\"Oct14\":51,\"Nov14\":51,\"Dec14\":51,\"Jan15\":35,\"Feb15\":0,\"Mar15\":0}";
             Dictionary<string, int> SavedCollection = JsonConvert.DeserializeObject<Dictionary<string, int>>(savedData);
             Dictionary<string, int> updatedCollection = JsonConvert.DeserializeObject<Dictionary<string, int>>(serializedObject);

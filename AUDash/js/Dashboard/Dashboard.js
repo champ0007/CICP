@@ -41,8 +41,6 @@ AUDashboardApp.config(['$routeProvider',
     }
 ]);
 
-
-
 AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($scope, $http) {
 
     $http({
@@ -393,6 +391,7 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', '$http'
 AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
     var STORAGE_ID = 'Projects';
     $scope.EditMode = "false";
+    $scope.ActiveFilterSet;
 
     var ProjectDetails = $scope.ActiveProjectDetails = [];
 
@@ -400,12 +399,13 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
         ////debugger;
         $http({
             method: 'GET',
-            url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
+            url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID,
         }).
         success(function (data, status, headers, config) {
 
             if (data != 'null') {
                 ProjectDetails = $scope.ActiveProjectDetails = JSON.parse(JSON.parse(data));
+                $scope.OriginalProjectDetails = JSON.parse(JSON.parse(data));
                 $scope.$parent.ActiveProjects = ProjectDetails.length;
                 $scope.UpdateChart();
             }
@@ -424,39 +424,56 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
         $scope.OriginalProject = jQuery.extend(true, {}, project); // deep copy
     }
 
-    $scope.setProjects = function (ProjectDetails) {
-        var referenceData = new Object();
-        referenceData.storageId = STORAGE_ID;
-        referenceData.storageData = JSON.stringify(ProjectDetails);
+    //$scope.setProjects = function (ProjectDetails) {
+    //    var referenceData = new Object();
+    //    referenceData.storageId = STORAGE_ID;
+    //    referenceData.storageData = JSON.stringify(ProjectDetails);
+    //    $http({
+    //        url: 'api/Dashboard/SetReferenceData',
+    //        method: "POST",
+    //        data: JSON.stringify(JSON.stringify(referenceData))
+    //    })
+    //        .then(function (response) {
+    //            $scope.getProjects();
+    //        },
+    //            function (response) { // optional
+    //            }
+    //        );
+    //};
+
+    //$scope.$watch('ActiveProjectDetails', function (newValue, oldValue) {
+    //    if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
+    //        $scope.setProjects($scope.ActiveProjectDetails);
+    //    }
+    //}, true);
+
+    $scope.AddProject = function (ProjectEntity, action) {
+        var projectRequest = new Object();
+        projectRequest.Projects = ProjectDetails;
+        projectRequest.Project = ProjectEntity;
+        projectRequest.action = action;
+        
         $http({
-            url: 'api/Dashboard/SetReferenceData',
-            method: "POST",
-            data: JSON.stringify(JSON.stringify(referenceData))
-        })
-            .then(function (response) {
-                $scope.getProjects();
-            },
-                function (response) { // optional
-                }
-            );
-    };
+            method: 'POST',
+            url: 'api/Dashboard/UpsertProject',
+            data: projectRequest
+        }).
+       success(function (data, status, headers, config) {
+           //success logic
+           if (data != 'null') {
+               ProjectDetails = $scope.ActiveProjectDetails = JSON.parse(JSON.parse(data));
+               $scope.OriginalProjectDetails = JSON.parse(JSON.parse(data));
+               $scope.$parent.ActiveProjects = ProjectDetails.length;
+               $scope.UpdateChart();
 
-    $scope.$watch('ActiveProjectDetails', function (newValue, oldValue) {
-        if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
-            $scope.setProjects(ProjectDetails);
-        }
-    }, true);
+               $scope.ActiveProjectDetails = ProjectDetails;
+               $scope.ProjectEntity = '';
+           }
+       }).
+       error(function (data, status, headers, config) {
+          //error handling logic
+       });
 
-    $scope.AddProject = function (ProjectEntity) {
-        ////debugger;
-        if (ProjectEntity.index >= 0) {
-            ProjectDetails[ProjectEntity.index] = ProjectEntity;
-        } else {
-            ProjectDetails.push(ProjectEntity);
-        }
-
-        $scope.ActiveProjectDetails = ProjectDetails;
-        $scope.ProjectEntity = '';
     };
 
     $scope.OpenAddProject = function () {
@@ -626,8 +643,8 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
         }).
         success(function (data, status, headers, config) {
             if (data != null) {
-                resources = $scope.AllResources = JSON.parse(JSON.parse(data));               
-                //$scope.UpdateChart();
+                resources = $scope.AllResources = JSON.parse(JSON.parse(data));
+                $scope.UpdateChart();
             }
         }).
         error(function (data, status, headers, config) {
@@ -655,28 +672,28 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
 
     };
 
-    $scope.setResources = function (resourcesToBeSaved) {
-        var referenceData = new Object();
-        referenceData.storageId = STORAGE_ID;
-        referenceData.storageData = JSON.stringify(resourcesToBeSaved);
-        $http({
-            url: 'api/Dashboard/SetReferenceData',
-            method: "POST",
-            data: JSON.stringify(JSON.stringify(referenceData))
-        })
-            .then(function (response) {
-                $scope.getResources();
-            },
-                function (response) { // optional
-                }
-            );
-    };
-    
-    $scope.$watch('AllResources', function (newValue, oldValue) {
-        if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
-            $scope.setResources(resources);
-        }
-    }, true);
+    //$scope.setResources = function (resourcesToBeSaved) {
+    //    var referenceData = new Object();
+    //    referenceData.storageId = STORAGE_ID;
+    //    referenceData.storageData = JSON.stringify(resourcesToBeSaved);
+    //    $http({
+    //        url: 'api/Dashboard/SetReferenceData',
+    //        method: "POST",
+    //        data: JSON.stringify(JSON.stringify(referenceData))
+    //    })
+    //        .then(function (response) {
+    //            $scope.getResources();
+    //        },
+    //            function (response) { // optional
+    //            }
+    //        );
+    //};
+
+    //$scope.$watch('AllResources', function (newValue, oldValue) {
+    //    if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
+    //        $scope.setResources(resources);
+    //    }
+    //}, true);
 
     $scope.EditResource = function (resource, index) {
         //debugger;
@@ -685,18 +702,34 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
         //Shallow Copy - $scope.ResourceEntity = resource;
         $scope.ResourceEntity = jQuery.extend(true, {}, resource); // deep copy
         $scope.OriginalResourceEntity = jQuery.extend(true, {}, resource); // deep copy
-    }
+    };
 
-    $scope.addResource = function (resource) {
-        debugger;
-        ////debugger;
-        if (resource.index >= 0) {
-            resources[resource.index] = resource;
-        } else {
-            resources.push(resource);
-        }
-        $scope.AllResources = resources;
-        $scope.ResourceEntity = '';
+    $scope.addResource = function (resource, action) {
+        var resourceRequest = new Object();
+        resourceRequest.Resources = resources;
+        resourceRequest.Resource = resource;
+        resourceRequest.Action = action;
+
+        $http({
+            method: 'POST',
+            url: 'api/Dashboard/UpsertResource',
+            data: resourceRequest
+        }).
+       success(function (data, status, headers, config) {
+           //success logic
+           if (data != null) {
+               resources = $scope.AllResources = JSON.parse(JSON.parse(data));
+
+               $scope.UpdateChart();
+
+               $scope.AllResources = resources;
+               $scope.ResourceEntity = '';
+
+           }
+       }).
+       error(function (data, status, headers, config) {
+           //error handling logic
+       });
 
     };
 
@@ -709,7 +742,6 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
-              debugger;
               chartLabels = JSON.parse(data[0]);
               chartData = JSON.parse(data[1]);
           }
@@ -1335,45 +1367,6 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
 
     $scope.UpdateTechChart();
 
-    // Chart.js Data
-    //$scope.ProjectChartData = [
-    //  {
-    //      value: 0,
-    //      color: '#d9534f',
-    //      highlight: '#F7464A',
-    //      label: 'Sitecore'
-    //  },    
-    //   {
-    //       value: 0,
-    //       color: '#f8c705',
-    //       highlight: '#FFC870',
-    //       label: 'Core .NET'
-    //   },
-    //  {
-    //      value: 0,
-    //      color: '#00b0f0',
-    //      highlight: '#46BFBD',
-    //      label: 'Hybris'
-    //  },
-    //  {
-    //      value: 0,
-    //      color: '#FDB45C',
-    //      highlight: '#FFC870',
-    //      label: 'Adobe CQ'
-    //  },
-    //  {
-    //      value: 0,
-    //      color: '#fe6f54',
-    //      highlight: '#E32400',
-    //      label: 'Core Java'
-    //  },
-    //  {
-    //      value: 0,
-    //      color: '#7ec351',
-    //      highlight: 'lightgreen',
-    //      label: 'QA'
-    //  }
-    //];
 
     // Chart.js Options
     $scope.ProjectChartOptions = {

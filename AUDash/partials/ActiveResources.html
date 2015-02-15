@@ -78,7 +78,6 @@
 
     <div class="panel panel-red">
         <div class="panel-heading">
-
             <span class="resourceTab activeTab" ng-class="{'activeTab': ShowCurrent}" ng-click="DisplayContent('Allocated')">Current Resources</span>
             <span class="resourceTab" ng-class="{'activeTab': !ShowCurrent}" ng-click="DisplayContent('Unallocated')">Unallocated Roles</span>
             <i class="fa fa-search"></i><input ng-model="searchResource" class="textSearch" />
@@ -124,8 +123,9 @@
                     <th ng-click="predicate = 'NextProject'; reverse=false">Proposed Project</th>
                     <th ng-click="predicate = 'RequiredFrom'; reverse=false" class="hidden-sm hidden-xs">Required From</th>
                     <th ng-click="predicate = 'RequestDate'; reverse=false" class="hidden-sm hidden-xs">Request Received On</th>
+                    <th><i class="fa fa-times"</th>
                 </tr>
-                <tr dir-paginate="resource in AllResources | filter: searchResource |itemsPerPage: 10" current-page="currentPage" pagination-id="ResourcesPagination">
+                <tr dir-paginate="resource in AllResources | filter: searchResource|orderBy:predicate:reverse |itemsPerPage: 10" current-page="currentPage" pagination-id="ResourcesPagination">
                     <td><i class="fa fa-edit" ng-click="EditResource(resource, $index)" data-toggle="modal" data-target=".bs-AddResource-modal-lg"> </i></td>
                     <td>{{resource.FirstName}} {{resource.LastName}}</td>
                     <td>{{resource.Skills}}</td>
@@ -133,7 +133,7 @@
                     <td class="hidden-sm hidden-xs">{{resource.NextProject}}</td>
                     <td class="hidden-sm hidden-xs">{{resource.RequiredFrom | date:"MM/dd/yyyy" }}</td>
                     <td class="hidden-sm hidden-xs">{{resource.RequestDate | date:"MM/dd/yyyy" }}</td>
-                    
+                    <td><i class="fa fa-times" ng-click="addResource(resource, 'Delete')"> </i></td>
                 </tr>
             </table>
             <div class="text-center">
@@ -192,25 +192,41 @@
                                 </div>
                             </div>
 
-                           
-
                             <div class="form-group">
-
                                 <label for="inputRequestDate" class="col-sm-3 control-label">Request Date</label>
                                 <div class="col-sm-4">
                                     <input type="date" class="form-control" id="inputRequestDate" placeholder="Request Date" ng-model="ResourceEntity.RequestDate">
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label for="inputNextProject" class="col-sm-3 control-label">Project</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" id="inputNextProject" placeholder="Next Project" ng-model="ResourceEntity.NextProject">
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="selectStatus" class="col-sm-3 control-label">Status</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" id="selectStatus" ng-model="ResourceEntity.PositionStatus">
+                                        <option>Open</option>
+                                        <option>Closed</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ResourceComments" class="col-sm-3 control-label">Comments</label>
+                                <div class="checkbox col-sm-4">
+                                    <label>
+                                        <textarea id="ResourceComments" rows="3" cols="50" ng-model="ResourceEntity.Comments" />
+                                    </label>
+                                </div>
+                            </div>
 
                             <div class="form-group">
                                 <div class="col-sm-offset-5 col-sm-10">
-                                    <button type="submit" class="btn btn-success" data-dismiss="modal" ng-click="addResource(ResourceEntity)">Save</button>
+                                    <button type="submit" class="btn btn-success" data-dismiss="modal" ng-click="addResource(ResourceEntity, 'Upsert')">Save</button>
                                 </div>
                             </div>
                         </form>

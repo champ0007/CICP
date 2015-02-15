@@ -12,10 +12,33 @@ namespace AUDash.Models
         public string ResourceData { get; set; }
     }
 
+    public class ResourceRequest
+    {
+        public List<UnallocatedResourceEntity> Resources { get; set; }
+        public UnallocatedResourceEntity Resource { get; set; }
+        public RequestedAction Action { get; set; }
+
+    }
+
     public class miniResource
     {
         public int ResourceId { get; set; }
 
+    }
+
+    public class UnallocatedResourceEntity
+    {
+
+        public string Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Level { get; set; }
+        public string Skills { get; set; }
+        public string RequiredFrom { get; set; }
+        public string RequestDate { get; set; }
+        public string NextProject { get; set; }
+        public string Comments { get; set; }
+        public string PositionStatus { get; set; }
     }
 
     public class ResourceEntity
@@ -29,6 +52,7 @@ namespace AUDash.Models
         public string NextProject { get; set; }
         public string AvailableOn { get; set; }
         public string EmpId { get; set; }
+
     }
 
     public class GroupedProject
