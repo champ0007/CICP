@@ -13,7 +13,7 @@ namespace AUDash.Models
         public string Period { get; set; }
         public string Date { get; set; }
         public string Hours { get; set; }
-        public string Amount { get; set; }
+        public decimal Amount { get; set; }
         public string ATBApproval { get; set; }
         public string ATBApprovalSentOn { get; set; }
         public string InvoiceRaised { get; set; }

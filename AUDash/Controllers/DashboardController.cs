@@ -198,7 +198,7 @@ namespace AUDash.Controllers
                             Period = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 5].Value),
                             Date = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 6].Value),
                             Hours = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 7].Value),
-                            Amount = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 8].Value),
+                            Amount = Convert.ToDecimal(invoiceWorkSheet.Cells[rowCount, 8].Value),
                             ATBApproval = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 9].Value),
                             ATBApprovalSentOn = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 10].Value).IndexOf(" ") > 0 ? Convert.ToString(invoiceWorkSheet.Cells[rowCount, 10].Value).Substring(0, Convert.ToString(invoiceWorkSheet.Cells[rowCount, 10].Value).IndexOf(" ")) : Convert.ToString(invoiceWorkSheet.Cells[rowCount, 10].Value),
                             InvoiceRaised = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 11].Value),
@@ -661,7 +661,7 @@ namespace AUDash.Controllers
                         if (rec.Period.Substring(0, rec.Period.IndexOf('/')) == i.ToString() || rec.Period.Substring(0, rec.Period.IndexOf('/')) == "0" + i.ToString())
                         {
                             //add revenue to month's total
-                            if (rec.Amount != String.Empty)
+                            if (rec.Amount >= 0)
                             {
                                 currRevenue = currRevenue + Convert.ToDouble(rec.Amount);
                             }
