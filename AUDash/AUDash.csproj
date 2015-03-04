@@ -233,11 +233,21 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="images\DD_RGB_black-small.jpg" />
-    <Content Include="js\angular-file-upload.js" />
-    <Content Include="js\angular-file-upload.min.js" />
-    <Content Include="js\bootstrap-datepicker.js" />
-    <Content Include="js\bootstrap.js" />
-    <Content Include="js\bootstrap.min.js" />
+    <Content Include="js\angular-file-upload.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\angular-file-upload.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\bootstrap-datepicker.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\bootstrap.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\bootstrap.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Areas\HelpPage\Views\Web.config" />
     <Content Include="Areas\HelpPage\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\ResourceModel.cshtml" />
@@ -287,23 +297,57 @@
     <Content Include="font-awesome-4.1.0\scss\_stacked.scss" />
     <Content Include="font-awesome-4.1.0\scss\_variables.scss" />
     <Content Include="font-awesome-4.1.0\scss\font-awesome.scss" />
-    <Content Include="js\angular-file-upload.min.map" />
-    <None Include="js\jquery-1.10.2.intellisense.js" />
-    <Content Include="js\Chart.js" />
-    <Content Include="js\ChartNew.js" />
-    <Content Include="js\Dashboard\Dashboard.js" />
-    <Content Include="js\dirPagination.js" />
-    <Content Include="js\dirPagination.spec.js" />
-    <Content Include="js\dirPagination.tpl.html" />
-    <Content Include="js\jquery-1.10.2.js" />
-    <Content Include="js\jquery-1.10.2.min.js" />
-    <Content Include="js\jquery-1.11.0.js" />
-    <None Include="js\jquery.validate-vsdoc.js" />
-    <Content Include="js\jquery.validate.js" />
-    <Content Include="js\jquery.validate.min.js" />
-    <Content Include="js\jquery.validate.unobtrusive.js" />
-    <Content Include="js\jquery.validate.unobtrusive.min.js" />
-    <Content Include="js\modernizr-2.6.2.js" />
+    <Content Include="js\angular-file-upload.min.map">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\jquery-1.10.2.intellisense.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\Chart.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\ChartNew.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\Dashboard\Dashboard.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\dirPagination.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\dirPagination.spec.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\dirPagination.tpl.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\jquery-1.10.2.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\jquery-1.10.2.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\jquery-1.11.0.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\jquery.validate-vsdoc.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\jquery.validate.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\jquery.validate.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\jquery.validate.unobtrusive.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\jquery.validate.unobtrusive.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\modernizr-2.6.2.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="js\plugins\dataTables\dataTables.bootstrap.js" />
     <Content Include="js\plugins\dataTables\jquery.dataTables.js" />
     <Content Include="js\plugins\flot\excanvas.min.js" />
@@ -324,27 +368,67 @@
     <Content Include="js\plugins\ToDo\todoEscape.js" />
     <Content Include="js\plugins\ToDo\todoFocus.js" />
     <Content Include="js\plugins\ToDo\todoStorage.js" />
-    <Content Include="js\respond.js" />
-    <Content Include="js\respond.min.js" />
-    <Content Include="js\sb-admin-2.js" />
-    <Content Include="js\tc-angular-chartjs.min.js" />
-    <Content Include="partials\ActionItems.html" />
-    <Content Include="partials\Invoices.html" />
-    <Content Include="partials\NewActionItems.html" />
-    <Content Include="partials\ActiveProjects.html" />
-    <Content Include="partials\ActiveResources.html" />
-    <Content Include="partials\ManageDashboard.html" />
-    <Content Include="partials\Operations.html" />
-    <Content Include="partials\partialDashboard.html" />
-    <Content Include="js\angular-mocks.js" />
-    <Content Include="js\angular-route.js" />
-    <Content Include="js\angular-route.min.js" />
-    <Content Include="js\angular.js" />
-    <Content Include="js\angular.min.js" />
-    <Content Include="js\jquery-ui-1.11.2.js" />
-    <Content Include="js\jquery-ui-1.11.2.min.js" />
+    <Content Include="js\respond.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\respond.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\sb-admin-2.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\tc-angular-chartjs.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="partials\ActionItems.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="partials\Invoices.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="partials\NewActionItems.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="partials\ActiveProjects.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="partials\ActiveResources.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="partials\ManageDashboard.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="partials\Operations.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="partials\partialDashboard.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\angular-mocks.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\angular-route.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\angular-route.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\angular.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\angular.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\jquery-ui-1.11.2.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\jquery-ui-1.11.2.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="TESTConnection.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -353,16 +437,30 @@
     </Content>
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <Content Include="css\Site.css" />
-    <Content Include="js\_references.js" />
+    <Content Include="js\_references.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="js\jquery-1.10.2.min.map" />
-    <Content Include="js\angular.min.js.map" />
-    <Content Include="js\angular-route.min.js.map" />
+    <Content Include="js\jquery-1.10.2.min.map">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\angular.min.js.map">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="js\angular-route.min.js.map">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DocumentTemplates\Global Proposal Review Template v3 0.docx" />
+    <Content Include="DocumentTemplates\Template_Attest -Independence.doc" />
+    <Content Include="DocumentTemplates\Template_Non -Attest Independence %282%29.doc" />
+    <Content Include="DocumentTemplates\WO Template 111114.doc" />
+    <Content Include="DocumentTemplates\FY15_EDC_India_Billing_Expense_Policy.pdf" />
     <None Include="Properties\PublishProfiles\audashboard.pubxml" />
+    <None Include="Properties\PublishProfiles\IISDeploy.pubxml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
