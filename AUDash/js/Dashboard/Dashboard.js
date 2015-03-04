@@ -1203,6 +1203,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
               debugger;
               $scope.revenueChartPrevData = JSON.parse(data[1]);
               $scope.revenueChartCurrData = JSON.parse(data[0]);
+
               $scope.skillChartData.datasets[0].data = $scope.revenueChartCurrData;
               $scope.skillChartData.datasets[1].data = $scope.revenueChartPrevData;
               $scope.skillChartData.datasets[0].label = JSON.parse(data[2]);
