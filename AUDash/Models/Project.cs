@@ -29,6 +29,12 @@ namespace AUDash.Models
         public string ProjectStatus { get; set; }
     }
 
+    public class ResourcesGroupedByMonth
+    {
+        public int Count { get; set; }
+        public string Month { get; set; }
+    }
+
     public class ProjectRequest
     {
         public List<ProjectEntity> Projects { get; set; }

@@ -162,51 +162,51 @@
                         <form class="form-horizontal" name="addForm" role="form" ng-valid>
                             <input type="hidden" ng-model="ResourceEntity.index" />
                             <div class="form-group">
-                                <label for="inputFirstName" class="col-sm-3 control-label">First Name</label>
-                                <div class="col-sm-8">
+                                <label for="inputFirstName" class="col-sm-2 control-label">FirstName</label>
+                                <div class="col-sm-4">
                                     <input type="text" class="form-control" id="inputFirstName" placeholder="First Name" ng-model="ResourceEntity.FirstName" required>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputLastName" class="col-sm-3 control-label">Last Name</label>
-                                <div class="col-sm-8">
+                            
+                                <label for="inputLastName" class="col-sm-2 control-label">LastName</label>
+                                <div class="col-sm-4">
                                     <input type="text" class="form-control" id="inputLastName" placeholder="Last Name" ng-model="ResourceEntity.LastName" required>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputLevel" class="col-sm-3 control-label">Level</label>
-                                <div class="col-sm-8">
+                                <label for="inputLevel" class="col-sm-2 control-label">Level</label>
+                                <div class="col-sm-4">
                                     <input type="text" class="form-control" id="inputLevel" placeholder="Level" ng-model="ResourceEntity.Level">
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputSkills" class="col-sm-3 control-label">Technology</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="inputSkills" placeholder="Skills" ng-model="ResourceEntity.Skills">
+                            
+                                <label for="inputSkills" class="col-sm-2 control-label">Technology</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="inputSkills" placeholder="Skills" ng-model="ResourceEntity.Skills" required>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputRequiredFrom" class="col-sm-3 control-label">Required From</label>
+                                <label for="inputRequiredFrom" class="col-sm-2 control-label">StartDate</label>
                                 <div class="col-sm-4">
-                                    <input type="date" class="form-control" id="inputRequiredFrom" placeholder="Required From" ng-model="ResourceEntity.RequiredFrom">
+                                    <input type="date" class="form-control" id="inputRequiredFrom" placeholder="Required From" ng-model="ResourceEntity.RequiredFrom" required>
+                                </div>
+                                <label for="inputRequiredTill" class="col-sm-2 control-label">EndDate</label>
+                                <div class="col-sm-4">
+                                    <input type="date" class="form-control" id="inputRequiredTill" placeholder="Required Till" ng-model="ResourceEntity.RequiredTill" required>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="inputRequestDate" class="col-sm-3 control-label">Request Date</label>
+                                <label for="inputRequestDate" class="col-sm-2 control-label">Request Date</label>
                                 <div class="col-sm-4">
-                                    <input type="date" class="form-control" id="inputRequestDate" placeholder="Request Date" ng-model="ResourceEntity.RequestDate">
+                                    <input type="date" class="form-control" id="inputRequestDate" placeholder="Request Date" ng-model="ResourceEntity.RequestDate" required>
                                 </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="inputNextProject" class="col-sm-3 control-label">Project</label>
+                           
+                                <label for="inputNextProject" class="col-sm-2 control-label">Project</label>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control" id="inputNextProject" placeholder="Next Project" ng-model="ResourceEntity.NextProject">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="selectStatus" class="col-sm-3 control-label">Status</label>
+                                <label for="selectStatus" class="col-sm-2 control-label">Status</label>
                                 <div class="col-sm-4">
                                     <select class="form-control" id="selectStatus" ng-model="ResourceEntity.PositionStatus">
                                         <option>Open</option>
@@ -216,7 +216,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="ResourceComments" class="col-sm-3 control-label">Comments</label>
+                                <label for="ResourceComments" class="col-sm-2" control-label">Comments</label>
                                 <div class="checkbox col-sm-4">
                                     <label>
                                         <textarea id="ResourceComments" rows="3" cols="50" ng-model="ResourceEntity.Comments" />
@@ -226,7 +226,7 @@
 
                             <div class="form-group">
                                 <div class="col-sm-offset-5 col-sm-10">
-                                    <button type="submit" class="btn btn-success" data-dismiss="modal" ng-click="addResource(ResourceEntity, 'Upsert')">Save</button>
+                                    <button type="submit" ng-disabled="!addForm.$valid" class="btn btn-success" data-dismiss="modal" ng-click="addResource(ResourceEntity, 'Upsert')">Save</button>
                                 </div>
                             </div>
                         </form>

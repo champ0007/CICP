@@ -55,7 +55,8 @@ namespace AUDash.Controllers
         //GET api/GetSoldProposedChartData
         public List<string> GetSoldProposedChartData()
         {
-            return ParseSoldProposedData(repo.GetReferenceData("Projects"));
+            //return ParseSoldProposedData(repo.GetReferenceData("Projects"));
+            return ParseSoldProposedData(repo.GetReferenceData("Resources"), repo.GetReferenceData("GSSResources"));
         }
 
         //GET api/Dashboard/GetReferenceData
@@ -195,7 +196,7 @@ namespace AUDash.Controllers
                             Project = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 2].Value),
                             Partner = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 3].Value),
                             Resource = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 4].Value),
-                            Period = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 5].Value),
+                            Period = Convert.ToDateTime(Convert.ToString(invoiceWorkSheet.Cells[rowCount, 5].Value)).ToString("MMM-yy"),
                             Date = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 6].Value),
                             Hours = Convert.ToString(invoiceWorkSheet.Cells[rowCount, 7].Value),
                             Amount = Convert.ToDecimal(invoiceWorkSheet.Cells[rowCount, 8].Value),
@@ -288,7 +289,7 @@ namespace AUDash.Controllers
             }
 
             repo.SetReferenceData("Projects", JsonConvert.SerializeObject(projectRequest.Projects));
-            
+
             return repo.GetReferenceData("Projects");
         }
 
@@ -556,6 +557,34 @@ namespace AUDash.Controllers
             }
         }
 
+        private static void PopulateEntity(Dictionary<string, int> resources, ResourcesGroupedByMonth resource)
+        {
+            int incrementedAttribute = 0;
+
+            incrementedAttribute = Convert.ToInt32(resource.Count);
+
+            for (DateTime projectDate = DateTime.Now; projectDate <= Convert.ToDateTime(ParseMonthYear(resource.Month)); projectDate = projectDate.AddMonths(1))
+            {
+                if (resources.ContainsKey(((ChartMonths)projectDate.Month).ToString() + projectDate.Year.ToString().Substring(2, 2)))
+                {
+                    resources[((ChartMonths)projectDate.Month).ToString() + projectDate.Year.ToString().Substring(2, 2)] += incrementedAttribute;
+                }
+            }
+        }
+
+        private static void PopulateUnallocatedEntity(Dictionary<string, int> resources, UnallocatedResourceEntity resource)
+        {
+            int incrementedAttribute = 1;
+
+            for (DateTime projectDate = Convert.ToDateTime(resource.RequiredFrom); projectDate <= Convert.ToDateTime(resource.RequiredTill); projectDate = projectDate.AddMonths(1))
+            {
+                if (resources.ContainsKey(((ChartMonths)projectDate.Month).ToString() + projectDate.Year.ToString().Substring(2, 2)))
+                {
+                    resources[((ChartMonths)projectDate.Month).ToString() + projectDate.Year.ToString().Substring(2, 2)] += incrementedAttribute;
+                }
+            }
+        }
+
         private List<string> ParseProjectDistributionData(string projects)
         {
             int currentFY = GetFiscalYear();
@@ -817,6 +846,87 @@ namespace AUDash.Controllers
             return returnList;
 
         }
+
+        private List<string> ParseSoldProposedData(string resources, string GSSresources)
+        {
+            List<ResourceEntity> gssResources = JsonConvert.DeserializeObject<List<ResourceEntity>>(GSSresources);
+            List<UnallocatedResourceEntity> unallocatedResources = JsonConvert.DeserializeObject<List<UnallocatedResourceEntity>>(resources);
+            List<ProjectEntity> projects = JsonConvert.DeserializeObject<List<ProjectEntity>>(repo.GetReferenceData("Projects"));
+
+            List<ResourcesGroupedByMonth> GroupedGssResources = gssResources
+                .GroupBy(s => Convert.ToDateTime(s.AvailableOn).ToString("MMMyy"))
+                .Select(group => new ResourcesGroupedByMonth() { Month = group.Key, Count = group.Count() }).ToList();
+
+            //List<ResourcesGroupedByMonth> GroupedUnallocatedResources = unallocatedResources
+            //    .GroupBy(s => Convert.ToDateTime(s.RequiredFrom).ToString("MMMyy"))
+            //    .Select(group => new ResourcesGroupedByMonth() { Month = group.Key, Count = group.Count() }).ToList();
+
+
+
+            Dictionary<string, int> soldEntity = new Dictionary<string, int>();
+            soldEntity.Add(((ChartMonths)DateTime.Now.Month).ToString() + DateTime.Now.Year.ToString().Substring(2, 2), 0);
+            soldEntity.Add(((ChartMonths)DateTime.Now.AddMonths(1).Month).ToString() + DateTime.Now.AddMonths(1).Year.ToString().Substring(2, 2), 0);
+            soldEntity.Add(((ChartMonths)DateTime.Now.AddMonths(2).Month).ToString() + DateTime.Now.AddMonths(2).Year.ToString().Substring(2, 2), 0);
+            soldEntity.Add(((ChartMonths)DateTime.Now.AddMonths(3).Month).ToString() + DateTime.Now.AddMonths(3).Year.ToString().Substring(2, 2), 0);
+            soldEntity.Add(((ChartMonths)DateTime.Now.AddMonths(4).Month).ToString() + DateTime.Now.AddMonths(4).Year.ToString().Substring(2, 2), 0);
+            soldEntity.Add(((ChartMonths)DateTime.Now.AddMonths(5).Month).ToString() + DateTime.Now.AddMonths(5).Year.ToString().Substring(2, 2), 0);
+            soldEntity.Add(((ChartMonths)DateTime.Now.AddMonths(6).Month).ToString() + DateTime.Now.AddMonths(6).Year.ToString().Substring(2, 2), 0);
+            soldEntity.Add(((ChartMonths)DateTime.Now.AddMonths(7).Month).ToString() + DateTime.Now.AddMonths(7).Year.ToString().Substring(2, 2), 0);
+            soldEntity.Add(((ChartMonths)DateTime.Now.AddMonths(8).Month).ToString() + DateTime.Now.AddMonths(8).Year.ToString().Substring(2, 2), 0);
+            soldEntity.Add(((ChartMonths)DateTime.Now.AddMonths(9).Month).ToString() + DateTime.Now.AddMonths(9).Year.ToString().Substring(2, 2), 0);
+            soldEntity.Add(((ChartMonths)DateTime.Now.AddMonths(10).Month).ToString() + DateTime.Now.AddMonths(10).Year.ToString().Substring(2, 2), 0);
+            soldEntity.Add(((ChartMonths)DateTime.Now.AddMonths(11).Month).ToString() + DateTime.Now.AddMonths(11).Year.ToString().Substring(2, 2), 0);
+
+
+            Dictionary<string, int> proposedEntity = new Dictionary<string, int>();
+
+            proposedEntity.Add(((ChartMonths)DateTime.Now.Month).ToString() + DateTime.Now.Year.ToString().Substring(2, 2), 0);
+            proposedEntity.Add(((ChartMonths)DateTime.Now.AddMonths(1).Month).ToString() + DateTime.Now.AddMonths(1).Year.ToString().Substring(2, 2), 0);
+            proposedEntity.Add(((ChartMonths)DateTime.Now.AddMonths(2).Month).ToString() + DateTime.Now.AddMonths(2).Year.ToString().Substring(2, 2), 0);
+            proposedEntity.Add(((ChartMonths)DateTime.Now.AddMonths(3).Month).ToString() + DateTime.Now.AddMonths(3).Year.ToString().Substring(2, 2), 0);
+            proposedEntity.Add(((ChartMonths)DateTime.Now.AddMonths(4).Month).ToString() + DateTime.Now.AddMonths(4).Year.ToString().Substring(2, 2), 0);
+            proposedEntity.Add(((ChartMonths)DateTime.Now.AddMonths(5).Month).ToString() + DateTime.Now.AddMonths(5).Year.ToString().Substring(2, 2), 0);
+            proposedEntity.Add(((ChartMonths)DateTime.Now.AddMonths(6).Month).ToString() + DateTime.Now.AddMonths(6).Year.ToString().Substring(2, 2), 0);
+            proposedEntity.Add(((ChartMonths)DateTime.Now.AddMonths(7).Month).ToString() + DateTime.Now.AddMonths(7).Year.ToString().Substring(2, 2), 0);
+            proposedEntity.Add(((ChartMonths)DateTime.Now.AddMonths(8).Month).ToString() + DateTime.Now.AddMonths(8).Year.ToString().Substring(2, 2), 0);
+            proposedEntity.Add(((ChartMonths)DateTime.Now.AddMonths(9).Month).ToString() + DateTime.Now.AddMonths(9).Year.ToString().Substring(2, 2), 0);
+            proposedEntity.Add(((ChartMonths)DateTime.Now.AddMonths(10).Month).ToString() + DateTime.Now.AddMonths(10).Year.ToString().Substring(2, 2), 0);
+            proposedEntity.Add(((ChartMonths)DateTime.Now.AddMonths(11).Month).ToString() + DateTime.Now.AddMonths(11).Year.ToString().Substring(2, 2), 0);
+
+            foreach (ResourcesGroupedByMonth resource in GroupedGssResources)
+            {
+
+                PopulateEntity(soldEntity, resource);
+                PopulateEntity(proposedEntity, resource);
+            }
+
+            foreach (UnallocatedResourceEntity unallocatedResource in unallocatedResources)
+            {
+
+                PopulateUnallocatedEntity(proposedEntity, unallocatedResource);
+            }
+
+
+
+            List<string> chartData = new List<string>();
+
+            chartData.Add(JsonConvert.SerializeObject(soldEntity.Keys.ToList<string>()));
+            chartData.Add(JsonConvert.SerializeObject(soldEntity.Values.ToList<int>()));
+            chartData.Add(JsonConvert.SerializeObject(proposedEntity.Values.ToList<int>()));
+
+            return chartData;
+
+        }
+
+        private static string ParseMonthYear(string MMMyy)
+        {
+            string output = MMMyy.Substring(0, 3) + (Convert.ToInt32(MMMyy.Substring(3, 2)) + 2000).ToString();
+
+
+            return output;
+
+        }
+
 
     }
 }

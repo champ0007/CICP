@@ -39,6 +39,7 @@ namespace AUDash.Models
         public string NextProject { get; set; }
         public string Comments { get; set; }
         public string PositionStatus { get; set; }
+        public string RequiredTill { get; set; }
     }
 
     public class ResourceEntity
