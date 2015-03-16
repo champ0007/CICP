@@ -29,6 +29,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <IncludeIisSettings>false</IncludeIisSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -461,6 +462,7 @@
     <Content Include="DocumentTemplates\FY15_EDC_India_Billing_Expense_Policy.pdf" />
     <None Include="Properties\PublishProfiles\audashboard.pubxml" />
     <None Include="Properties\PublishProfiles\IISDeploy.pubxml" />
+    <None Include="Properties\PublishProfiles\Tushar.pubxml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
