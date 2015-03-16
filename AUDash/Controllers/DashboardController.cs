@@ -862,10 +862,10 @@ namespace AUDash.Controllers
             currentRevenueMonths.Add(ChartMonths.Mar.ToString() + "-" + nextYear, 0);
 
 
-            relevantCurrentInvoices = invoices.FindAll(e => currentRevenueMonths.ContainsKey(e.Period));
+            relevantCurrentInvoices = invoices.FindAll(e => currentRevenueMonths.ContainsKey(Convert.ToDateTime(e.Period).ToString("MMM-yy")));
             decimal sumCurrentYear = relevantCurrentInvoices.Sum(e => e.Amount);
 
-            relevantPreviousInvoices = invoices.FindAll(e => previousRevenueMonths.ContainsKey(e.Period));
+            relevantPreviousInvoices = invoices.FindAll(e => previousRevenueMonths.ContainsKey(Convert.ToDateTime(e.Period).ToString("MMM-yy")));
             decimal sumPreviousYear = relevantPreviousInvoices.Sum(e => e.Amount);
 
             List<string> returnList = new List<string>();
