@@ -17,7 +17,7 @@ namespace AUDash
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: "Dashboard.html"
             ).RouteHandler = new SessionStateRouteHandler();
         }
     }
