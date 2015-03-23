@@ -133,7 +133,7 @@
                     <th ng-click="predicate = 'Stage'; reverse=false">Project Stage</th>
                     <th ng-click="predicate = 'Technology'; reverse=false">Technology</th>
                     <th ng-click="predicate = 'GDM'; reverse=false">GDM</th>
-                    <th ng-click="predicate = 'AUPM'; reverse=false">AU-PM</th>
+                    <th ng-click="predicate = 'AUPM'; reverse=false">CA-PM</th>
                     <th><i class="fa fa-times"</th>
 
                 </tr>
@@ -249,16 +249,16 @@
                                     <select class="form-control" id="selectWorkOrder" ng-model="ProjectEntity.WorkOrderStatus">
                                         <option>Not Received</option>
                                         <option>EDC Review</option>
-                                        <option>Waiting AU Signature</option>
+                                        <option>Waiting CA Signature</option>
                                         <option>Signed WO Received</option>
                                         <option>WBS created</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputAUPM" class="col-sm-2 control-label">AU PM</label>
+                                <label for="inputCAPM" class="col-sm-2 control-label">CA PM</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" id="inputAUPM" placeholder="AU Project Manager" ng-model="ProjectEntity.AUPM">
+                                    <input type="text" class="form-control" id="inputCAPM" placeholder="AU Project Manager" ng-model="ProjectEntity.AUPM">
                                 </div>
                             </div>
                             <div class="form-group">

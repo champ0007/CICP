@@ -20,7 +20,7 @@ namespace AUDash.Repository
 
             if (connSection.ConnectionStrings.Count > 0)
             {
-                connString = connSection.ConnectionStrings["AUDashboardAzureConnection"];
+                connString = connSection.ConnectionStrings["CICPConnection"];
                 if (connString != null)
                     connectionString = connString.ConnectionString;
                 else

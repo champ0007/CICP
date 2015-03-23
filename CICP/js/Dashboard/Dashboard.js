@@ -2,9 +2,9 @@
 /// <reference path="../jquery-1.10.2.intellisense.js" />
 var todos;
 
-var AUDashboardApp = angular.module("AUDashboardApp", ["ngRoute", "tc.chartjs", "angularFileUpload", "angularUtils.directives.dirPagination"]);
+var CICPApp = angular.module("CICPApp", ["ngRoute", "tc.chartjs", "angularFileUpload", "angularUtils.directives.dirPagination"]);
 
-AUDashboardApp.config(['$routeProvider',
+CICPApp.config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider.
         when('/Dashboard', {
@@ -41,7 +41,7 @@ AUDashboardApp.config(['$routeProvider',
     }
 ]);
 
-AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($scope, $http) {
+CICPApp.controller('DashboardController', ['$scope', '$http', function ($scope, $http) {
 
     $http({
         method: 'GET',
@@ -266,7 +266,7 @@ AUDashboardApp.controller('DashboardController', ['$scope', '$http', function ($
 
 }]);
 
-AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
+CICPApp.controller('ActionItemsController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
 
     var todos = $scope.todos = [];
 
@@ -388,7 +388,7 @@ AUDashboardApp.controller('ActionItemsController', ['$scope', '$filter', '$http'
     };
 }]);
 
-AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
+CICPApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
     var STORAGE_ID = 'Projects';
     $scope.EditMode = "false";
     $scope.ActiveFilterSet;
@@ -627,7 +627,7 @@ AUDashboardApp.controller('ActiveProjectsController', ['$scope', '$filter', '$ht
 
 }]);
 
-AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'FileUploader', function ($scope, $http, FileUploader) {
+CICPApp.controller('ActiveResourcesController', ['$scope', '$http', 'FileUploader', function ($scope, $http, FileUploader) {
     var STORAGE_ID = 'Resources';
     $scope.EditMode = "false";
     $scope.currentPage = 1;
@@ -836,7 +836,7 @@ AUDashboardApp.controller('ActiveResourcesController', ['$scope', '$http', 'File
 
 }]);
 
-AUDashboardApp.controller('NewActionItemsController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
+CICPApp.controller('NewActionItemsController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
     var STORAGE_ID = 'NewToDoItems'; // To be passed
     //$scope.EditMode = "false";
 
@@ -970,7 +970,7 @@ AUDashboardApp.controller('NewActionItemsController', ['$scope', '$filter', '$ht
 
 }]);
 
-AUDashboardApp.controller('OperationsController', ['$scope', '$http', function ($scope, $http) {
+CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope, $http) {
 
     //Start Key Updates
     var keyUpdates = $scope.keyUpdates = [];
@@ -1517,7 +1517,7 @@ AUDashboardApp.controller('OperationsController', ['$scope', '$http', function (
 
 }]);
 
-AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', 'FileUploader', function ($scope, $filter, $http, FileUploader) {
+CICPApp.controller('InvoicesController', ['$scope', '$filter', '$http', 'FileUploader', function ($scope, $filter, $http, FileUploader) {
     var STORAGE_ID = 'Invoices';
     $scope.EditMode = "false";
     $scope.currentPage = 1;
@@ -1700,7 +1700,7 @@ AUDashboardApp.controller('InvoicesController', ['$scope', '$filter', '$http', '
     //};
 }]);
 
-angular.module('AUDashboardApp').filter('changeDateFormat', function($filter)
+angular.module('CICPApp').filter('changeDateFormat', function($filter)
 {
     return function(input)
     {
