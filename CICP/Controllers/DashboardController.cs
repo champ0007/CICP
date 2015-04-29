@@ -21,68 +21,108 @@ namespace AUDash.Controllers
     {
         DBRepository repo = new DBRepository();
 
-        //GET api/Dashboard/GetDashboardCounts
-        public string GetDashboardCounts()
+        private string AUTH_TOKEN = "admin-admin";
+
+        public string GetAuthentication(string authToken)
         {
-            List<string> dashboardCounts = ParseDashboardCounts(repo.GetDashboardCounts());
+            string uid = authToken.Split('-').First();
+            string pass = authToken.Split('-').Last();
+            if (authToken.Equals(AUTH_TOKEN))
+                return "true";
+            else
+                return "false";
+        }
 
+        //GET api/Dashboard/GetDashboardCounts
+        public string GetDashboardCounts(string authToken)
+        {
+            List<string> dashboardCounts = new List<string>();
+            if (authToken.Equals(AUTH_TOKEN))
+                dashboardCounts = ParseDashboardCounts(repo.GetDashboardCounts());
             return JsonConvert.SerializeObject(dashboardCounts);
-
         }
 
         //GET api/Dashboard/GetProjectChartData //Added by Vibhav
-        public List<string> GetProjectChartData()
+        public List<string> GetProjectChartData(string authToken)
         {
-            return ParseProjectData(repo.GetReferenceData("Projects"));
+            if (authToken.Equals(AUTH_TOKEN))
+                return ParseProjectData(repo.GetReferenceData("Projects"));
+            else
+                return new List<string>();
         }
 
         //GET api/Dashboard/GetRevenueChartData //Added by Vibhav
-        public List<string> GetRevenueChartData()
+        public List<string> GetRevenueChartData(string authToken)
         {
-            return ParseRevenueData(repo.GetReferenceData("Invoices"));
+            if (authToken.Equals(AUTH_TOKEN))
+                return ParseRevenueData(repo.GetReferenceData("Invoices"));
+            else
+                return new List<string>();
         }
 
         //GET api/Dashboard/GetTechChartData //Added by Vibhav
-        public List<string> GetTechChartData()
+        public List<string> GetTechChartData(string authToken)
         {
-            return ParseSKillData(repo.GetReferenceData("Projects"));
+            if (authToken.Equals(AUTH_TOKEN))
+                return ParseSKillData(repo.GetReferenceData("Projects"));
+            else
+                return new List<string>();
         }
 
         //GET api/Dashboard/GetProjChartData //Added by Vibhav
-        public List<string> GetProjChartData()
+        public List<string> GetProjChartData(string authToken)
         {
-            return ParseProjBySkillData(repo.GetReferenceData("Projects"));
+            if (authToken.Equals(AUTH_TOKEN))
+                return ParseProjBySkillData(repo.GetReferenceData("Projects"));
+            else
+                return new List<string>();
         }
         //GET api/GetSoldProposedChartData
-        public List<string> GetSoldProposedChartData()
+        public List<string> GetSoldProposedChartData(string authToken)
         {
             //return ParseSoldProposedData(repo.GetReferenceData("Projects"));
-            return ParseSoldProposedData(repo.GetReferenceData("Resources"), repo.GetReferenceData("GSSResources"));
+            if (authToken.Equals(AUTH_TOKEN))
+                return ParseSoldProposedData(repo.GetReferenceData("Resources"), repo.GetReferenceData("GSSResources"));
+            else
+                return new List<string>();
+
         }
 
         //GET api/Dashboard/GetReferenceData
-        public string GetReferenceData(string storageId)
+        public string GetReferenceData(string storageId, string authToken)
         {
-            string response = repo.GetReferenceData(storageId);
+            string response = string.Empty;
+            if (authToken.Equals(AUTH_TOKEN))
+                response = repo.GetReferenceData(storageId);
+
             return response == string.Empty ? null : response;
         }
 
         //GET api/Dashboard/GetResourceChartData
-        public List<string> GetResourceChartData()
+        public List<string> GetResourceChartData(string authToken)
         {
-            return ParseResourceData(repo.GetReferenceData("GSSResources"));
+            if (authToken.Equals(AUTH_TOKEN))
+                return ParseResourceData(repo.GetReferenceData("GSSResources"));
+            else
+                return new List<string>();
         }
 
         //GET api/Dashboard/GetProjectDistributionChartData
-        public List<string> GetProjectDistributionChartData()
+        public List<string> GetProjectDistributionChartData(string authToken)
         {
-            return ParseProjectDistributionData(repo.GetReferenceData("Projects"));
+            if (authToken.Equals(AUTH_TOKEN))
+                return ParseProjectDistributionData(repo.GetReferenceData("Projects"));
+            else
+                return new List<string>();
         }
 
         //GET api/Dashboard/GetResourceDeploymentChartData
-        public List<string> GetResourceDeploymentChartData()
+        public List<string> GetResourceDeploymentChartData(string authToken)
         {
-            return ParseResourceDeploymentChartData(repo.GetReferenceData("ResourceDataCount"));
+            if (authToken.Equals(AUTH_TOKEN))
+                return ParseResourceDeploymentChartData(repo.GetReferenceData("ResourceDataCount"));
+            else
+                return new List<string>();
         }
 
         //POST api/Dashboard/SetReferenceData
@@ -91,15 +131,16 @@ namespace AUDash.Controllers
         {
             ReferenceData refData = JsonConvert.DeserializeObject<ReferenceData>(referenceData);
             //Set Session Values
-
             //HttpContext.Current.Session[refData.storageId] = refData.storageData;
             //string sessionvalue = Convert.ToString(HttpContext.Current.Session[refData.storageId]);
-
-            repo.SetReferenceData(refData.storageId, refData.storageData);
+            if (refData.authToken.Equals(AUTH_TOKEN))
+            {
+                repo.SetReferenceData(refData.storageId, refData.storageData);
+            }
         }
 
         //GET api/Dashboard/GetResourceList
-        public string GetResourceList()
+        public string GetResourceList(string authToken)
         {
             //List<Resource> Resources = new List<Resource>();
             //Resources.Add(new Resource() { FirstName = "Shakil", LastName = "Shaikh", CurrentProject = "Telstra", ProposedProject = "None", Level = "Manager", AvailableOn = "01-Dec-2014", Skills = "Adobe CQ", StartDate = "01-Mar-2014" });
@@ -107,8 +148,10 @@ namespace AUDash.Controllers
             //Resources.Add(new Resource() { FirstName = "Shakil", LastName = "Shaikh", CurrentProject = "Telstra", ProposedProject = "None", Level = "Manager", AvailableOn = "01-Dec-2014", Skills = "Adobe CQ", StartDate = "01-Mar-2014" });
             //Resources.Add(new Resource() { FirstName = "Shakil", LastName = "Shaikh", CurrentProject = "Telstra", ProposedProject = "None", Level = "Manager", AvailableOn = "01-Dec-2014", Skills = "Adobe CQ", StartDate = "01-Mar-2014" });
             //Resources.Add(new Resource() { FirstName = "Shakil", LastName = "Shaikh", CurrentProject = "Telstra", ProposedProject = "None", Level = "Manager", AvailableOn = "01-Dec-2014", Skills = "Adobe CQ", StartDate = "01-Mar-2014" });
-
-            return JSONConcat(repo.GetAllResources());
+            if (authToken.Equals(AUTH_TOKEN))
+                return JSONConcat(repo.GetAllResources());
+            else
+                return string.Empty;
         }
 
         private string JSONConcat(List<Resource> resourceList)
@@ -147,26 +190,28 @@ namespace AUDash.Controllers
         }
 
         //GET api/Dashboard/GetKeyUpdates
-        public string GetKeyUpdates()
+        public string GetKeyUpdates(string authToken)
         {
             List<KeyUpdates> kUpdates = new List<KeyUpdates>();
-            kUpdates.Add(new KeyUpdates()
+            if (authToken.Equals(AUTH_TOKEN))
             {
-                Heading = "Telstra Client India Visit",
-                Highlights = new List<string>() {
+                kUpdates.Add(new KeyUpdates()
+                {
+                    Heading = "Telstra Client India Visit",
+                    Highlights = new List<string>() {
                     "Brendan Devers, Jen Cochrane and Adam Sandler along with Telstra client will be visiting Hyderabad and Mumbai office between 1st Sept and 5th Sept"
                  }
-            });
+                });
 
-            kUpdates.Add(new KeyUpdates()
-            {
-                Heading = " Decisions on AU/DD Testing CoE continue",
-                Highlights = new List<string>() {
+                kUpdates.Add(new KeyUpdates()
+                {
+                    Heading = " Decisions on AU/DD Testing CoE continue",
+                    Highlights = new List<string>() {
                     "Process identified",
                     "Identification of right resources for CoE in progress"
                  }
-            });
-
+                });
+            }
 
             return JsonConvert.SerializeObject(kUpdates);
 
@@ -331,6 +376,113 @@ namespace AUDash.Controllers
 
             return repo.GetReferenceData("Resources");
         }
+
+
+        //GET api/Dashboard/GetActualVsBudgetHoursChartData //Added by Bhushan
+        public List<string> GetActualVsBudgetHoursChartData(string authToken)
+        {
+            if (authToken.Equals(AUTH_TOKEN))
+                return ParseActualVsBudgetData();
+            else
+                return null;
+        }
+
+        public List<string> GetActivePursuitsChartData(string authToken)
+        {
+            if (authToken.Equals(AUTH_TOKEN))
+                return ParseActivePursuitsData();
+            else
+                return null;
+        }
+
+        public List<string> GetPursuitsByLeadChartData(string authToken)
+        {
+            if (authToken.Equals(AUTH_TOKEN))
+                return ParsePursuitsByLeadData();
+            else
+                return null;
+        }
+
+        //GET api/Dashboard/GetActualUSIEngmntByIMLead //Added by Bhushan
+        public List<string> GetActualUSIEngmntByIMLead(string authToken)
+        {
+            if (authToken.Equals(AUTH_TOKEN))
+                return ParseActualUSIEngmntByIMLead();
+            else
+                return null;
+        }
+
+        public List<string> GetActualUSIEngmntByClient(string authToken)
+        {
+            if (authToken.Equals(AUTH_TOKEN))
+                return ParseActualUSIEngmntByClient();
+            else
+                return null;
+        }
+
+        public List<string> GetQualifiedPursuitsByCustomer(string authToken)
+        {
+            if (authToken.Equals(AUTH_TOKEN))
+                return ParseQualifiedPursuitsByCustomer();
+            else
+                return null;
+        }
+
+        private List<string> ParseActualUSIEngmntByIMLead()
+        {
+            List<string> returnList = new List<string>();
+            returnList.Add("[126, 4893.5, 6506, 18276]");
+            returnList.Add("['Pineda,Raymond', 'Finklestein,Perry', 'D-Ercole,Nat', 'IM House']");
+            return returnList;
+        }
+
+        private List<string> ParseActualUSIEngmntByClient()
+        {
+            List<string> returnList = new List<string>();
+            returnList.Add("[126, 342, 363, 531, 544, 4517, 4893.5, 5076, 5962, 7447]");
+            return returnList;
+        }
+
+        private List<string> ParseQualifiedPursuitsByCustomer()
+        {
+            List<string> returnList = new List<string>();
+            returnList.Add("[0, 38560, 135676, 316788, 482530, 1759913, 2623703, 5000000, 8184721, 30000000]");
+            return returnList;
+        }
+
+        private List<string> ParseActualVsBudgetData()
+        {
+            List<string> returnList = new List<string>();
+            returnList.Add("[1210, 1678, 2295, 2320, 2456, 3974, 4245, 3068, 4055, 4500.5, 0, 0, 0]");
+            returnList.Add("[1461, 1461, 1461, 1461, 1461, 1461, 1461, 1461, 1461, 1461, 1461, 1461, 1461]");
+            returnList.Add("Actual");
+            returnList.Add("Budget");
+            return returnList;
+
+        }
+
+
+        private List<string> ParsePursuitsByLeadData()
+        {
+            List<string> returnList = new List<string>();
+            returnList.Add("[0, 0, 0, 1, 2, 2, 3, 4, 6]");
+            returnList.Add("[3, 4, 2, 4, 4, 0, 8, 9, 3]");
+            returnList.Add("Yes - Proposal Support");
+            returnList.Add("Yes-Still Qualifying");
+            return returnList;
+
+        }
+
+        private List<string> ParseActivePursuitsData()
+        {
+            List<string> returnList = new List<string>();
+            returnList.Add("[0, 0, 0, 1, 5, 6, 3, 1, 1, 1, 0, 0, 0]");
+            returnList.Add("[2, 1, 1, 1, 6, 15, 2, 3, 0, 3, 1, 1, 1]");
+            returnList.Add("Yes - Proposal Support");
+            returnList.Add("Yes-Still Qualifying");
+            return returnList;
+        }
+
 
 
         private string GetResourceDataCount(int resourceCount, string currentDate)
@@ -689,7 +841,7 @@ namespace AUDash.Controllers
             List<string> dashboardCounts = new List<string>();
 
             dashboardCounts.Add(JsonConvert.DeserializeObject<List<Invoice>>(dashboardData["Invoices"]).Where(x => x.PaymentReceived == "Pending").Count().ToString());
-            dashboardCounts.Add(JsonConvert.DeserializeObject<List<ProjectEntity>>(dashboardData["Projects"]).Count.ToString());
+            dashboardCounts.Add(JsonConvert.DeserializeObject<List<ProjectEntity>>(dashboardData["Projects"]).Where(x => x.Stage == "Sold").Count().ToString());
             dashboardCounts.Add(JsonConvert.DeserializeObject<List<ActionItem>>(dashboardData["NewToDoItems"]).Where(x => x.Status == "Open").Count().ToString());
             dashboardCounts.Add(JsonConvert.DeserializeObject<List<ResourceEntity>>(dashboardData["GSSResources"]).Count.ToString());
 
@@ -802,7 +954,7 @@ namespace AUDash.Controllers
             {
                 PopulateUnallocatedEntity(proposedEntity, unallocatedResource);
             }
-            
+
             List<string> chartData = new List<string>();
 
             chartData.Add(JsonConvert.SerializeObject(soldEntity.Keys.ToList<string>()));

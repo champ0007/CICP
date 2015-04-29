@@ -43,225 +43,244 @@ CICPApp.config(['$routeProvider',
 
 CICPApp.controller('DashboardController', ['$scope', '$http', function ($scope, $http) {
 
-    $http({
-        method: 'GET',
-        url: 'api/Dashboard/GetDashboardCounts'
-    }).
-    success(function (data, status, headers, config) {
-        $scope.PendingInvoices = JSON.parse(JSON.parse(data))[0];
-        $scope.ActiveProjects = JSON.parse(JSON.parse(data))[1];
-        $scope.OpenActionItems = JSON.parse(JSON.parse(data))[2];
-        $scope.ActiveResources = JSON.parse(JSON.parse(data))[3];
-
-    }).
-    error(function (data, status, headers, config) {
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
-        $scope.ActiveProjects = -1;
-        $scope.PendingInvoices = -1;
-        $scope.ActiveResources = -1;
-        $scope.OpenActionItems = -1;
-    });
-
-
-    //$scope.PendingInvoices = 9;
-    //$scope.ActiveResources = 32;
-    //$scope.OpenActionItems = 5;
-
-    var ProjectEntity;
-
-    var FakeNotifications = [{
-        message: 'Frank Farrall USI Visit - Mumbai',
-        eventdate: '8-Dec',
-        type: 'fa fa-calendar fa-fw'
-    }, {
-        message: 'Frank Farrall USI Visit - Hyderabad',
-        eventdate: '10-Dec',
-        type: 'fa fa-calendar fa-fw'
-    }, {
-        message: 'Submit Project Report',
-        eventdate: '20-Dec',
-        type: 'fa fa-twitter fa-fw'
-    }, {
-        message: 'EDC-AU meet',
-        eventdate: '5-Jan',
-        type: 'fa fa-calendar fa-fw'
-    }, {
-        message: 'EDC Upcoming Holiday',
-        eventdate: '26-Dec',
-        type: 'fa fa-calendar fa-fw'
-    }];
-
-    $scope.notifications = FakeNotifications;
-
-
-
-    //Start 
-    // Chart.js Data
-    $scope.skillChartData = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [
-          {
-              label: 'FY15 Business',
-              fillColor: '#FFFFFF',
-              strokeColor: 'rgba(69,201,102,0.9)',
-              highlightFill: 'rgba(69,201,102,0.9)',
-              highlightStroke: 'rgba(220,220,220,1)',
-              data: [65, 59, 80, 81, 56, 55, 40]
-          },
-          {
-              label: 'FY14 Business',
-              fillColor: '#FFFFFF',
-              strokeColor: 'rgba(1,187,205,0.8)',
-              highlightFill: 'rgba(38, 208, 255, 0.75)',
-              highlightStroke: 'rgba(151,187,205,1)',
-              data: [28, 48, 40, 19, 86, 27, 30]
-          }
-        ]
-    };
-
-    // Chart.js Options
-    $scope.skillChartOptions = {
-
-        // Sets the chart to be responsive
-        responsive: true,
-
-        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
-        scaleBeginAtZero: true,
-
-        //Boolean - Whether grid lines are shown across the chart
-        scaleShowGridLines: true,
-
-        //String - Colour of the grid lines
-        scaleGridLineColor: "rgba(0,0,0,.05)",
-
-        //Number - Width of the grid lines
-        scaleGridLineWidth: 1,
-
-        //Boolean - If there is a stroke on each bar
-        barShowStroke: true,
-
-        //Number - Pixel width of the bar stroke
-        barStrokeWidth: 2,
-
-        //Number - Spacing between each of the X value sets
-        barValueSpacing: 5,
-
-        //Number - Spacing between data sets within X values
-        barDatasetSpacing: 1,
-
-        //String - A legend template
-        legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
-    };
-
-    $scope.ProjectChartData = [];
-
-    $scope.UpdateProjChart = function () {
+    $scope.UserIdentity = null;
+    $scope.UserPassword = null;
+    $scope.UserValidated = false;
+    $scope.LoginMessage = null;
+    debugger;
+    $scope.ValidateUserLogin = function () {
         $http({
             method: 'GET',
-            url: 'api/Dashboard/GetProjChartData'
+            url: 'api/Dashboard/GetAuthentication?authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
         }).
-      success(function (data, status, headers, config) {
-          if (data != null) {
-              debugger;
-              $scope.ProjectChartData = [];
-              var ProjectChartDataList = JSON.parse(data[0]);
-              for (i = 0; i <= ProjectChartDataList.length; i++) {
-                  var dataItem = new Object();
-                  dataItem.value = ProjectChartDataList[i].Count;
-                  dataItem.label = ProjectChartDataList[i].ProjectStatus;
-                  dataItem.color = colors[i];
-                  dataItem.highlight = highlights[i];
-                  $scope.ProjectChartData.push(dataItem);
-              }
-              //$scope.revenueChartPrevData = JSON.parse(data[1]);
-              //$scope.revenueChartCurrData = JSON.parse(data[0]);
-              //$scope.skillChartData.datasets[0].data = $scope.revenueChartCurrData;
-              //$scope.skillChartData.datasets[1].data = $scope.revenueChartPrevData;
-              //$scope.skillChartData.datasets[0].label = JSON.parse(data[2]);
-              //$scope.skillChartData.datasets[1].label = JSON.parse(data[3]);
-          }
-      }).
-      error(function (data, status, headers, config) {
-          // called asynchronously if an error occurs
-          // or server returns response with an error status.
-          $scope.AllResources = -1;
-      });
-    };
-
-    //$scope.UpdateProjChart();
-
-    //// Chart.js Data
-    //$scope.ProjectChartData = [
-    //  {
-    //      value: 0,
-    //      color: '#F7464A',
-    //      highlight: '#FF5A5E',
-    //      label: 'Sitecore'
-    //  }];
-    //  {
-    //      value: 0,
-    //      color: '#46BFBD',
-    //      highlight: '#5AD3D1',
-    //      label: 'Hybris'
-    //  },
-    //  {
-    //      value: 0,
-    //      color: '#FDB45C',
-    //      highlight: '#FFC870',
-    //      label: 'Adobe CQ'
-    //  },
-    //  {
-    //      value: 0,
-    //      color: '#46BFBA',
-    //      highlight: '#5AD3D1',
-    //      label: 'Biztalk'
-    //  },
-    //  {
-    //      value: 0,
-    //      color: '#FDB4AC',
-    //      highlight: '#FFC870',
-    //      label: 'Mobile'
-    //  }
-    //];
-
-    // Chart.js Options
-    $scope.ProjectChartOptions = {
-
-        // Sets the chart to be responsive
-        responsive: true,
-
-        //Boolean - Whether we should show a stroke on each segment
-        segmentShowStroke: true,
-
-        //String - The colour of each segment stroke
-        segmentStrokeColor: '#fff',
-
-        //Number - The width of each segment stroke
-        segmentStrokeWidth: 2,
-
-        //Number - The percentage of the chart that we cut out of the middle
-        percentageInnerCutout: 50, // This is 0 for Pie charts
-
-        //Number - Amount of animation steps
-        animationSteps: 100,
-
-        //String - Animation easing effect
-        animationEasing: 'easeOutQuint',
-
-        //Boolean - Whether we animate the rotation of the Doughnut
-        animateRotate: false,
-
-        //Boolean - Whether we animate scaling the Doughnut from the centre
-        animateScale: false,
-
-        //String - A legend template     
-        legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
-
-    };
+        success(function (data, status, headers, config) {
+            var isValidUser = JSON.parse(data);
+            $scope.UserValidated = JSON.parse(data)
+            if (isValidUser == "false")
+                $scope.LoginMessage = "* user name/password not correct";
+            else {
+                $scope.LoginMessage = null;
 
 
-    //End
+                $http({
+                    method: 'GET',
+                    url: 'api/Dashboard/GetDashboardCounts?authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
+                }).
+                success(function (data, status, headers, config) {
+                    $scope.PendingInvoices = JSON.parse(JSON.parse(data))[0];
+                    $scope.ActiveProjects = JSON.parse(JSON.parse(data))[1];
+                    $scope.OpenActionItems = JSON.parse(JSON.parse(data))[2];
+                    $scope.ActiveResources = JSON.parse(JSON.parse(data))[3];
+
+                }).
+                error(function (data, status, headers, config) {
+                    // called asynchronously if an error occurs
+                    // or server returns response with an error status.
+                    $scope.ActiveProjects = -1;
+                    $scope.PendingInvoices = -1;
+                    $scope.ActiveResources = -1;
+                    $scope.OpenActionItems = -1;
+                });
+
+
+                //$scope.PendingInvoices = 9;
+                //$scope.ActiveResources = 32;
+                //$scope.OpenActionItems = 5;
+
+                var ProjectEntity;
+
+                var FakeNotifications = [{
+                    message: 'USI - Canada Monthly Meet',
+                    eventdate: '8-May',
+                    type: 'fa fa-calendar fa-fw'
+                }, {
+                    message: 'Big Client Project - Kick Off',
+                    eventdate: '1-Jun',
+                    type: 'fa fa-calendar fa-fw'
+                }];
+
+                $scope.notifications = FakeNotifications;
+
+
+
+                //Start 
+                // Chart.js Data
+                $scope.skillChartData = {
+                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                    datasets: [
+                      {
+                          label: 'FY15 Business',
+                          fillColor: '#FFFFFF',
+                          strokeColor: 'rgba(69,201,102,0.9)',
+                          highlightFill: 'rgba(69,201,102,0.9)',
+                          highlightStroke: 'rgba(220,220,220,1)',
+                          data: [65, 59, 80, 81, 56, 55, 40]
+                      },
+                      {
+                          label: 'FY14 Business',
+                          fillColor: '#FFFFFF',
+                          strokeColor: 'rgba(1,187,205,0.8)',
+                          highlightFill: 'rgba(38, 208, 255, 0.75)',
+                          highlightStroke: 'rgba(151,187,205,1)',
+                          data: [28, 48, 40, 19, 86, 27, 30]
+                      }
+                    ]
+                };
+
+                // Chart.js Options
+                $scope.skillChartOptions = {
+
+                    // Sets the chart to be responsive
+                    responsive: true,
+
+                    //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+                    scaleBeginAtZero: true,
+
+                    //Boolean - Whether grid lines are shown across the chart
+                    scaleShowGridLines: true,
+
+                    //String - Colour of the grid lines
+                    scaleGridLineColor: "rgba(0,0,0,.05)",
+
+                    //Number - Width of the grid lines
+                    scaleGridLineWidth: 1,
+
+                    //Boolean - If there is a stroke on each bar
+                    barShowStroke: true,
+
+                    //Number - Pixel width of the bar stroke
+                    barStrokeWidth: 2,
+
+                    //Number - Spacing between each of the X value sets
+                    barValueSpacing: 5,
+
+                    //Number - Spacing between data sets within X values
+                    barDatasetSpacing: 1,
+
+                    //String - A legend template
+                    legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+                };
+
+                $scope.ProjectChartData = [];
+
+                $scope.UpdateProjChart = function () {
+                    $http({
+                        method: 'GET',
+                        url: 'api/Dashboard/GetProjChartData?authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
+                    }).
+                  success(function (data, status, headers, config) {
+                      if (data != null) {
+                          debugger;
+                          $scope.ProjectChartData = [];
+                          var ProjectChartDataList = JSON.parse(data[0]);
+                          for (i = 0; i <= ProjectChartDataList.length; i++) {
+                              var dataItem = new Object();
+                              dataItem.value = ProjectChartDataList[i].Count;
+                              dataItem.label = ProjectChartDataList[i].ProjectStatus;
+                              dataItem.color = colors[i];
+                              dataItem.highlight = highlights[i];
+                              $scope.ProjectChartData.push(dataItem);
+                          }
+                          //$scope.revenueChartPrevData = JSON.parse(data[1]);
+                          //$scope.revenueChartCurrData = JSON.parse(data[0]);
+                          //$scope.skillChartData.datasets[0].data = $scope.revenueChartCurrData;
+                          //$scope.skillChartData.datasets[1].data = $scope.revenueChartPrevData;
+                          //$scope.skillChartData.datasets[0].label = JSON.parse(data[2]);
+                          //$scope.skillChartData.datasets[1].label = JSON.parse(data[3]);
+                      }
+                  }).
+                  error(function (data, status, headers, config) {
+                      // called asynchronously if an error occurs
+                      // or server returns response with an error status.
+                      $scope.AllResources = -1;
+                  });
+                };
+
+                //$scope.UpdateProjChart();
+
+                //// Chart.js Data
+                //$scope.ProjectChartData = [
+                //  {
+                //      value: 0,
+                //      color: '#F7464A',
+                //      highlight: '#FF5A5E',
+                //      label: 'Sitecore'
+                //  }];
+                //  {
+                //      value: 0,
+                //      color: '#46BFBD',
+                //      highlight: '#5AD3D1',
+                //      label: 'Hybris'
+                //  },
+                //  {
+                //      value: 0,
+                //      color: '#FDB45C',
+                //      highlight: '#FFC870',
+                //      label: 'Adobe CQ'
+                //  },
+                //  {
+                //      value: 0,
+                //      color: '#46BFBA',
+                //      highlight: '#5AD3D1',
+                //      label: 'Biztalk'
+                //  },
+                //  {
+                //      value: 0,
+                //      color: '#FDB4AC',
+                //      highlight: '#FFC870',
+                //      label: 'Mobile'
+                //  }
+                //];
+
+                // Chart.js Options
+                $scope.ProjectChartOptions = {
+
+                    // Sets the chart to be responsive
+                    responsive: true,
+
+                    //Boolean - Whether we should show a stroke on each segment
+                    segmentShowStroke: true,
+
+                    //String - The colour of each segment stroke
+                    segmentStrokeColor: '#fff',
+
+                    //Number - The width of each segment stroke
+                    segmentStrokeWidth: 2,
+
+                    //Number - The percentage of the chart that we cut out of the middle
+                    percentageInnerCutout: 50, // This is 0 for Pie charts
+
+                    //Number - Amount of animation steps
+                    animationSteps: 100,
+
+                    //String - Animation easing effect
+                    animationEasing: 'easeOutQuint',
+
+                    //Boolean - Whether we animate the rotation of the Doughnut
+                    animateRotate: false,
+
+                    //Boolean - Whether we animate scaling the Doughnut from the centre
+                    animateScale: false,
+
+                    //String - A legend template     
+                    legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+
+                };
+                //End
+            }
+        }).
+        error(function (data, status, headers, config) {
+            $scope.UserValidated = false;
+            $scope.LoginMessage = "* user name/password not correct";
+        });
+    }
+    $scope.UserLogout = function () {
+        $scope.UserIdentity = null;
+        $scope.UserPassword = null;
+        $scope.UserValidated = false;
+        $scope.LoginMessage = null;
+    }
+
 
 
 }]);
@@ -297,7 +316,7 @@ CICPApp.controller('ActionItemsController', ['$scope', '$filter', '$http', funct
 
         $http({
             method: 'GET',
-            url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
+            url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID + '&authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
         }).
         success(function (data, status, headers, config) {
 
@@ -322,6 +341,7 @@ CICPApp.controller('ActionItemsController', ['$scope', '$filter', '$http', funct
         var referenceData = new Object();
         referenceData.storageId = STORAGE_ID;
         referenceData.storageData = JSON.stringify(todos);
+        referenceData.authToken = $scope.UserIdentity + "-" + $scope.UserPassword;
         $http({
             url: 'api/Dashboard/SetReferenceData',
             method: "POST",
@@ -399,14 +419,14 @@ CICPApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', fu
         ////debugger;
         $http({
             method: 'GET',
-            url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID,
+            url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID + '&authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword,
         }).
         success(function (data, status, headers, config) {
 
             if (data != 'null') {
                 ProjectDetails = $scope.ActiveProjectDetails = JSON.parse(JSON.parse(data));
                 $scope.OriginalProjectDetails = JSON.parse(JSON.parse(data));
-                $scope.$parent.ActiveProjects = ProjectDetails.length;
+                $scope.$parent.ActiveProjects = $filter('filter')(ProjectDetails, { Stage: "Sold" }).length;
                 $scope.UpdateChart();
             }
         }).
@@ -452,7 +472,8 @@ CICPApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', fu
         projectRequest.Projects = ProjectDetails;
         projectRequest.Project = ProjectEntity;
         projectRequest.action = action;
-        
+        projectRequest.authToken = $scope.UserIdentity + "-" + $scope.UserPassword;
+
         $http({
             method: 'POST',
             url: 'api/Dashboard/UpsertProject',
@@ -463,7 +484,7 @@ CICPApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', fu
            if (data != 'null') {
                ProjectDetails = $scope.ActiveProjectDetails = JSON.parse(JSON.parse(data));
                $scope.OriginalProjectDetails = JSON.parse(JSON.parse(data));
-               $scope.$parent.ActiveProjects = ProjectDetails.length;
+               $scope.$parent.ActiveProjects = $filter('filter')(ProjectDetails, { Stage: "Sold" }).length;
                $scope.UpdateChart();
 
                $scope.ActiveProjectDetails = ProjectDetails;
@@ -471,7 +492,7 @@ CICPApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', fu
            }
        }).
        error(function (data, status, headers, config) {
-          //error handling logic
+           //error handling logic
        });
 
     };
@@ -488,7 +509,7 @@ CICPApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', fu
 
         $http({
             method: 'GET',
-            url: 'api/Dashboard/GetReferenceData?storageId=KeyUpdates'
+            url: 'api/Dashboard/GetReferenceData?storageId=KeyUpdates&authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
         }).
         success(function (data, status, headers, config) {
 
@@ -517,6 +538,7 @@ CICPApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', fu
         var referenceData = new Object();
         referenceData.storageId = 'KeyUpdates';
         referenceData.storageData = JSON.stringify(keyUpdates);
+        referenceData.authToken = $scope.UserIdentity + "-" + $scope.UserPassword;
         $http({
             url: 'api/Dashboard/SetReferenceData',
             method: "POST",
@@ -554,7 +576,7 @@ CICPApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', fu
     $scope.UpdateChart = function () {
         $http({
             method: 'GET',
-            url: 'api/Dashboard/GetProjectChartData'
+            url: 'api/Dashboard/GetProjectChartData?authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
@@ -639,7 +661,7 @@ CICPApp.controller('ActiveResourcesController', ['$scope', '$http', 'FileUploade
     $scope.getResources = function () {
         $http({
             method: 'GET',
-            url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
+            url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID + '&authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
         }).
         success(function (data, status, headers, config) {
             if (data != null) {
@@ -655,7 +677,8 @@ CICPApp.controller('ActiveResourcesController', ['$scope', '$http', 'FileUploade
 
         $http({
             method: 'GET',
-            url: 'api/Dashboard/GetReferenceData?storageId=GSSResources'
+            url: 'api/Dashboard/GetReferenceData?storageId=GSSResources&authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
+
         }).
        success(function (data, status, headers, config) {
            if (data != null) {
@@ -709,6 +732,7 @@ CICPApp.controller('ActiveResourcesController', ['$scope', '$http', 'FileUploade
         resourceRequest.Resources = resources;
         resourceRequest.Resource = resource;
         resourceRequest.Action = action;
+        resourceRequest.authToken = $scope.UserIdentity + "-" + $scope.UserPassword;
 
         $http({
             method: 'POST',
@@ -738,7 +762,7 @@ CICPApp.controller('ActiveResourcesController', ['$scope', '$http', 'FileUploade
     $scope.UpdateChart = function () {
         $http({
             method: 'GET',
-            url: 'api/Dashboard/GetResourceChartData'
+            url: 'api/Dashboard/GetResourceChartData?authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
@@ -845,7 +869,7 @@ CICPApp.controller('NewActionItemsController', ['$scope', '$filter', '$http', fu
     $scope.getNewToDos = function () {
         $http({
             method: 'GET',
-            url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
+            url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID + '&authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
         }).
         success(function (data, status, headers, config) {
 
@@ -874,6 +898,7 @@ CICPApp.controller('NewActionItemsController', ['$scope', '$filter', '$http', fu
         var referenceData = new Object();
         referenceData.storageId = STORAGE_ID;
         referenceData.storageData = JSON.stringify(NewToDos);
+        referenceData.authToken = $scope.UserIdentity + "-" + $scope.UserPassword;
         $http({
             url: 'api/Dashboard/SetReferenceData',
             method: "POST",
@@ -976,7 +1001,7 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
     var keyUpdates = $scope.keyUpdates = [];
 
     $scope.getKeyUpdates = function () {
-        ////debugger;
+        ////
         $http({
             method: 'GET',
             url: 'api/Dashboard/GetReferenceData?storageId=KeyUpdates'
@@ -1041,6 +1066,225 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
 
     //Start 
 
+    $scope.UpdateActualUSIEngmntByIMLead = function () {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetActualUSIEngmntByIMLead?authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
+        }).
+      success(function (data, status, headers, config) {
+          if (data != null) {
+              //
+
+              $scope.USIEngmntByIMLead = JSON.parse(data[0]);
+
+              $scope.USIEngmntByIMLeadData.datasets[0].data = $scope.USIEngmntByIMLead;
+
+          }
+      }).
+      error(function (data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+
+      });
+    };
+
+    $scope.UpdateActualUSIEngmntByIMLead();
+
+
+    $scope.USIEngmntByIMLeadData = {
+        labels: ['Pineda,Raymond', 'Finklestein,Perry', 'D-Ercole,Nat', 'IM House'],
+        datasets: [
+          {
+              label: 'IM Lead',
+              fillColor: '#0cc09f',
+              strokeColor: 'rgba(220,220,220,0.8)',
+              highlightFill: '#0aac8e',
+              highlightStroke: 'rgba(220,220,220,1)',
+              data: $scope.USIEngmntByIMLead
+          }
+        ]
+    };
+
+    $scope.USIEngmntByIMLeadDataOptions = {
+
+        // Sets the chart to be responsive
+        responsive: true,
+
+        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+        scaleBeginAtZero: true,
+
+        //Boolean - Whether grid lines are shown across the chart
+        scaleShowGridLines: true,
+
+        //String - Colour of the grid lines
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+
+        //Number - Width of the grid lines
+        scaleGridLineWidth: 1,
+
+        //Boolean - If there is a stroke on each bar
+        barShowStroke: true,
+
+        //Number - Pixel width of the bar stroke
+        barStrokeWidth: 2,
+
+        //Number - Spacing between each of the X value sets
+        barValueSpacing: 50,
+
+        //Number - Spacing between data sets within X values
+        barDatasetSpacing: 1,
+
+        //String - A legend template
+        legendTemplate: '<div class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i+=3){%><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(i<datasets.length){%><%=datasets[i].label%><%}%><%if(i+1<datasets.length){%><span style="background-color:<%=datasets[i+1].fillColor%>"></span> &nbsp; <%=datasets[i+1].label%><%}%><%if(i+2<datasets.length){%><span style="background-color:<%=datasets[i+2].fillColor%>"></span><%=datasets[i+2].label%><%}%><%}%></div>'
+    };
+
+    $scope.UpdateQualifiedPursuitsByCustomer = function () {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetQualifiedPursuitsByCustomer?authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
+        }).
+      success(function (data, status, headers, config) {
+          if (data != null) {
+              //
+
+              $scope.QualifiedPursuitsByCustomer = JSON.parse(data[0]);
+
+              $scope.QualifiedPursuitsByCustomerData.datasets[0].data = $scope.QualifiedPursuitsByCustomer;
+
+          }
+      }).
+      error(function (data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+
+      });
+    };
+
+    $scope.UpdateQualifiedPursuitsByCustomer();
+
+
+    $scope.QualifiedPursuitsByCustomerData = {
+        labels: ['CC', 'FRHII', 'HOOL', 'CBB', 'UA', 'HC', 'ICBC', 'HEI', 'SEI', '3SH'],
+        datasets: [
+          {
+              label: 'Account',
+              fillColor: '#0cc09f',
+              strokeColor: 'rgba(220,220,220,0.8)',
+              highlightFill: '#0aac8e',
+              highlightStroke: 'rgba(220,220,220,1)',
+              data: $scope.QualifiedPursuitsByCustomer
+          }
+        ]
+    };
+
+    $scope.QualifiedPursuitsByCustomerDataDataOptions = {
+
+        // Sets the chart to be responsive
+        responsive: true,
+
+        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+        scaleBeginAtZero: true,
+
+        //Boolean - Whether grid lines are shown across the chart
+        scaleShowGridLines: true,
+
+        //String - Colour of the grid lines
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+
+        //Number - Width of the grid lines
+        scaleGridLineWidth: 1,
+
+        //Boolean - If there is a stroke on each bar
+        barShowStroke: true,
+
+        //Number - Pixel width of the bar stroke
+        barStrokeWidth: 2,
+
+        //Number - Spacing between each of the X value sets
+        barValueSpacing: 50,
+
+        //Number - Spacing between data sets within X values
+        barDatasetSpacing: 1,
+
+        //String - A legend template
+        legendTemplate: '<div class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i+=3){%><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(i<datasets.length){%><%=datasets[i].label%><%}%><%if(i+1<datasets.length){%><span style="background-color:<%=datasets[i+1].fillColor%>"></span> &nbsp; <%=datasets[i+1].label%><%}%><%if(i+2<datasets.length){%><span style="background-color:<%=datasets[i+2].fillColor%>"></span><%=datasets[i+2].label%><%}%><%}%></div>'
+    };
+
+    $scope.UpdateActualUSIEngmntByClient = function () {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetActualUSIEngmntByClient?authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
+        }).
+      success(function (data, status, headers, config) {
+          if (data != null) {
+              //
+
+              $scope.USIEngmntByClient = JSON.parse(data[0]);
+
+              $scope.USIEngmntByClientData.datasets[0].data = $scope.USIEngmntByClient;
+
+          }
+      }).
+      error(function (data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+
+      });
+    };
+
+    $scope.UpdateActualUSIEngmntByClient();
+
+
+    $scope.USIEngmntByClientData = {
+        labels: ['FRHII', 'ON-MCYS', 'CSI', 'BGC', 'IBMCL.', 'SCAA&T', 'CIBC', 'TDBG', 'CBB', 'CII'],
+        datasets: [
+          {
+              label: 'Service - Client Name',
+              fillColor: '#0cc09f',
+              strokeColor: 'rgba(220,220,220,0.8)',
+              highlightFill: '#0aac8e',
+              highlightStroke: 'rgba(220,220,220,1)',
+              data: $scope.USIEngmntByClient
+          }
+        ]
+    };
+
+    $scope.USIEngmntByClientDataOptions = {
+
+        // Sets the chart to be responsive
+        responsive: true,
+
+        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+        scaleBeginAtZero: true,
+
+        //Boolean - Whether grid lines are shown across the chart
+        scaleShowGridLines: true,
+
+        //String - Colour of the grid lines
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+
+        //Number - Width of the grid lines
+        scaleGridLineWidth: 1,
+
+        //Boolean - If there is a stroke on each bar
+        barShowStroke: true,
+
+        //Number - Pixel width of the bar stroke
+        barStrokeWidth: 2,
+
+        //Number - Spacing between each of the X value sets
+        barValueSpacing: 50,
+
+        //Number - Spacing between data sets within X values
+        barDatasetSpacing: 1,
+
+        //String - A legend template
+        legendTemplate: '<div class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i+=3){%><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(i<datasets.length){%><%=datasets[i].label%><%}%><%if(i+1<datasets.length){%><span style="background-color:<%=datasets[i+1].fillColor%>"></span> &nbsp; <%=datasets[i+1].label%><%}%><%if(i+2<datasets.length){%><span style="background-color:<%=datasets[i+2].fillColor%>"></span><%=datasets[i+2].label%><%}%><%}%></div>'
+    };
+
+
+
+
     $scope.UpdateProjectDistributionChart = function () {
         $http({
             method: 'GET',
@@ -1048,7 +1292,7 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
-              //debugger;
+              //
 
               $scope.ProjectDistLabels = JSON.parse(data[0]);
               $scope.ProjectDistData = JSON.parse(data[1]);
@@ -1124,7 +1368,7 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
-              //debugger;
+              //
 
               $scope.ResourceMonthLabels = JSON.parse(data[0]);
               $scope.ResourceMonthData = JSON.parse(data[1]);
@@ -1192,6 +1436,92 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
 
     };
 
+    $scope.UpdateActualVsBudgetChart = function () {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetActualVsBudgetHoursChartData?authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
+        }).
+      success(function (data, status, headers, config) {
+          if (data != null) {
+
+              $scope.usiHoursActualData = JSON.parse(data[0]);
+              $scope.usiHoursBudgetData = JSON.parse(data[1]);
+
+              $scope.actualVsBudgetData.datasets[0].data = $scope.usiHoursActualData;
+              $scope.actualVsBudgetData.datasets[1].data = $scope.usiHoursBudgetData;
+              $scope.actualVsBudgetData.datasets[0].label = JSON.parse(data[2]);
+              $scope.actualVsBudgetData.datasets[1].label = JSON.parse(data[3]);
+          }
+      }).
+      error(function (data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+          $scope.AllResources = -1;
+      });
+    };
+
+    // Chart.js Data
+    $scope.actualVsBudgetData = {
+        labels: ['201501', '201502', '201503', '201504', '201505', '201506', '201507', '201508', '201509', '201510', '201511', '201512', '201513'],
+
+        datasets: [
+          {
+              label: 'Actual',
+
+              fillColor: 'rgba(620,201,102,0.75)',
+              strokeColor: 'rgba(220,220,220,0.8)',
+              highlightFill: 'rgba(69,201,102,0.9)',
+              highlightStroke: 'rgba(220,220,220,1)',
+              data: $scope.usiHoursActualData
+          },
+          {
+              label: 'Budget',
+              fillColor: '#FFFFFF',
+              strokeColor: 'rgba(1,187,205,0.8)',
+              highlightFill: 'rgba(38, 208, 255, 0.75)',
+              highlightStroke: 'rgba(151,187,205,1)',
+              data: $scope.usiHoursBudgetData
+          }
+        ]
+    };
+
+    // Chart.js Options
+    $scope.actualVsBudgetDataOptions = {
+
+        // Sets the chart to be responsive
+        responsive: true,
+
+        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+        scaleBeginAtZero: true,
+
+        //Boolean - Whether grid lines are shown across the chart
+        scaleShowGridLines: true,
+
+        //String - Colour of the grid lines
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+
+        //Number - Width of the grid lines
+        scaleGridLineWidth: 1,
+
+        //Boolean - If there is a stroke on each bar
+        barShowStroke: true,
+
+        //Number - Pixel width of the bar stroke
+        barStrokeWidth: 2,
+
+        //Number - Spacing between each of the X value sets
+        barValueSpacing: 5,
+
+        //Number - Spacing between data sets within X values
+        barDatasetSpacing: 1,
+
+        //String - A legend template
+        legendTemplate: '<div class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i+=3){%><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(i<datasets.length){%><%=datasets[i].label%><%}%><%if(i+1<datasets.length){%><span style="background-color:<%=datasets[i+1].fillColor%>"></span> &nbsp; <%=datasets[i+1].label%><%}%><%if(i+2<datasets.length){%><span style="background-color:<%=datasets[i+2].fillColor%>"></span><%=datasets[i+2].label%><%}%><%}%></div>'
+        //legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+    };
+
+    $scope.UpdateActualVsBudgetChart();
+
     // added by Vibhav. To update skill revenue chart 
     $scope.UpdateRevenueChart = function () {
         $http({
@@ -1200,7 +1530,7 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
-              debugger;
+
               $scope.revenueChartPrevData = JSON.parse(data[1]);
               $scope.revenueChartCurrData = JSON.parse(data[0]);
 
@@ -1331,6 +1661,181 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
         legendTemplate: '<div class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i+=3){%><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(i<datasets.length){%><%=datasets[i].label%><%}%><%if(i+1<datasets.length){%><span style="background-color:<%=datasets[i+1].fillColor%>"></span> &nbsp; <%=datasets[i+1].label%><%}%><%if(i+2<datasets.length){%><span style="background-color:<%=datasets[i+2].fillColor%>"></span><%=datasets[i+2].label%><%}%><%}%></div>'
     };
 
+
+    $scope.UpdateActivePursuitsChart = function () {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetActivePursuitsChartData?authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
+        }).
+      success(function (data, status, headers, config) {
+          if (data != null) {
+
+              $scope.yesProposalSupport = JSON.parse(data[0]);
+              $scope.yesStillQualifying = JSON.parse(data[1]);
+
+              $scope.activePursuitsData.datasets[0].data = $scope.yesProposalSupport;
+              $scope.activePursuitsData.datasets[1].data = $scope.yesStillQualifying;
+              $scope.activePursuitsData.datasets[0].label = JSON.parse(data[2]);
+              $scope.activePursuitsData.datasets[1].label = JSON.parse(data[3]);
+          }
+      }).
+      error(function (data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+          $scope.AllResources = -1;
+      });
+    };
+
+    // Chart.js Data
+    $scope.activePursuitsData = {
+        labels: ['2015 - 05', '2015 - 07', '2015 - 09', '2015 - 10', '2015 - 11', '2015 - 12', '2015 - 13', '2016 - 01', '2016 - 02', '2016 - 05', '2017 - 01', '2017 - 08', '2017 - 10'],
+
+        datasets: [
+          {
+              label: 'Yes - Proposal Support',
+              fillColor: 'rgba(620,201,102,0.75)',
+              strokeColor: 'rgba(220,220,220,0.8)',
+              highlightFill: 'rgba(69,201,102,0.9)',
+              highlightStroke: 'rgba(220,220,220,1)',
+              data: $scope.yesProposalSupport
+          },
+          {
+              label: 'Yes-Still Qualifying',
+              fillColor: '#FFFFFF',
+              strokeColor: 'rgba(1,187,205,0.8)',
+              highlightFill: 'rgba(38, 208, 255, 0.75)',
+              highlightStroke: 'rgba(151,187,205,1)',
+              data: $scope.yesStillQualifying
+          }
+        ]
+    };
+
+    // Chart.js Options
+    $scope.activePursuitsDataOptions = {
+
+        // Sets the chart to be responsive
+        responsive: true,
+
+        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+        scaleBeginAtZero: true,
+
+        //Boolean - Whether grid lines are shown across the chart
+        scaleShowGridLines: true,
+
+        //String - Colour of the grid lines
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+
+        //Number - Width of the grid lines
+        scaleGridLineWidth: 1,
+
+        //Boolean - If there is a stroke on each bar
+        barShowStroke: true,
+
+        //Number - Pixel width of the bar stroke
+        barStrokeWidth: 2,
+
+        //Number - Spacing between each of the X value sets
+        barValueSpacing: 5,
+
+        //Number - Spacing between data sets within X values
+        barDatasetSpacing: 1,
+
+        //String - A legend template
+        legendTemplate: '<div class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i+=3){%><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(i<datasets.length){%><%=datasets[i].label%><%}%><%if(i+1<datasets.length){%><span style="background-color:<%=datasets[i+1].fillColor%>"></span> &nbsp; <%=datasets[i+1].label%><%}%><%if(i+2<datasets.length){%><span style="background-color:<%=datasets[i+2].fillColor%>"></span><%=datasets[i+2].label%><%}%><%}%></div>'
+        //legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+    };
+
+    $scope.UpdateActivePursuitsChart();
+
+
+
+
+    $scope.UpdateActivePursuitsByLeadChart = function () {
+        $http({
+            method: 'GET',
+            url: 'api/Dashboard/GetPursuitsByLeadChartData?authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
+        }).
+      success(function (data, status, headers, config) {
+          if (data != null) {
+
+              $scope.yesProposalSupportByLead = JSON.parse(data[0]);
+              $scope.yesStillQualifyingByLead = JSON.parse(data[1]);
+
+              $scope.activePursuitsByLeadData.datasets[0].data = $scope.yesProposalSupportByLead;
+              $scope.activePursuitsByLeadData.datasets[1].data = $scope.yesStillQualifyingByLead;
+          }
+      }).
+      error(function (data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+          $scope.AllResources = -1;
+      });
+    };
+
+    // Chart.js Data
+    $scope.activePursuitsByLeadData = {
+        labels: ['LEPETERSON', 'MARCIADOUGLAS', 'PFINKLESTEIN', 'RLABUHN', 'NDERCOLE', 'JOWALLACE', 'MBHARADWAJ', 'RPINEDA', 'JJAAJ'],
+
+        datasets: [
+          {
+              label: 'Yes - Proposal Support',
+              fillColor: 'rgba(620,201,102,0.75)',
+              strokeColor: 'rgba(220,220,220,0.8)',
+              highlightFill: 'rgba(69,201,102,0.9)',
+              highlightStroke: 'rgba(220,220,220,1)',
+              data: $scope.yesProposalSupportByLead
+          },
+          {
+              label: 'Yes-Still Qualifying',
+              fillColor: '#FFFFFF',
+              strokeColor: 'rgba(1,187,205,0.8)',
+              highlightFill: 'rgba(38, 208, 255, 0.75)',
+              highlightStroke: 'rgba(151,187,205,1)',
+              data: $scope.yesStillQualifyingByLead
+          }
+        ]
+    };
+
+    // Chart.js Options
+    $scope.activePursuitsByLeadDataOptions = {
+
+        // Sets the chart to be responsive
+        responsive: true,
+
+        //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+        scaleBeginAtZero: true,
+
+        //Boolean - Whether grid lines are shown across the chart
+        scaleShowGridLines: true,
+
+        //String - Colour of the grid lines
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+
+        //Number - Width of the grid lines
+        scaleGridLineWidth: 1,
+
+        //Boolean - If there is a stroke on each bar
+        barShowStroke: true,
+
+        scaleFontSize: 10,
+
+        //Number - Pixel width of the bar stroke
+        barStrokeWidth: 2,
+
+        //Number - Spacing between each of the X value sets
+        barValueSpacing: 5,
+
+        //Number - Spacing between data sets within X values
+        barDatasetSpacing: 1,
+
+        //String - A legend template
+        legendTemplate: '<div class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i+=3){%><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(i<datasets.length){%><%=datasets[i].label%><%}%><%if(i+1<datasets.length){%><span style="background-color:<%=datasets[i+1].fillColor%>"></span> &nbsp; <%=datasets[i+1].label%><%}%><%if(i+2<datasets.length){%><span style="background-color:<%=datasets[i+2].fillColor%>"></span><%=datasets[i+2].label%><%}%><%}%></div>'
+        //legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+    };
+
+    $scope.UpdateActivePursuitsByLeadChart();
+
+
     $scope.UpdateTechChart = function () {
         $http({
             method: 'GET',
@@ -1338,7 +1843,7 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
-              debugger;
+
               var colors = ['#F7464A', '#46BFBD', '#FDB45C', '#46BFBA', '#FDB4AC', '#F7464A', '#46BFBD', '#FDB45C', '#46BFBA', '#FDB4AC', '#F7464A', '#46BFBD', '#FDB45C', '#46BFBA', '#FDB4AC', '#F7464A', '#46BFBD', '#FDB45C', '#46BFBA', '#FDB4AC'];
               var highlights = ['#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870', '#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870', '#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870', '#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870'];
               $scope.ProjectChartData = [];
@@ -1415,7 +1920,7 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
-              //debugger;
+              //
               $scope.SoldProposedChartLabels = JSON.parse(data[0]);
               $scope.SoldProjectsChartData = JSON.parse(data[1]);
               $scope.ProposedProjectsChartData = JSON.parse(data[2]);
@@ -1529,7 +2034,7 @@ CICPApp.controller('InvoicesController', ['$scope', '$filter', '$http', 'FileUpl
         debugger;
         $http({
             method: 'GET',
-            url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID
+            url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID + '&authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
         }).
         success(function (data, status, headers, config) {
 
@@ -1577,6 +2082,7 @@ CICPApp.controller('InvoicesController', ['$scope', '$filter', '$http', 'FileUpl
         var referenceData = new Object();
         referenceData.storageId = STORAGE_ID;
         referenceData.storageData = JSON.stringify(InvoiceDetails);
+        referenceData.authToken = $scope.UserIdentity + "-" + $scope.UserPassword;
         $http({
             url: 'api/Dashboard/SetReferenceData',
             method: "POST",
@@ -1682,7 +2188,7 @@ CICPApp.controller('InvoicesController', ['$scope', '$filter', '$http', 'FileUpl
     };
 
     $scope.predicate;
-    $scope.reverse=false;
+    $scope.reverse = false;
     $scope.sort = function (item) {
         if ($scope.predicate == 'Period') {
             return new Date(item.Period);
@@ -1700,12 +2206,10 @@ CICPApp.controller('InvoicesController', ['$scope', '$filter', '$http', 'FileUpl
     //};
 }]);
 
-angular.module('CICPApp').filter('changeDateFormat', function($filter)
-{
-    return function(input)
-    {
-        if(input == null){ return ""; }
-        var _date = $filter('date')(new Date(input),'MMM-yy');
+angular.module('CICPApp').filter('changeDateFormat', function ($filter) {
+    return function (input) {
+        if (input == null) { return ""; }
+        var _date = $filter('date')(new Date(input), 'MMM-yy');
         return _date.toUpperCase();
         //return new Date(input);
     };

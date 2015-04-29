@@ -234,6 +234,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="images\DD_RGB_black-small.jpg" />
+    <Content Include="images\DD_RGB_white-black-small.jpg" />
     <Content Include="js\angular-file-upload.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -486,7 +487,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>2424</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

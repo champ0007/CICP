@@ -1,80 +1,72 @@
 ﻿<div class="col-lg-4">
-
     <div class="panel panel-blue">
         <div class="panel-heading">
-            <i class="fa fa-bell fa-fw"></i> Competency Distribution
-        </div>
-        <!-- /.panel-heading -->
-        <div class="panel-body panel-chart">
-            <canvas tc-chartjs-doughnut chart-options="ProjectChartOptions" chart-data="ProjectChartData" class="col-lg-4" auto-legend></canvas>
-        </div>
-        <!-- /.panel-body -->
-    </div>
-
-    <div class="panel panel-blue">
-        <div class="panel-heading">
-            <i class="fa fa-ma fa-fw"></i> USI Revenue Year on Year
-        </div>
-        <div class="panel-body panel-chart">
-            <canvas tc-chartjs-bar chart-options="YoYOptions" chart-data="YoYData" auto-legend></canvas>
-        </div>
-        <!-- /.panel-body -->
-    </div>  
-</div>
-
-<div class="col-lg-4">
-  
-    <div class="panel panel-blue">
-        <div class="panel-heading">
-            <i class="fa fa-bell fa-fw"></i> Project Distribution
-        </div>
-        <!-- /.panel-heading -->
-        <div class="panel-body panel-chart">
-            <canvas tc-chartjs-bar chart-options="ProjectDistributionOptions" chart-data="ProjectDistributionData" auto-legend></canvas>
-        </div>
-        <!-- /.panel-body -->
-    </div>
-    
-      <div class="panel panel-blue">
-        <div class="panel-heading">
-            <i class="fa fa-bar-chart-o fa-fw"></i> USI Revenue - AU Cost
+            <i class="fa fa-bar-chart-o fa-fw"></i> Actual vs Budget USI Hours
         </div>
         <div class="panel-body panel-chart">
             <!--<div id="morris-bar-chart"></div>-->
-            <canvas tc-chartjs-bar chart-options="skillChartOptions" chart-data="skillChartData" auto-legend></canvas>
+            <canvas tc-chartjs-bar chart-options="actualVsBudgetDataOptions" chart-data="actualVsBudgetData" auto-legend></canvas>
         </div>
         <!-- /.panel-body -->
     </div>
-
-  
+    <div class="panel panel-blue">
+        <div class="panel-heading">
+            <i class="fa fa-ma fa-fw"></i> Active Pursuits by Close Period
+        </div>
+        <div class="panel-body panel-chart">
+            <canvas tc-chartjs-bar chart-options="activePursuitsDataOptions" chart-data="activePursuitsData" auto-legend></canvas>
+        </div>
+        <!-- /.panel-body -->
+    </div>
 </div>
-
 <div class="col-lg-4">
 
     <div class="panel panel-blue">
         <div class="panel-heading">
-            <i class="fa fa-ma fa-fw"></i> Resource Demand - Sold vs Proposed
+            <i class="fa fa-bell fa-fw"></i> Actual USI Engagement By IM Lead (Hours)
         </div>
+        <!-- /.panel-heading -->
         <div class="panel-body panel-chart">
-            <canvas tc-chartjs-line chart-options="SoldProposedOptions" chart-data="SoldProposedData" auto-legend></canvas>
+            <canvas tc-chartjs-bar chart-options="USIEngmntByIMLeadDataOptions" chart-data="USIEngmntByIMLeadData" auto-legend></canvas>
         </div>
         <!-- /.panel-body -->
     </div>
 
     <div class="panel panel-blue">
         <div class="panel-heading">
-            <i class="fa fa-bar-chart-o fa-fw"></i> USI Resource Deployment
+            <i class="fa fa-bar-chart-o fa-fw"></i> Active  USI Pursuits By Lead
         </div>
         <div class="panel-body panel-chart">
             <!--<div id="morris-bar-chart"></div>-->
-            <canvas tc-chartjs-bar chart-options="ResourceDeploymentOptions" chart-data="ResourceDeploymentData" auto-legend></canvas>
+            <canvas tc-chartjs-bar chart-options="activePursuitsByLeadDataOptions" chart-data="activePursuitsByLeadData" auto-legend></canvas>
+        </div>
+        <!-- /.panel-body -->
+    </div>
+
+</div>
+<div class="col-lg-4">
+    <div class="panel panel-blue">
+        <div class="panel-heading">
+            <i class="fa fa-ma fa-fw"></i> Actual USI Engagement By Client (Hours)
+        </div>
+        <div class="panel-body panel-chart">
+            <canvas tc-chartjs-bar chart-options="USIEngmntByClientDataOptions" chart-data="USIEngmntByClientData" auto-legend></canvas>
+        </div>
+        <!-- /.panel-body -->
+    </div>
+    <div class="panel panel-blue">
+        <div class="panel-heading">
+            <i class="fa fa-bar-chart-o fa-fw"></i> Qualified USI Pursuits By Customer ($)
+        </div>
+        <div class="panel-body panel-chart">
+            <!--<div id="morris-bar-chart"></div>-->
+            <canvas tc-chartjs-bar chart-options="QualifiedPursuitsByCustomerDataDataOptions" chart-data="QualifiedPursuitsByCustomerData" auto-legend></canvas>
         </div>
         <!-- /.panel-body -->
     </div>
 </div>
-
 <script>
-        //$(function () { // when the DOM is ready...
-        //    $("html, body").animate({ scrollTop: $(document).height()}, 1000);
-        //});
+    //$(function () { // when the DOM is ready...
+    //    $("html, body").animate({ scrollTop: $(document).height()}, 1000);
+    //});
 </script>

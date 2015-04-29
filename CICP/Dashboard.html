@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>CICP - Dashboard</title>
+    <title>Dashboard</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -38,16 +38,17 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+
 </head>
 
 <body ng-controller="DashboardController">
 
     <!-- jQuery Version 1.11.0 -->
     <script src="js/jquery-1.11.0.js"></script>
-    
+
     <!-- jQuery UI Version 1.11.2 -->
     <script src="js/jquery-ui-1.11.2.js"></script>
-    
+
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
 
@@ -60,49 +61,107 @@
 
     <!--Angular Route JS-->
     <script src="js/angular-route.min.js"></script>
-    
+
     <!--File Upload-->
     <script src="js/angular-file-upload.js"></script>
-    
+
     <!--Main Dashboard Angular JS-->
     <script src="js/Dashboard/Dashboard.js"></script>
 
     <!--Chart JS Javascript-->
     <script src="js/Chart.js"></script>
     <!--Pagination Directive-->
-    <script src="js/dirPagination.js"></script>    
+    <script src="js/dirPagination.js"></script>
     <script src="js/dirPagination.spec.js"></script>
 
     <!--TC Angular JS-->
     <script src="js/tc-angular-chartjs.min.js"></script>
 
+    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/1.6.0/annyang.min.js"></script>
+    <script>
+        if (annyang) {
+            // Let's define our first command. First the text we expect, and then the function it should call
+            var commands = {
+                'go to projects': function () {
+                    //alert('Selected active projects');
+                    window.location.href= 'Dashboard.html#/ActiveProjects';
+                },
+                'go to operations': function () {
+                    //alert('Selected active projects');
+                    window.location.href = 'Dashboard.html#/Operations';
+                },
+                'go to items': function () {
+                    //alert('Selected active projects');
+                    window.location.href = 'Dashboard.html#/NewActionItems';
+                },
+                'go to resources': function () {
+                    //alert('Selected active projects');
+                    window.location.href = 'Dashboard.html#/ActiveResources';
+                }
+            };
+
+            // Add our commands to annyang
+            annyang.addCommands(commands);
+            annyang.debug();
+            // Start listening. You can call this here, or attach this call to an event, button, etc.
+            annyang.start();
+        }
+    </script>-->
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-        <div class="navbar-header">
-            <!--<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>-->
-            <a class="navbar-brand" href="#Dashboard"><img src="images/DD_RGB_black-small.jpg" height=50px" /> </a>
-        </div>
+        <!--<div class="navbar-header">-->
+        <!--<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>-->
+        <!--<a class="navbar-brand" href="#Dashboard"><img src="images/DD_RGB_black-small.jpg" height=50px" /> </a>
+        </div>-->
         <!-- /.navbar-header -->
 
         <ul class="nav navbar-top-links navbar-right">
             <li class="dropdown">
-                <a class="dropdown-toggle" href="#Dashboard">
-                    <i class="fa fa-home fa-fw"></i>  
+                <!--<a class="dropdown-toggle" href="#Dashboard">
+                    <i class="fa fa-home fa-fw"></i>
+                </a>-->
+
+                <a ng-show="UserValidated" title="LogOut">
+                    <i class="fa fa-sign-out fa-fw" ng-click="UserLogout()"></i>
                 </a>
             </li>
-      
+
         </ul>
         <!-- /.navbar-top-links -->
 
 
     </nav>
 
-    <div id="page-wrapper">
+
+    <table align="center" ng-hide="UserValidated" style="min-width: 250px">
+        <tr>
+            <td>
+                <div>
+                    <div class="form-group">
+                        <label for="uid">User Name:</label>
+                        <input type="text" class="form-control" id="uid" placeholder="Enter user name" ng-model="UserIdentity">
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd">Password:</label>
+                        <input type="password" class="form-control" id="pwd" placeholder="Enter password" ng-model="UserPassword">
+                    </div>
+                    <div>
+                        <button class="btn btn-info btn-md" ng-click="ValidateUserLogin()">Login</button>
+                    </div>
+                    <div class="bg-danger text-danger text-warning" style="text-align:center; padding-top:10px;">{{LoginMessage}}</div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <!--<div ng-show="UserValidated" style="text-align:right;"><button class="btn btn-info btn-md" ng-click="UserLogout()">Logout</button></div>-->
+
+    <div id="page-wrapper" ng-show="UserValidated">
         <div class="row">
             <div class="col-lg-12 clearfix">
                 &nbsp;
@@ -423,7 +482,10 @@
             </div>
 
         </div>
+        <div class="row">
+            <div class="col-lg-12"><span class="pull-right"><font color="white">Powered By</font> <img src="images/DD_RGB_white-black-small.jpg" width="100" height="50" /> </span></div>
 
+        </div>
 
 
         <!-- /.row -->
@@ -436,7 +498,7 @@
     <!-- Morris Charts JavaScript -->
     <script src="js/plugins/morris/raphael.min.js"></script>
 
-    
+
 
 
 </body>

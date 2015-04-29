@@ -9,5 +9,7 @@ namespace AUDash.Models
     {
         public string storageId { get; set; }
         public string storageData { get; set; }
+
+        public string authToken { get; set; }
     }
 }
