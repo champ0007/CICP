@@ -311,7 +311,96 @@ namespace AUDash.Controllers
             repo.SetReferenceData("ResourceDataCount", GetResourceDataCount(resources.Count(), DateTime.Now.ToString("MMMyy")));
         }
 
+        public void UploadCICPMasterData()
+        {
+            HttpPostedFile uploadedFile = HttpContext.Current.Request.Files[0];
+            Stream inputStream = uploadedFile.InputStream;
+            int rowCount = 2;
+            ExcelPackage package = new ExcelPackage(inputStream);
+            List<ActualBudget> actualBudgetData = new List<ActualBudget>();
+            List<IMTime> IMTimeData = new List<IMTime>();
+            List<Opportunities> opportunitiesData = new List<Opportunities>();
+            List<OpportunityStatus> opportunityStatusData = new List<OpportunityStatus>();
 
+            //Read Actual/Budget Data
+            ExcelWorksheet resourceWorkSheet = package.Workbook.Worksheets.Where(x => x.Name.Equals("ActualBudget")).First();
+            while (resourceWorkSheet.Cells[rowCount, 1].Value != null)
+            {
+                actualBudgetData.Add(new ActualBudget()
+                {
+                    Series = Convert.ToString(resourceWorkSheet.Cells[rowCount, 1].Value),
+                    Period = Convert.ToInt32(resourceWorkSheet.Cells[rowCount, 2].Value),
+                    TotalHours = Convert.ToDecimal(resourceWorkSheet.Cells[rowCount, 3].Value)
+                });
+
+                rowCount++;
+            }
+
+            rowCount = 2;
+            resourceWorkSheet = package.Workbook.Worksheets.Where(x => x.Name.Equals("IMTime")).First();
+            while (resourceWorkSheet.Cells[rowCount, 1].Value != null)
+            {
+                IMTimeData.Add(new IMTime()
+                {
+                    IMLead = Convert.ToString(resourceWorkSheet.Cells[rowCount, 1].Value),
+                    ServiceClientName = Convert.ToString(resourceWorkSheet.Cells[rowCount, 2].Value),
+                    MandateSF = Convert.ToString(resourceWorkSheet.Cells[rowCount, 3].Value),
+                    Period = Convert.ToInt32(resourceWorkSheet.Cells[rowCount, 4].Value),
+                    IMHours = Convert.ToDecimal(resourceWorkSheet.Cells[rowCount, 5].Value),
+                    NonIMHours = Convert.ToDecimal(resourceWorkSheet.Cells[rowCount, 6].Value),
+                    TotalHours = Convert.ToDecimal(resourceWorkSheet.Cells[rowCount, 7].Value)
+                });
+
+                rowCount++;
+            }
+
+            rowCount = 2;
+            resourceWorkSheet = package.Workbook.Worksheets.Where(x => x.Name.Equals("Opportunities")).First();
+            while (resourceWorkSheet.Cells[rowCount, 1].Value != null)
+            {
+                opportunitiesData.Add(new Opportunities()
+                {
+                    USIOpportunity = Convert.ToString(resourceWorkSheet.Cells[rowCount, 1].Value),
+                    OpportunityId = Convert.ToString(resourceWorkSheet.Cells[rowCount, 2].Value),
+                    Account = Convert.ToString(resourceWorkSheet.Cells[rowCount, 3].Value),
+                    Opportunity = Convert.ToString(resourceWorkSheet.Cells[rowCount, 4].Value),
+                    USIProposalSupport = Convert.ToString(resourceWorkSheet.Cells[rowCount, 5].Value),
+                    IMLead = Convert.ToString(resourceWorkSheet.Cells[rowCount, 6].Value),
+                    USILead = Convert.ToString(resourceWorkSheet.Cells[rowCount, 7].Value),
+                    IMService = Convert.ToString(resourceWorkSheet.Cells[rowCount, 8].Value),
+                    TotalEstimatedRevenue = Convert.ToDecimal(resourceWorkSheet.Cells[rowCount, 9].Value),
+                    TotalEstimatedNSR = Convert.ToDecimal(resourceWorkSheet.Cells[rowCount, 10].Value),
+                    TotalThirdPartyEstRevenue = Convert.ToDecimal(resourceWorkSheet.Cells[rowCount, 11].Value),
+                    ClosePeriod = Convert.ToInt32(resourceWorkSheet.Cells[rowCount, 12].Value.ToString().Split('-')[1].Trim()),
+                    ClosePeriodYear = Convert.ToInt32(resourceWorkSheet.Cells[rowCount, 12].Value.ToString().Split('-')[0].Trim()),
+                    LeadPursuitPartner = Convert.ToString(resourceWorkSheet.Cells[rowCount, 13].Value),
+                    SalesStage = Convert.ToString(resourceWorkSheet.Cells[rowCount, 14].Value),
+                });
+
+                rowCount++;
+            }
+
+            rowCount = 2;
+            resourceWorkSheet = package.Workbook.Worksheets.Where(x => x.Name.Equals("Opportunities Status")).First();
+            while (resourceWorkSheet.Cells[rowCount, 1].Value != null)
+            {
+                opportunityStatusData.Add(new OpportunityStatus()
+                {
+                    IMLead = Convert.ToString(resourceWorkSheet.Cells[rowCount, 1].Value),
+                    USIOpportunity = Convert.ToString(resourceWorkSheet.Cells[rowCount, 2].Value),
+                    Account = Convert.ToString(resourceWorkSheet.Cells[rowCount, 3].Value),
+                    Opportunity = Convert.ToString(resourceWorkSheet.Cells[rowCount, 4].Value),
+                    CurrentStatus = Convert.ToString(resourceWorkSheet.Cells[rowCount, 5].Value),
+                });
+
+                rowCount++;
+            }
+
+            repo.SetReferenceData("ActualBudget", JsonConvert.SerializeObject(actualBudgetData));
+            repo.SetReferenceData("IMTime", JsonConvert.SerializeObject(IMTimeData));
+            repo.SetReferenceData("Opportunities", JsonConvert.SerializeObject(opportunitiesData));
+            repo.SetReferenceData("OpportunitiesStatus", JsonConvert.SerializeObject(opportunityStatusData));
+        }
 
         //POST api/Dashboard/UpsertProject
         [HttpPost]
@@ -382,7 +471,10 @@ namespace AUDash.Controllers
         public List<string> GetActualVsBudgetHoursChartData(string authToken)
         {
             if (authToken.Equals(AUTH_TOKEN))
-                return ParseActualVsBudgetData();
+            {
+                repo.GetReferenceData("ActualBudget");
+                return ParseActualVsBudgetData(JsonConvert.DeserializeObject<List<ActualBudget>>(repo.GetReferenceData("ActualBudget")));
+            }
             else
                 return null;
         }
@@ -390,7 +482,7 @@ namespace AUDash.Controllers
         public List<string> GetActivePursuitsChartData(string authToken)
         {
             if (authToken.Equals(AUTH_TOKEN))
-                return ParseActivePursuitsData();
+                return ParseActivePursuitsData(JsonConvert.DeserializeObject<List<Opportunities>>(repo.GetReferenceData("Opportunities")));
             else
                 return null;
         }
@@ -398,7 +490,7 @@ namespace AUDash.Controllers
         public List<string> GetPursuitsByLeadChartData(string authToken)
         {
             if (authToken.Equals(AUTH_TOKEN))
-                return ParsePursuitsByLeadData();
+                return ParsePursuitsByLeadData(JsonConvert.DeserializeObject<List<Opportunities>>(repo.GetReferenceData("Opportunities")));
             else
                 return null;
         }
@@ -407,7 +499,7 @@ namespace AUDash.Controllers
         public List<string> GetActualUSIEngmntByIMLead(string authToken)
         {
             if (authToken.Equals(AUTH_TOKEN))
-                return ParseActualUSIEngmntByIMLead();
+                return ParseActualUSIEngmntByIMLead(JsonConvert.DeserializeObject<List<IMTime>>(repo.GetReferenceData("IMTime")));
             else
                 return null;
         }
@@ -428,11 +520,18 @@ namespace AUDash.Controllers
                 return null;
         }
 
-        private List<string> ParseActualUSIEngmntByIMLead()
+        private List<string> ParseActualUSIEngmntByIMLead(List<IMTime> IMTimeData)
         {
             List<string> returnList = new List<string>();
-            returnList.Add("[126, 4893.5, 6506, 18276]");
-            returnList.Add("['Pineda,Raymond', 'Finklestein,Perry', 'D-Ercole,Nat', 'IM House']");
+            List<IMTime> groupedResult = IMTimeData
+                 .GroupBy(s => new { s.IMLead })
+                .Select(g => new IMTime
+                {
+                    IMLead = g.Key.IMLead,
+                    TotalHours = g.Sum(x => x.TotalHours)
+                }).OrderByDescending(x => x.TotalHours).ToList();
+            returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(s=>s.IMLead).ToList()));
+            returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(s => s.TotalHours).ToList()));
             return returnList;
         }
 
@@ -450,11 +549,20 @@ namespace AUDash.Controllers
             return returnList;
         }
 
-        private List<string> ParseActualVsBudgetData()
+        private List<string> ParseActualVsBudgetData(List<ActualBudget> actualBudgetData)
         {
             List<string> returnList = new List<string>();
-            returnList.Add("[1210, 1678, 2295, 2320, 2456, 3974, 4245, 3068, 4055, 4500.5, 0, 0, 0]");
-            returnList.Add("[1461, 1461, 1461, 1461, 1461, 1461, 1461, 1461, 1461, 1461, 1461, 1461, 1461]");
+            var groupedResult = actualBudgetData
+                 .GroupBy(s => new { s.Series, s.Period })
+                .Select(g => new
+                        {
+                            Series = g.Key.Series,
+                            Period = g.Key.Period,
+                            TotalHours = g.Sum(x => x.TotalHours)
+                        }).OrderBy(x => x.Series).ThenBy(x => x.Period);
+
+            returnList.Add(JsonConvert.SerializeObject(groupedResult.Where(x => x.Series.Equals("Actual")).Select(x => x.TotalHours).ToList()));
+            returnList.Add(JsonConvert.SerializeObject(groupedResult.Where(x => x.Series.Equals("Budget")).Select(x => x.TotalHours).ToList()));
             returnList.Add("Actual");
             returnList.Add("Budget");
             return returnList;
@@ -462,24 +570,91 @@ namespace AUDash.Controllers
         }
 
 
-        private List<string> ParsePursuitsByLeadData()
+        private List<string> ParsePursuitsByLeadData(List<Opportunities> opportunitiesData)
         {
             List<string> returnList = new List<string>();
-            returnList.Add("[0, 0, 0, 1, 2, 2, 3, 4, 6]");
-            returnList.Add("[3, 4, 2, 4, 4, 0, 8, 9, 3]");
-            returnList.Add("Yes - Proposal Support");
-            returnList.Add("Yes-Still Qualifying");
+
+            List<Opportunities> groupedResult = opportunitiesData
+              .Where(s => s.USIOpportunity.Contains("Yes"))
+              .GroupBy(s => new { s.USIOpportunity, s.IMLead })
+              .Select(g => new Opportunities
+              {
+                  USIOpportunity = g.Key.USIOpportunity,
+                  IMLead = g.Key.IMLead,
+                  TotalCount = g.Count()
+              }).OrderBy(x => x.USIOpportunity).ThenByDescending(x=>x.TotalCount).ToList();
+
+            List<string> KeyLeads = groupedResult.Where(x=>x.USIOpportunity.Contains("Proposal")).OrderByDescending(x => x.TotalCount).GroupBy(s => s.IMLead).Select(s => s.Key).ToList();
+            List<string> KeyCategories = groupedResult.GroupBy(s => s.USIOpportunity).Select(s => s.Key).ToList();
+
+            foreach (string category in KeyCategories)
+            {
+                List<int> dataValues = new List<int>();
+                foreach (string lead in KeyLeads)
+                {
+                    if (groupedResult.Where(s => s.IMLead == lead && s.USIOpportunity == category).Count() > 0)
+                    {
+                        dataValues.Add(groupedResult.Where(s => s.IMLead == lead && s.USIOpportunity == category).Select(s => s.TotalCount).First());
+                    }
+                    else
+                    {
+                        dataValues.Add(0);
+                    }
+                }
+                returnList.Add(JsonConvert.SerializeObject(dataValues));
+            }
+
+            returnList.Add(JsonConvert.SerializeObject(KeyCategories));
+            returnList.Add(JsonConvert.SerializeObject(KeyLeads));
+
+
+            //returnList.Add("[0, 0, 0, 1, 2, 2, 3, 4, 6]");
+            //returnList.Add("[3, 4, 2, 4, 4, 0, 8, 9, 3]");
+            //returnList.Add("Yes - Proposal Support");
+            //returnList.Add("Yes-Still Qualifying");
             return returnList;
 
         }
 
-        private List<string> ParseActivePursuitsData()
+        private List<string> ParseActivePursuitsData(List<Opportunities> opportunitiesData)
         {
+
             List<string> returnList = new List<string>();
-            returnList.Add("[0, 0, 0, 1, 5, 6, 3, 1, 1, 1, 0, 0, 0]");
-            returnList.Add("[2, 1, 1, 1, 6, 15, 2, 3, 0, 3, 1, 1, 1]");
-            returnList.Add("Yes - Proposal Support");
-            returnList.Add("Yes-Still Qualifying");
+            List<Opportunities> groupedResult = opportunitiesData
+                .Where(s => s.USIOpportunity.Contains("Yes"))
+                .GroupBy(s => new { s.USIOpportunity, s.ClosePeriodYear, s.ClosePeriod })
+                .Select(g => new Opportunities
+                        {
+                            USIOpportunity = g.Key.USIOpportunity,
+                            ClosePeriodYear = g.Key.ClosePeriodYear,
+                            ClosePeriod = g.Key.ClosePeriod,
+                            DisplayClosePeriod = g.Key.ClosePeriodYear + "-" + g.Key.ClosePeriod.ToString("D2"),
+                            TotalCount = g.Count()
+                        }).OrderBy(x => x.USIOpportunity).ThenBy(x => x.ClosePeriodYear).ThenBy(x => x.ClosePeriod).ToList();
+
+            List<string> KeyPeriods = groupedResult.OrderBy(s => s.ClosePeriodYear).ThenBy(s => s.ClosePeriod).GroupBy(s => s.DisplayClosePeriod).Select(s => s.Key).ToList();
+            List<string> KeyCategories = groupedResult.GroupBy(s => s.USIOpportunity).Select(s => s.Key).ToList();
+
+            foreach (string category in KeyCategories)
+            {
+                List<int> dataValues = new List<int>();
+                foreach (string period in KeyPeriods)
+                {
+                    if(groupedResult.Where(s => s.DisplayClosePeriod == period && s.USIOpportunity == category).Count() > 0)
+                    {
+                        dataValues.Add(groupedResult.Where(s => s.DisplayClosePeriod == period && s.USIOpportunity == category).Select(s=>s.TotalCount).First());
+                    }
+                    else
+                    {
+                        dataValues.Add(0);
+                    }
+                }
+                returnList.Add(JsonConvert.SerializeObject(dataValues));
+            }
+
+            returnList.Add(JsonConvert.SerializeObject(KeyPeriods));   
+            returnList.Add(JsonConvert.SerializeObject(KeyCategories));
+                
             return returnList;
         }
 

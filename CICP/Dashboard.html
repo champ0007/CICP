@@ -130,12 +130,45 @@
                     <i class="fa fa-sign-out fa-fw" ng-click="UserLogout()"></i>
                 </a>
             </li>
+            <li class="dropdown">
+                <!--<a class="dropdown-toggle" href="#Dashboard">
+            <i class="fa fa-home fa-fw"></i>
+        </a>-->
+                
+                <a title="Upload">
+                    <i class="fa fa-upload fa-fw" data-toggle="modal" data-target=".bs-UploadMasterData-modal-lg"></i>
+                </a>
+            </li>
 
         </ul>
         <!-- /.navbar-top-links -->
 
 
     </nav>
+
+    <!--File upload modal popup begin-->
+    <div class="modal fade bs-UploadMasterData-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Upload Master Data
+                        <div class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></div>
+                    </div>
+                    <div class="panel-body">
+                        <input type="file" nv-file-select="" uploader="cicpmasterdatauploader" />
+                        <div ng-repeat="item in cicpmasterdatauploader.queue">
+                            <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                            <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                            <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 
     <table align="center" ng-hide="UserValidated" style="min-width: 250px">

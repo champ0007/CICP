@@ -41,13 +41,13 @@ CICPApp.config(['$routeProvider',
     }
 ]);
 
-CICPApp.controller('DashboardController', ['$scope', '$http', function ($scope, $http) {
+CICPApp.controller('DashboardController', ['$scope', '$http', 'FileUploader', function ($scope, $http, FileUploader) {
 
     $scope.UserIdentity = null;
     $scope.UserPassword = null;
     $scope.UserValidated = false;
     $scope.LoginMessage = null;
-    debugger;
+    
     $scope.ValidateUserLogin = function () {
         $http({
             method: 'GET',
@@ -103,64 +103,7 @@ CICPApp.controller('DashboardController', ['$scope', '$http', function ($scope, 
 
 
 
-                //Start 
-                // Chart.js Data
-                $scope.skillChartData = {
-                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                    datasets: [
-                      {
-                          label: 'FY15 Business',
-                          fillColor: '#FFFFFF',
-                          strokeColor: 'rgba(69,201,102,0.9)',
-                          highlightFill: 'rgba(69,201,102,0.9)',
-                          highlightStroke: 'rgba(220,220,220,1)',
-                          data: [65, 59, 80, 81, 56, 55, 40]
-                      },
-                      {
-                          label: 'FY14 Business',
-                          fillColor: '#FFFFFF',
-                          strokeColor: 'rgba(1,187,205,0.8)',
-                          highlightFill: 'rgba(38, 208, 255, 0.75)',
-                          highlightStroke: 'rgba(151,187,205,1)',
-                          data: [28, 48, 40, 19, 86, 27, 30]
-                      }
-                    ]
-                };
-
-                // Chart.js Options
-                $scope.skillChartOptions = {
-
-                    // Sets the chart to be responsive
-                    responsive: true,
-
-                    //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
-                    scaleBeginAtZero: true,
-
-                    //Boolean - Whether grid lines are shown across the chart
-                    scaleShowGridLines: true,
-
-                    //String - Colour of the grid lines
-                    scaleGridLineColor: "rgba(0,0,0,.05)",
-
-                    //Number - Width of the grid lines
-                    scaleGridLineWidth: 1,
-
-                    //Boolean - If there is a stroke on each bar
-                    barShowStroke: true,
-
-                    //Number - Pixel width of the bar stroke
-                    barStrokeWidth: 2,
-
-                    //Number - Spacing between each of the X value sets
-                    barValueSpacing: 5,
-
-                    //Number - Spacing between data sets within X values
-                    barDatasetSpacing: 1,
-
-                    //String - A legend template
-                    legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
-                };
-
+              
                 $scope.ProjectChartData = [];
 
                 $scope.UpdateProjChart = function () {
@@ -196,41 +139,7 @@ CICPApp.controller('DashboardController', ['$scope', '$http', function ($scope, 
                   });
                 };
 
-                //$scope.UpdateProjChart();
-
-                //// Chart.js Data
-                //$scope.ProjectChartData = [
-                //  {
-                //      value: 0,
-                //      color: '#F7464A',
-                //      highlight: '#FF5A5E',
-                //      label: 'Sitecore'
-                //  }];
-                //  {
-                //      value: 0,
-                //      color: '#46BFBD',
-                //      highlight: '#5AD3D1',
-                //      label: 'Hybris'
-                //  },
-                //  {
-                //      value: 0,
-                //      color: '#FDB45C',
-                //      highlight: '#FFC870',
-                //      label: 'Adobe CQ'
-                //  },
-                //  {
-                //      value: 0,
-                //      color: '#46BFBA',
-                //      highlight: '#5AD3D1',
-                //      label: 'Biztalk'
-                //  },
-                //  {
-                //      value: 0,
-                //      color: '#FDB4AC',
-                //      highlight: '#FFC870',
-                //      label: 'Mobile'
-                //  }
-                //];
+              
 
                 // Chart.js Options
                 $scope.ProjectChartOptions = {
@@ -280,6 +189,18 @@ CICPApp.controller('DashboardController', ['$scope', '$http', function ($scope, 
         $scope.UserValidated = false;
         $scope.LoginMessage = null;
     }
+
+    //File upload functionality
+    var cicpmasterdatauploader = $scope.cicpmasterdatauploader = new FileUploader({
+        url: 'api/Dashboard/UploadCICPMasterData',
+        autoUpload: true,
+        removeAfterUpload: true
+    });
+
+    //cicpmasterdatauploader.onCompleteItem = function (fileItem, response, status, headers) {
+        
+    //};
+
 
 
 
@@ -839,6 +760,7 @@ CICPApp.controller('ActiveResourcesController', ['$scope', '$http', 'FileUploade
     uploader.onCompleteItem = function (fileItem, response, status, headers) {
         $scope.getResources();
     };
+
     $scope.ShowCurrent = true;
 
     $scope.DisplayContent = function (activeTab) {
@@ -1075,9 +997,10 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
           if (data != null) {
               //
 
-              $scope.USIEngmntByIMLead = JSON.parse(data[0]);
+              $scope.USIEngmntByIMLead = JSON.parse(data[1]);
 
               $scope.USIEngmntByIMLeadData.datasets[0].data = $scope.USIEngmntByIMLead;
+              $scope.USIEngmntByIMLeadData.labels = JSON.parse(data[0]);
 
           }
       }).
@@ -1087,9 +1010,6 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
 
       });
     };
-
-    $scope.UpdateActualUSIEngmntByIMLead();
-
 
     $scope.USIEngmntByIMLeadData = {
         labels: ['Pineda,Raymond', 'Finklestein,Perry', 'D-Ercole,Nat', 'IM House'],
@@ -1104,6 +1024,11 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
           }
         ]
     };
+
+    $scope.UpdateActualUSIEngmntByIMLead();
+
+
+   
 
     $scope.USIEngmntByIMLeadDataOptions = {
 
@@ -1669,14 +1594,15 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
         }).
       success(function (data, status, headers, config) {
           if (data != null) {
-
               $scope.yesProposalSupport = JSON.parse(data[0]);
               $scope.yesStillQualifying = JSON.parse(data[1]);
 
               $scope.activePursuitsData.datasets[0].data = $scope.yesProposalSupport;
               $scope.activePursuitsData.datasets[1].data = $scope.yesStillQualifying;
-              $scope.activePursuitsData.datasets[0].label = JSON.parse(data[2]);
-              $scope.activePursuitsData.datasets[1].label = JSON.parse(data[3]);
+              $scope.activePursuitsData.labels = JSON.parse(data[2]);
+              $scope.activePursuitsData.datasets[0].label = JSON.parse(data[3])[0];
+              $scope.activePursuitsData.datasets[1].label = JSON.parse(data[3])[1];
+              
           }
       }).
       error(function (data, status, headers, config) {
@@ -1763,6 +1689,7 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
 
               $scope.activePursuitsByLeadData.datasets[0].data = $scope.yesProposalSupportByLead;
               $scope.activePursuitsByLeadData.datasets[1].data = $scope.yesStillQualifyingByLead;
+              $scope.activePursuitsByLeadData.labels = JSON.parse(data[3]);
           }
       }).
       error(function (data, status, headers, config) {
@@ -1823,7 +1750,7 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
         barStrokeWidth: 2,
 
         //Number - Spacing between each of the X value sets
-        barValueSpacing: 5,
+        barValueSpacing: 20,
 
         //Number - Spacing between data sets within X values
         barDatasetSpacing: 1,
