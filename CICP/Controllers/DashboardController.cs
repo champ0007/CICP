@@ -507,7 +507,7 @@ namespace AUDash.Controllers
         public List<string> GetActualUSIEngmntByClient(string authToken)
         {
             if (authToken.Equals(AUTH_TOKEN))
-                return ParseActualUSIEngmntByClient();
+                return ParseActualUSIEngmntByClient(JsonConvert.DeserializeObject<List<IMTime>>(repo.GetReferenceData("IMTime")));
             else
                 return null;
         }
@@ -515,7 +515,7 @@ namespace AUDash.Controllers
         public List<string> GetQualifiedPursuitsByCustomer(string authToken)
         {
             if (authToken.Equals(AUTH_TOKEN))
-                return ParseQualifiedPursuitsByCustomer();
+                return ParseQualifiedPursuitsByCustomer(JsonConvert.DeserializeObject<List<Opportunities>>(repo.GetReferenceData("Opportunities")));
             else
                 return null;
         }
@@ -530,22 +530,42 @@ namespace AUDash.Controllers
                     IMLead = g.Key.IMLead,
                     TotalHours = g.Sum(x => x.TotalHours)
                 }).OrderByDescending(x => x.TotalHours).ToList();
-            returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(s=>s.IMLead).ToList()));
+            returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(s => s.IMLead).ToList()));
             returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(s => s.TotalHours).ToList()));
             return returnList;
         }
 
-        private List<string> ParseActualUSIEngmntByClient()
+        private List<string> ParseActualUSIEngmntByClient(List<IMTime> IMTimeData)
         {
             List<string> returnList = new List<string>();
-            returnList.Add("[126, 342, 363, 531, 544, 4517, 4893.5, 5076, 5962, 7447]");
+            List<IMTime> groupedResult = IMTimeData
+                .GroupBy(s => new { s.ServiceClientName })
+               .Select(g => new IMTime
+               {
+                   ServiceClientName = g.Key.ServiceClientName,
+                   TotalHours = g.Sum(x => x.TotalHours)
+               }).OrderByDescending(x => x.TotalHours).ToList();
+            returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(s => s.ServiceClientName.Substring(0, 5)).ToList()));
+            returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(s => s.TotalHours).ToList()));
             return returnList;
         }
 
-        private List<string> ParseQualifiedPursuitsByCustomer()
+        private List<string> ParseQualifiedPursuitsByCustomer(List<Opportunities> opportunitiesData)
         {
             List<string> returnList = new List<string>();
-            returnList.Add("[0, 38560, 135676, 316788, 482530, 1759913, 2623703, 5000000, 8184721, 30000000]");
+            List<Opportunities> groupedResult = opportunitiesData
+             .Where(s => s.USIOpportunity.Contains("Proposal"))
+             .GroupBy(s => new { s.Account })
+             .Select(g => new Opportunities
+             {
+                 Account = g.Key.Account,
+                 TotalEstimatedRevenue = g.Sum(x => x.TotalEstimatedRevenue)
+             }).OrderByDescending(x => x.TotalEstimatedRevenue).ToList();
+
+            returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(x => x.Account.Substring(0,5)).ToList()));
+            returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(x => x.TotalEstimatedRevenue).ToList()));
+
+//            returnList.Add("[0, 38560, 135676, 316788, 482530, 1759913, 2623703, 5000000, 8184721, 30000000]");
             return returnList;
         }
 
@@ -582,9 +602,9 @@ namespace AUDash.Controllers
                   USIOpportunity = g.Key.USIOpportunity,
                   IMLead = g.Key.IMLead,
                   TotalCount = g.Count()
-              }).OrderBy(x => x.USIOpportunity).ThenByDescending(x=>x.TotalCount).ToList();
+              }).OrderBy(x => x.USIOpportunity).ThenByDescending(x => x.TotalCount).ToList();
 
-            List<string> KeyLeads = groupedResult.Where(x=>x.USIOpportunity.Contains("Proposal")).OrderByDescending(x => x.TotalCount).GroupBy(s => s.IMLead).Select(s => s.Key).ToList();
+            List<string> KeyLeads = groupedResult.Where(x => x.USIOpportunity.Contains("Proposal")).OrderByDescending(x => x.TotalCount).GroupBy(s => s.IMLead).Select(s => s.Key).ToList();
             List<string> KeyCategories = groupedResult.GroupBy(s => s.USIOpportunity).Select(s => s.Key).ToList();
 
             foreach (string category in KeyCategories)
@@ -640,9 +660,9 @@ namespace AUDash.Controllers
                 List<int> dataValues = new List<int>();
                 foreach (string period in KeyPeriods)
                 {
-                    if(groupedResult.Where(s => s.DisplayClosePeriod == period && s.USIOpportunity == category).Count() > 0)
+                    if (groupedResult.Where(s => s.DisplayClosePeriod == period && s.USIOpportunity == category).Count() > 0)
                     {
-                        dataValues.Add(groupedResult.Where(s => s.DisplayClosePeriod == period && s.USIOpportunity == category).Select(s=>s.TotalCount).First());
+                        dataValues.Add(groupedResult.Where(s => s.DisplayClosePeriod == period && s.USIOpportunity == category).Select(s => s.TotalCount).First());
                     }
                     else
                     {
@@ -652,9 +672,9 @@ namespace AUDash.Controllers
                 returnList.Add(JsonConvert.SerializeObject(dataValues));
             }
 
-            returnList.Add(JsonConvert.SerializeObject(KeyPeriods));   
+            returnList.Add(JsonConvert.SerializeObject(KeyPeriods));
             returnList.Add(JsonConvert.SerializeObject(KeyCategories));
-                
+
             return returnList;
         }
 

@@ -1072,9 +1072,9 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
           if (data != null) {
               //
 
-              $scope.QualifiedPursuitsByCustomer = JSON.parse(data[0]);
-
+              $scope.QualifiedPursuitsByCustomer = JSON.parse(data[1]);
               $scope.QualifiedPursuitsByCustomerData.datasets[0].data = $scope.QualifiedPursuitsByCustomer;
+              $scope.QualifiedPursuitsByCustomerData.labels = JSON.parse(data[0]);
 
           }
       }).
@@ -1126,7 +1126,7 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
         barStrokeWidth: 2,
 
         //Number - Spacing between each of the X value sets
-        barValueSpacing: 50,
+        barValueSpacing: 30,
 
         //Number - Spacing between data sets within X values
         barDatasetSpacing: 1,
@@ -1144,9 +1144,10 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
           if (data != null) {
               //
 
-              $scope.USIEngmntByClient = JSON.parse(data[0]);
+              $scope.USIEngmntByClient = JSON.parse(data[1]);
 
               $scope.USIEngmntByClientData.datasets[0].data = $scope.USIEngmntByClient;
+              $scope.USIEngmntByClientData.labels = JSON.parse(data[0]);
 
           }
       }).
@@ -1198,7 +1199,7 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
         barStrokeWidth: 2,
 
         //Number - Spacing between each of the X value sets
-        barValueSpacing: 50,
+        barValueSpacing: 30,
 
         //Number - Spacing between data sets within X values
         barDatasetSpacing: 1,
