@@ -239,6 +239,7 @@
     <Content Include="Global.asax" />
     <Content Include="images\DD_RGB_black-small.jpg" />
     <Content Include="images\DD_RGB_white-black-small.jpg" />
+    <Content Include="images\Logo.jpg" />
     <Content Include="js\angular-file-upload.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
