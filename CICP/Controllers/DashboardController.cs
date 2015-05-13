@@ -523,68 +523,83 @@ namespace AUDash.Controllers
         private List<string> ParseActualUSIEngmntByIMLead(List<IMTime> IMTimeData)
         {
             List<string> returnList = new List<string>();
-            List<IMTime> groupedResult = IMTimeData
-                 .GroupBy(s => new { s.IMLead })
-                .Select(g => new IMTime
-                {
-                    IMLead = g.Key.IMLead,
-                    TotalHours = g.Sum(x => x.TotalHours)
-                }).OrderByDescending(x => x.TotalHours).ToList();
-            returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(s => s.IMLead).ToList()));
-            returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(s => s.TotalHours).ToList()));
+            if (IMTimeData != null)
+            {
+                List<IMTime> groupedResult = IMTimeData
+                     .GroupBy(s => new { s.IMLead })
+                    .Select(g => new IMTime
+                    {
+                        IMLead = g.Key.IMLead,
+                        TotalHours = g.Sum(x => x.TotalHours)
+                    }).OrderBy(x => x.TotalHours).ToList();
+                returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(s => s.IMLead).ToList()));
+                
+                List<List<decimal>> embeddedData = new List<List<decimal>>();
+                List<decimal> finalData = groupedResult.Select(s => s.TotalHours).ToList();
+                embeddedData.Add(finalData);
+                returnList.Add(JsonConvert.SerializeObject(embeddedData));
+            }
             return returnList;
         }
 
         private List<string> ParseActualUSIEngmntByClient(List<IMTime> IMTimeData)
         {
             List<string> returnList = new List<string>();
-            List<IMTime> groupedResult = IMTimeData
-                .GroupBy(s => new { s.ServiceClientName })
-               .Select(g => new IMTime
-               {
-                   ServiceClientName = g.Key.ServiceClientName,
-                   TotalHours = g.Sum(x => x.TotalHours)
-               }).OrderByDescending(x => x.TotalHours).ToList();
-            returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(s => s.ServiceClientName.Substring(0, 5)).ToList()));
-            returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(s => s.TotalHours).ToList()));
+            if (IMTimeData != null)
+            {
+                List<IMTime> groupedResult = IMTimeData
+                    .GroupBy(s => new { s.ServiceClientName })
+                   .Select(g => new IMTime
+                   {
+                       ServiceClientName = g.Key.ServiceClientName,
+                       TotalHours = g.Sum(x => x.TotalHours)
+                   }).OrderBy(x => x.TotalHours).ToList();
+                returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(s => s.ServiceClientName).ToList()));
+                returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(s => s.TotalHours).ToList()));
+            }
             return returnList;
         }
 
         private List<string> ParseQualifiedPursuitsByCustomer(List<Opportunities> opportunitiesData)
         {
             List<string> returnList = new List<string>();
-            List<Opportunities> groupedResult = opportunitiesData
-             .Where(s => s.USIOpportunity.Contains("Proposal"))
-             .GroupBy(s => new { s.Account })
-             .Select(g => new Opportunities
-             {
-                 Account = g.Key.Account,
-                 TotalEstimatedRevenue = g.Sum(x => x.TotalEstimatedRevenue)
-             }).OrderByDescending(x => x.TotalEstimatedRevenue).ToList();
+            if (opportunitiesData != null)
+            {
+                List<Opportunities> groupedResult = opportunitiesData
+                 .Where(s => s.USIOpportunity.Contains("Proposal"))
+                 .GroupBy(s => new { s.Account })
+                 .Select(g => new Opportunities
+                 {
+                     Account = g.Key.Account,
+                     TotalEstimatedRevenue = g.Sum(x => x.TotalEstimatedRevenue)
+                 }).OrderBy(x => x.TotalEstimatedRevenue).ToList();
 
-            returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(x => x.Account.Substring(0,5)).ToList()));
-            returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(x => x.TotalEstimatedRevenue).ToList()));
-
-//            returnList.Add("[0, 38560, 135676, 316788, 482530, 1759913, 2623703, 5000000, 8184721, 30000000]");
+                returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(x => x.Account).ToList()));
+                returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(x => x.TotalEstimatedRevenue).ToList()));
+            }
             return returnList;
         }
 
         private List<string> ParseActualVsBudgetData(List<ActualBudget> actualBudgetData)
         {
             List<string> returnList = new List<string>();
-            var groupedResult = actualBudgetData
-                 .GroupBy(s => new { s.Series, s.Period })
-                .Select(g => new
-                        {
-                            Series = g.Key.Series,
-                            Period = g.Key.Period,
-                            TotalHours = g.Sum(x => x.TotalHours)
-                        }).OrderBy(x => x.Series).ThenBy(x => x.Period);
+            if (actualBudgetData != null)
+            {
+             
+                var groupedResult = actualBudgetData
+                     .GroupBy(s => new { s.Series, s.Period })
+                    .Select(g => new
+                            {
+                                Series = g.Key.Series,
+                                Period = g.Key.Period,
+                                TotalHours = g.Sum(x => x.TotalHours)
+                            }).OrderBy(x => x.Series).ThenBy(x => x.Period);
 
-            returnList.Add(JsonConvert.SerializeObject(groupedResult.Where(x => x.Series.Equals("Actual")).Select(x => x.TotalHours).ToList()));
-            returnList.Add(JsonConvert.SerializeObject(groupedResult.Where(x => x.Series.Equals("Budget")).Select(x => x.TotalHours).ToList()));
-            returnList.Add("Actual");
-            returnList.Add("Budget");
+                returnList.Add(JsonConvert.SerializeObject(groupedResult.Where(x => x.Series.Equals("Actual")).Select(x => x.TotalHours).ToList()));
+                returnList.Add(JsonConvert.SerializeObject(groupedResult.Where(x => x.Series.Equals("Budget")).Select(x => x.TotalHours).ToList()));
+                returnList.Add("Actual");
+                returnList.Add("Budget");
+            }
             return returnList;
 
         }
@@ -593,45 +608,47 @@ namespace AUDash.Controllers
         private List<string> ParsePursuitsByLeadData(List<Opportunities> opportunitiesData)
         {
             List<string> returnList = new List<string>();
-
-            List<Opportunities> groupedResult = opportunitiesData
-              .Where(s => s.USIOpportunity.Contains("Yes"))
-              .GroupBy(s => new { s.USIOpportunity, s.IMLead })
-              .Select(g => new Opportunities
-              {
-                  USIOpportunity = g.Key.USIOpportunity,
-                  IMLead = g.Key.IMLead,
-                  TotalCount = g.Count()
-              }).OrderBy(x => x.USIOpportunity).ThenByDescending(x => x.TotalCount).ToList();
-
-            List<string> KeyLeads = groupedResult.Where(x => x.USIOpportunity.Contains("Proposal")).OrderByDescending(x => x.TotalCount).GroupBy(s => s.IMLead).Select(s => s.Key).ToList();
-            List<string> KeyCategories = groupedResult.GroupBy(s => s.USIOpportunity).Select(s => s.Key).ToList();
-
-            foreach (string category in KeyCategories)
+            if (opportunitiesData != null)
             {
-                List<int> dataValues = new List<int>();
-                foreach (string lead in KeyLeads)
+                List<Opportunities> groupedResult = opportunitiesData
+                  .Where(s => s.USIOpportunity.Contains("Yes"))
+                  .GroupBy(s => new { s.USIOpportunity, s.IMLead })
+                  .Select(g => new Opportunities
+                  {
+                      USIOpportunity = g.Key.USIOpportunity,
+                      IMLead = g.Key.IMLead,
+                      TotalCount = g.Count()
+                  }).OrderBy(x => x.USIOpportunity).ThenBy(x => x.TotalCount).ToList();
+
+                List<string> KeyLeads = groupedResult.Where(x => x.USIOpportunity.Contains("Proposal")).OrderBy(x => x.TotalCount).GroupBy(s => s.IMLead).Select(s => s.Key).ToList();
+                List<string> KeyCategories = groupedResult.GroupBy(s => s.USIOpportunity).Select(s => s.Key).ToList();
+
+                foreach (string category in KeyCategories)
                 {
-                    if (groupedResult.Where(s => s.IMLead == lead && s.USIOpportunity == category).Count() > 0)
+                    List<int> dataValues = new List<int>();
+                    foreach (string lead in KeyLeads)
                     {
-                        dataValues.Add(groupedResult.Where(s => s.IMLead == lead && s.USIOpportunity == category).Select(s => s.TotalCount).First());
+                        if (groupedResult.Where(s => s.IMLead == lead && s.USIOpportunity == category).Count() > 0)
+                        {
+                            dataValues.Add(groupedResult.Where(s => s.IMLead == lead && s.USIOpportunity == category).Select(s => s.TotalCount).First());
+                        }
+                        else
+                        {
+                            dataValues.Add(0);
+                        }
                     }
-                    else
-                    {
-                        dataValues.Add(0);
-                    }
+                    returnList.Add(JsonConvert.SerializeObject(dataValues));
                 }
-                returnList.Add(JsonConvert.SerializeObject(dataValues));
+
+                returnList.Add(JsonConvert.SerializeObject(KeyCategories));
+                returnList.Add(JsonConvert.SerializeObject(KeyLeads));
+
+
+                //returnList.Add("[0, 0, 0, 1, 2, 2, 3, 4, 6]");
+                //returnList.Add("[3, 4, 2, 4, 4, 0, 8, 9, 3]");
+                //returnList.Add("Yes - Proposal Support");
+                //returnList.Add("Yes-Still Qualifying");
             }
-
-            returnList.Add(JsonConvert.SerializeObject(KeyCategories));
-            returnList.Add(JsonConvert.SerializeObject(KeyLeads));
-
-
-            //returnList.Add("[0, 0, 0, 1, 2, 2, 3, 4, 6]");
-            //returnList.Add("[3, 4, 2, 4, 4, 0, 8, 9, 3]");
-            //returnList.Add("Yes - Proposal Support");
-            //returnList.Add("Yes-Still Qualifying");
             return returnList;
 
         }
@@ -640,41 +657,44 @@ namespace AUDash.Controllers
         {
 
             List<string> returnList = new List<string>();
-            List<Opportunities> groupedResult = opportunitiesData
-                .Where(s => s.USIOpportunity.Contains("Yes"))
-                .GroupBy(s => new { s.USIOpportunity, s.ClosePeriodYear, s.ClosePeriod })
-                .Select(g => new Opportunities
-                        {
-                            USIOpportunity = g.Key.USIOpportunity,
-                            ClosePeriodYear = g.Key.ClosePeriodYear,
-                            ClosePeriod = g.Key.ClosePeriod,
-                            DisplayClosePeriod = g.Key.ClosePeriodYear + "-" + g.Key.ClosePeriod.ToString("D2"),
-                            TotalCount = g.Count()
-                        }).OrderBy(x => x.USIOpportunity).ThenBy(x => x.ClosePeriodYear).ThenBy(x => x.ClosePeriod).ToList();
 
-            List<string> KeyPeriods = groupedResult.OrderBy(s => s.ClosePeriodYear).ThenBy(s => s.ClosePeriod).GroupBy(s => s.DisplayClosePeriod).Select(s => s.Key).ToList();
-            List<string> KeyCategories = groupedResult.GroupBy(s => s.USIOpportunity).Select(s => s.Key).ToList();
-
-            foreach (string category in KeyCategories)
+            if (opportunitiesData != null)
             {
-                List<int> dataValues = new List<int>();
-                foreach (string period in KeyPeriods)
+                List<Opportunities> groupedResult = opportunitiesData
+                    .Where(s => s.USIOpportunity.Contains("Yes"))
+                    .GroupBy(s => new { s.USIOpportunity, s.ClosePeriodYear, s.ClosePeriod })
+                    .Select(g => new Opportunities
+                            {
+                                USIOpportunity = g.Key.USIOpportunity,
+                                ClosePeriodYear = g.Key.ClosePeriodYear,
+                                ClosePeriod = g.Key.ClosePeriod,
+                                DisplayClosePeriod = g.Key.ClosePeriodYear + "-" + g.Key.ClosePeriod.ToString("D2"),
+                                TotalCount = g.Count()
+                            }).OrderBy(x => x.USIOpportunity).ThenBy(x => x.ClosePeriodYear).ThenBy(x => x.ClosePeriod).ToList();
+
+                List<string> KeyPeriods = groupedResult.OrderBy(s => s.ClosePeriodYear).ThenBy(s => s.ClosePeriod).GroupBy(s => s.DisplayClosePeriod).Select(s => s.Key).ToList();
+                List<string> KeyCategories = groupedResult.GroupBy(s => s.USIOpportunity).Select(s => s.Key).ToList();
+
+                foreach (string category in KeyCategories)
                 {
-                    if (groupedResult.Where(s => s.DisplayClosePeriod == period && s.USIOpportunity == category).Count() > 0)
+                    List<int> dataValues = new List<int>();
+                    foreach (string period in KeyPeriods)
                     {
-                        dataValues.Add(groupedResult.Where(s => s.DisplayClosePeriod == period && s.USIOpportunity == category).Select(s => s.TotalCount).First());
+                        if (groupedResult.Where(s => s.DisplayClosePeriod == period && s.USIOpportunity == category).Count() > 0)
+                        {
+                            dataValues.Add(groupedResult.Where(s => s.DisplayClosePeriod == period && s.USIOpportunity == category).Select(s => s.TotalCount).First());
+                        }
+                        else
+                        {
+                            dataValues.Add(0);
+                        }
                     }
-                    else
-                    {
-                        dataValues.Add(0);
-                    }
+                    returnList.Add(JsonConvert.SerializeObject(dataValues));
                 }
-                returnList.Add(JsonConvert.SerializeObject(dataValues));
+
+                returnList.Add(JsonConvert.SerializeObject(KeyPeriods));
+                returnList.Add(JsonConvert.SerializeObject(KeyCategories));
             }
-
-            returnList.Add(JsonConvert.SerializeObject(KeyPeriods));
-            returnList.Add(JsonConvert.SerializeObject(KeyCategories));
-
             return returnList;
         }
 

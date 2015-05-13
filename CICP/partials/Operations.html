@@ -27,7 +27,8 @@
         </div>
         <!-- /.panel-heading -->
         <div class="panel-body panel-chart">
-            <canvas tc-chartjs-bar chart-options="USIEngmntByIMLeadDataOptions" chart-data="USIEngmntByIMLeadData" auto-legend></canvas>
+            <!--<canvas tc-chartjs-bar chart-options="USIEngmntByIMLeadDataOptions" chart-data="USIEngmntByIMLeadData" auto-legend></canvas>-->
+            <chartist class="ct-chart ct-golden-section" chartist-data="barData" chartist-chart-type="Bar" chartist-chart-options="barOptions" chartist-responsive-options="barResponsiveOptions" chartist-events="events"></chartist>
         </div>
         <!-- /.panel-body -->
     </div>
@@ -38,7 +39,8 @@
         </div>
         <div class="panel-body panel-chart">
             <!--<div id="morris-bar-chart"></div>-->
-            <canvas tc-chartjs-bar chart-options="activePursuitsByLeadDataOptions" chart-data="activePursuitsByLeadData" auto-legend></canvas>
+            <!--<canvas tc-chartjs-bar chart-options="activePursuitsByLeadDataOptions" chart-data="activePursuitsByLeadData" auto-legend></canvas>-->
+            <chartist class="ct-chart ct-golden-section" chartist-data="PBLbarData" chartist-chart-type="Bar" chartist-chart-options="PBLbarOptions" chartist-responsive-options="PBLbarResponsiveOptions" chartist-events="PBLevents"></chartist>
         </div>
         <!-- /.panel-body -->
     </div>
@@ -50,7 +52,8 @@
             <i class="fa fa-ma fa-fw"></i> Actual USI Engagement By Client (Hours)
         </div>
         <div class="panel-body panel-chart">
-            <canvas tc-chartjs-bar chart-options="USIEngmntByClientDataOptions" chart-data="USIEngmntByClientData" auto-legend></canvas>
+            <!--<canvas tc-chartjs-bar chart-options="USIEngmntByClientDataOptions" chart-data="USIEngmntByClientData" auto-legend></canvas>-->
+            <chartist class="ct-chart ct-golden-section" chartist-data="EBCbarData" chartist-chart-type="Bar" chartist-chart-options="EBCbarOptions" chartist-responsive-options="PBLbarResponsiveOptions" chartist-events="EBCevents"></chartist>
         </div>
         <!-- /.panel-body -->
     </div>
@@ -60,13 +63,10 @@
         </div>
         <div class="panel-body panel-chart">
             <!--<div id="morris-bar-chart"></div>-->
-            <canvas tc-chartjs-bar chart-options="QualifiedPursuitsByCustomerDataDataOptions" chart-data="QualifiedPursuitsByCustomerData" auto-legend></canvas>
+            <!--<canvas tc-chartjs-bar chart-options="QualifiedPursuitsByCustomerDataDataOptions" chart-data="QualifiedPursuitsByCustomerData" auto-legend></canvas>-->
+            <chartist class="ct-chart ct-golden-section" chartist-data="PBCbarData" chartist-chart-type="Bar" chartist-chart-options="PBCbarOptions" chartist-responsive-options="PBLbarResponsiveOptions" chartist-events="PBCevents"></chartist>
         </div>
         <!-- /.panel-body -->
     </div>
 </div>
-<script>
-    //$(function () { // when the DOM is ready...
-    //    $("html, body").animate({ scrollTop: $(document).height()}, 1000);
-    //});
-</script>
+

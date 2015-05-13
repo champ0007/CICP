@@ -29,6 +29,9 @@
     <!-- Custom Fonts -->
     <link href="font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
+    <!--Chartist CSS-->
+    <link href="css/chartist.min.css" rel="stylesheet" />
+
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -76,6 +79,12 @@
 
     <!--TC Angular JS-->
     <script src="js/tc-angular-chartjs.min.js"></script>
+
+    <!--Chartist charts-->
+    <script src="js/chartist/chartist.js"></script>
+
+    <!--Angular Chartist-->
+    <script src="js/chartist/angular-chartist.min.js"></script>
 
     <!--<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/1.6.0/annyang.min.js"></script>
     <script>
@@ -135,8 +144,8 @@
             <i class="fa fa-home fa-fw"></i>
         </a>-->
                 
-                <a title="Upload">
-                    <i class="fa fa-upload fa-fw" data-toggle="modal" data-target=".bs-UploadMasterData-modal-lg"></i>
+                <a ng-show="UserValidated" title="Upload">
+                    <i class="fa fa-upload fa-fw" data-toggle="modal" data-target=".bs-UploadMasterData-modal-lg" ng-click="ClearFileUpload()"></i>
                 </a>
             </li>
 
@@ -156,12 +165,9 @@
                         <div class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></div>
                     </div>
                     <div class="panel-body">
-                        <input type="file" nv-file-select="" uploader="cicpmasterdatauploader" />
-                        <div ng-repeat="item in cicpmasterdatauploader.queue">
-                            <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
-                            <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
-                            <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
-                        </div>
+                        <input type="file" nv-file-select="" uploader="cicpmasterdatauploader" id="cicpfileuploader" /><span class="pull-right">&nbsp;<i class="fa fa-times-circle" data-dismiss="modal"></i></span>
+                        
+                        {{UploadSuccessMessage}}
                     </div>
                 </div>
             </div>

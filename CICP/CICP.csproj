@@ -306,6 +306,11 @@
     <Content Include="js\angular-file-upload.min.map">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="js\chartist\angular-chartist.js" />
+    <Content Include="js\chartist\angular-chartist.min.js" />
+    <Content Include="js\chartist\chartist.js" />
+    <Content Include="css\chartist.min.css" />
+    <Content Include="js\chartist\chartist.min.js" />
     <Content Include="js\jquery-1.10.2.intellisense.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -465,6 +470,7 @@
     <Content Include="DocumentTemplates\Template_Non -Attest Independence %282%29.doc" />
     <Content Include="DocumentTemplates\WO Template 111114.doc" />
     <Content Include="DocumentTemplates\FY15_EDC_India_Billing_Expense_Policy.pdf" />
+    <Content Include="js\chartist\chartist.min.js.map" />
     <None Include="Properties\PublishProfiles\audashboard.pubxml" />
     <None Include="Properties\PublishProfiles\IISDeploy.pubxml" />
     <None Include="Properties\PublishProfiles\Tushar.pubxml" />

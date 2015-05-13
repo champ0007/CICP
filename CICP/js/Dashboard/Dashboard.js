@@ -2,7 +2,7 @@
 /// <reference path="../jquery-1.10.2.intellisense.js" />
 var todos;
 
-var CICPApp = angular.module("CICPApp", ["ngRoute", "tc.chartjs", "angularFileUpload", "angularUtils.directives.dirPagination"]);
+var CICPApp = angular.module("CICPApp", ["ngRoute", "tc.chartjs", "angularFileUpload", "angularUtils.directives.dirPagination", "angular-chartist"]);
 
 CICPApp.config(['$routeProvider',
     function ($routeProvider) {
@@ -47,7 +47,7 @@ CICPApp.controller('DashboardController', ['$scope', '$http', 'FileUploader', fu
     $scope.UserPassword = null;
     $scope.UserValidated = false;
     $scope.LoginMessage = null;
-    
+
     $scope.ValidateUserLogin = function () {
         $http({
             method: 'GET',
@@ -103,7 +103,7 @@ CICPApp.controller('DashboardController', ['$scope', '$http', 'FileUploader', fu
 
 
 
-              
+
                 $scope.ProjectChartData = [];
 
                 $scope.UpdateProjChart = function () {
@@ -139,7 +139,7 @@ CICPApp.controller('DashboardController', ['$scope', '$http', 'FileUploader', fu
                   });
                 };
 
-              
+
 
                 // Chart.js Options
                 $scope.ProjectChartOptions = {
@@ -197,9 +197,15 @@ CICPApp.controller('DashboardController', ['$scope', '$http', 'FileUploader', fu
         removeAfterUpload: true
     });
 
-    //cicpmasterdatauploader.onCompleteItem = function (fileItem, response, status, headers) {
-        
-    //};
+    ClearFileUpload = function () {
+        debugger;
+        $scope.UploadSuccessMessage = "";
+        $('#cicpfileuploader').val() = "";
+    }
+
+    cicpmasterdatauploader.onCompleteItem = function (fileItem, response, status, headers) {
+        $scope.UploadSuccessMessage = "File uploaded successfully !";
+    };
 
 
 
@@ -996,12 +1002,15 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
       success(function (data, status, headers, config) {
           if (data != null) {
               //
+              debugger;
 
               $scope.USIEngmntByIMLead = JSON.parse(data[1]);
 
               $scope.USIEngmntByIMLeadData.datasets[0].data = $scope.USIEngmntByIMLead;
               $scope.USIEngmntByIMLeadData.labels = JSON.parse(data[0]);
 
+              $scope.barData.labels = JSON.parse(data[0]);
+              $scope.barData.series = JSON.parse(data[1]);
           }
       }).
       error(function (data, status, headers, config) {
@@ -1025,10 +1034,10 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
         ]
     };
 
-    $scope.UpdateActualUSIEngmntByIMLead();
 
 
-   
+
+
 
     $scope.USIEngmntByIMLeadDataOptions = {
 
@@ -1075,6 +1084,9 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
               $scope.QualifiedPursuitsByCustomer = JSON.parse(data[1]);
               $scope.QualifiedPursuitsByCustomerData.datasets[0].data = $scope.QualifiedPursuitsByCustomer;
               $scope.QualifiedPursuitsByCustomerData.labels = JSON.parse(data[0]);
+
+              $scope.PBCbarData.labels = JSON.parse(data[0]);
+              $scope.PBCbarData.series[0] = JSON.parse(data[1]);
 
           }
       }).
@@ -1148,6 +1160,10 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
 
               $scope.USIEngmntByClientData.datasets[0].data = $scope.USIEngmntByClient;
               $scope.USIEngmntByClientData.labels = JSON.parse(data[0]);
+
+              $scope.EBCbarData.labels = JSON.parse(data[0]);
+              $scope.EBCbarData.series[0] = JSON.parse(data[1]);
+
 
           }
       }).
@@ -1235,7 +1251,7 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
       });
     };
 
-    $scope.UpdateProjectDistributionChart();
+    //$scope.UpdateProjectDistributionChart();
 
 
     $scope.ProjectDistributionData = {
@@ -1310,7 +1326,7 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
       });
     };
 
-    $scope.UpdateResourceDeploymentChart();
+    //$scope.UpdateResourceDeploymentChart();
 
 
 
@@ -1393,19 +1409,18 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
         datasets: [
           {
               label: 'Actual',
-
-              fillColor: 'rgba(620,201,102,0.75)',
-              strokeColor: 'rgba(220,220,220,0.8)',
-              highlightFill: 'rgba(69,201,102,0.9)',
-              highlightStroke: 'rgba(220,220,220,1)',
+              fillColor: '#0cc09f',
+              strokeColor: '#0cc09f',
+              highlightFill: '#0cc09f',
+              highlightStroke: '#0cc09f',
               data: $scope.usiHoursActualData
           },
           {
               label: 'Budget',
-              fillColor: '#FFFFFF',
-              strokeColor: 'rgba(1,187,205,0.8)',
-              highlightFill: 'rgba(38, 208, 255, 0.75)',
-              highlightStroke: 'rgba(151,187,205,1)',
+              fillColor: 'white',
+              strokeColor: 'white',
+              highlightFill: 'white',
+              highlightStroke: 'white',
               data: $scope.usiHoursBudgetData
           }
         ]
@@ -1538,7 +1553,7 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
         //legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
     };
 
-    $scope.UpdateRevenueChart();
+    //$scope.UpdateRevenueChart();
 
     $scope.YoYData = {
         labels: $scope.YoYLabels,
@@ -1603,7 +1618,7 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
               $scope.activePursuitsData.labels = JSON.parse(data[2]);
               $scope.activePursuitsData.datasets[0].label = JSON.parse(data[3])[0];
               $scope.activePursuitsData.datasets[1].label = JSON.parse(data[3])[1];
-              
+
           }
       }).
       error(function (data, status, headers, config) {
@@ -1620,18 +1635,18 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
         datasets: [
           {
               label: 'Yes - Proposal Support',
-              fillColor: 'rgba(620,201,102,0.75)',
-              strokeColor: 'rgba(220,220,220,0.8)',
-              highlightFill: 'rgba(69,201,102,0.9)',
-              highlightStroke: 'rgba(220,220,220,1)',
+              fillColor: '#0cc09f',
+              strokeColor: '#0cc09f',
+              highlightFill: '#0cc09f',
+              highlightStroke: '#0cc09f',
               data: $scope.yesProposalSupport
           },
           {
               label: 'Yes-Still Qualifying',
-              fillColor: '#FFFFFF',
-              strokeColor: 'rgba(1,187,205,0.8)',
-              highlightFill: 'rgba(38, 208, 255, 0.75)',
-              highlightStroke: 'rgba(151,187,205,1)',
+              fillColor: 'white',
+              strokeColor: 'white',
+              highlightFill: 'white',
+              highlightStroke: 'white',
               data: $scope.yesStillQualifying
           }
         ]
@@ -1691,6 +1706,10 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
               $scope.activePursuitsByLeadData.datasets[0].data = $scope.yesProposalSupportByLead;
               $scope.activePursuitsByLeadData.datasets[1].data = $scope.yesStillQualifyingByLead;
               $scope.activePursuitsByLeadData.labels = JSON.parse(data[3]);
+
+              $scope.PBLbarData.labels = JSON.parse(data[3]);
+              $scope.PBLbarData.series[0] = JSON.parse(data[0]);
+              $scope.PBLbarData.series[1] = JSON.parse(data[1]);
           }
       }).
       error(function (data, status, headers, config) {
@@ -1764,44 +1783,6 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
     $scope.UpdateActivePursuitsByLeadChart();
 
 
-    $scope.UpdateTechChart = function () {
-        $http({
-            method: 'GET',
-            url: 'api/Dashboard/GetTechChartData'
-        }).
-      success(function (data, status, headers, config) {
-          if (data != null) {
-
-              var colors = ['#F7464A', '#46BFBD', '#FDB45C', '#46BFBA', '#FDB4AC', '#F7464A', '#46BFBD', '#FDB45C', '#46BFBA', '#FDB4AC', '#F7464A', '#46BFBD', '#FDB45C', '#46BFBA', '#FDB4AC', '#F7464A', '#46BFBD', '#FDB45C', '#46BFBA', '#FDB4AC'];
-              var highlights = ['#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870', '#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870', '#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870', '#FF5A5E', '#5AD3D1', '#FFC870', '#5AD3D1', '#FFC870'];
-              $scope.ProjectChartData = [];
-              var ProjectChartDataList = JSON.parse(data[0]);
-              for (i = 0; i <= ProjectChartDataList.length; i++) {
-                  var dataItem = new Object();
-                  dataItem.value = ProjectChartDataList[i].value;
-                  dataItem.label = ProjectChartDataList[i].label;
-                  dataItem.color = colors[i];
-                  dataItem.highlight = highlights[i];
-                  $scope.ProjectChartData.push(dataItem);
-              }
-              //$scope.revenueChartPrevData = JSON.parse(data[1]);
-              //$scope.revenueChartCurrData = JSON.parse(data[0]);
-              //$scope.skillChartData.datasets[0].data = $scope.revenueChartCurrData;S
-              //$scope.skillChartData.datasets[1].data = $scope.revenueChartPrevData;
-              //$scope.skillChartData.datasets[0].label = JSON.parse(data[2]);
-              //$scope.skillChartData.datasets[1].label = JSON.parse(data[3]);
-          }
-      }).
-      error(function (data, status, headers, config) {
-          // called asynchronously if an error occurs
-          // or server returns response with an error status.
-          $scope.AllResources = -1;
-      });
-    };
-
-    $scope.UpdateTechChart();
-
-
     // Chart.js Options
     $scope.ProjectChartOptions = {
 
@@ -1865,7 +1846,7 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
       });
     };
 
-    $scope.UpdateSoldProposedChart();
+    //$scope.UpdateSoldProposedChart();
 
     // Chart.js Data
     $scope.SoldProposedData = {
@@ -1945,6 +1926,163 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
         //String - A legend template
         legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].strokeColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
     };
+
+
+    //$scope.USIEngmntByIMLeadData.datasets[0].data = $scope.USIEngmntByIMLead;
+    //$scope.USIEngmntByIMLeadData.labels = JSON.parse(data[0]);
+
+    $scope.UpdateActualUSIEngmntByIMLead();
+
+    //Chartist Charts
+    $scope.barData = {
+        labels: [],
+        series: [[]]
+    };
+
+    $scope.barOptions = {
+        seriesBarDistance: 15,
+        horizontalBars: true,
+        axisY: { offset: 80 }
+    };
+
+    $scope.barResponsiveOptions = [
+        ['screen and (min-width: 641px) and (max-width: 1024px)', {
+            seriesBarDistance: 10,
+            axisX: {
+                labelInterpolationFnc: function (value) {
+                    return value;
+                }
+            }
+        }],
+        ['screen and (max-width: 640px)', {
+            seriesBarDistance: 5,
+            axisX: {
+                labelInterpolationFnc: function (value) {
+                    return value[0];
+                }
+            }
+        }]
+    ];
+
+    //Chartist USI Pursuits by Lead
+
+
+    $scope.PBLbarData = {
+        labels: [],
+        series: [[]]
+    };
+
+    $scope.PBLbarOptions = {
+        seriesBarDistance: 15,
+        horizontalBars: true,
+        axisY: { offset: 80 },
+        animate: {
+            opacity: {
+                dur: 3000,
+                from: 0,
+                to: 1
+            },
+            x1: {
+                dur: '5000ms',
+                from: 100,
+                to: 200,
+                easing: 'easeOutQuart'
+            },
+            y1: {
+                dur: '2s',
+                from: 0,
+                to: 100
+            }
+        }
+    };
+
+    $scope.PBLbarResponsiveOptions = [
+        ['screen and (min-width: 641px) and (max-width: 1024px)', {
+            seriesBarDistance: 10,
+            axisX: {
+                labelInterpolationFnc: function (value) {
+                    return value;
+                }
+            }
+        }],
+        ['screen and (max-width: 640px)', {
+            seriesBarDistance: 5,
+            axisX: {
+                labelInterpolationFnc: function (value) {
+                    return value[0];
+                }
+            }
+        }]
+    ];
+
+    //Chartist - Engagement by Client
+    $scope.EBCbarData = {
+        labels: [],
+        series: [[]]
+    };
+
+    $scope.EBCbarOptions = {
+        seriesBarDistance: 15,
+        horizontalBars: true,
+        axisY: {
+            offset: 160
+        }
+    };
+
+    $scope.EBCbarResponsiveOptions = [
+        ['screen and (min-width: 641px) and (max-width: 1024px)', {
+            seriesBarDistance: 10,
+            axisX: {
+                labelInterpolationFnc: function (value) {
+                    return value;
+                }
+            }
+        }],
+        ['screen and (max-width: 640px)', {
+            seriesBarDistance: 5,
+            axisX: {
+                labelInterpolationFnc: function (value) {
+                    return value[0];
+                }
+            }
+        }]
+    ];
+
+    //Chartist - Pursuits by Client
+    $scope.PBCbarData = {
+        labels: [],
+        series: [[]]
+    };
+
+    $scope.PBCbarOptions = {
+        seriesBarDistance: 15,
+        horizontalBars: true,
+        axisY: {
+            offset: 180
+        }
+    };
+
+    $scope.PBCbarResponsiveOptions = [
+        ['screen and (min-width: 641px) and (max-width: 1024px)', {
+            seriesBarDistance: 10,
+            axisX: {
+                labelInterpolationFnc: function (value) {
+                    return value;
+                }
+            }
+        }],
+        ['screen and (max-width: 640px)', {
+            seriesBarDistance: 5,
+            axisX: {
+                labelInterpolationFnc: function (value) {
+                    return value[0];
+                }
+            }
+        }]
+    ];
+
+
+
 
 
 
