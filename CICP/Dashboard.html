@@ -118,37 +118,28 @@
     </script>-->
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-        <div class="navbar-header">
-      
-        <a class="navbar-brand" href="#Dashboard"><img src="images/Logo.jpg" height="50px" /> </a>
-            <ul class="nav navbar-top-links navbar-right">
-                <li class="dropdown">
-                    <!--<a class="dropdown-toggle" href="#Dashboard">
-                <i class="fa fa-home fa-fw"></i>
-            </a>-->
+        <table>
+            <tr>
+                <td class="col-lg-1"><a class="navbar-brand" href="#Dashboard"><img src="images/small-logo.png" /></a></td>
+                <td class="col-lg-6"><h1 class="CICPBanner">Canada & India Collaboration Portal</h1></td>
+                <td class="col-lg-5 pull-right vcenter">
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li class="dropdown">
 
-                    <a ng-show="UserValidated" title="LogOut">
-                        <i class="fa fa-sign-out fa-fw" ng-click="UserLogout()"></i>
-                    </a>
-                </li>
-                <li class="dropdown">
-                    <!--<a class="dropdown-toggle" href="#Dashboard">
-                <i class="fa fa-home fa-fw"></i>
-            </a>-->
+                            <a ng-show="UserValidated" title="LogOut">
+                                <i class="fa fa-sign-out fa-fw" ng-click="UserLogout()"></i>
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a ng-show="UserValidated" title="Upload">
+                                <i class="fa fa-upload fa-fw" data-toggle="modal" data-target=".bs-UploadMasterData-modal-lg" ng-click="ClearFileUpload()"></i>
+                            </a>
+                        </li>
 
-                    <a ng-show="UserValidated" title="Upload">
-                        <i class="fa fa-upload fa-fw" data-toggle="modal" data-target=".bs-UploadMasterData-modal-lg" ng-click="ClearFileUpload()"></i>
-                    </a>
-                </li>
-
-            </ul>
-        </div>
-        <!-- /.navbar-header -->
-
-       
-        <!-- /.navbar-top-links -->
-
-
+                    </ul>
+                </td>
+            </tr>
+        </table>
     </nav>
 
     <!--File upload modal popup begin-->

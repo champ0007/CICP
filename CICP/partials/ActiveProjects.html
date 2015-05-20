@@ -31,7 +31,8 @@
                             <div class="form-group">
                                 <div class="col-sm-offset-4 col-sm-10">
                                     <button type="submit" class="btn btn-success" data-dismiss="modal" ng-click="AddKeyUpdate(keyUpdate)">Save</button> &nbsp;
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button> &nbsp;
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="DeleteKeyUpdate(keyUpdate)">Delete</button> &nbsp;
                                 </div>
                             </div>
                         </form>
@@ -137,7 +138,7 @@
                     <th><i class="fa fa-times"</th>
 
                 </tr>
-                <tr ng-repeat="project in ActiveProjectDetails | filter:{Stage: searchProject} | orderBy:predicate:reverse track by $index">
+                <tr dir-paginate="project in ActiveProjectDetails | orderBy:predicate:reverse | filter: searchProject |itemsPerPage: 10" current-page="currentProjectPage" pagination-id="ProjectPagination">
                     <td><i class="fa fa-edit" ng-click="EditProject(project, $index)" data-toggle="modal" data-target=".bs-AddProjects-modal-lg"> </i></td>
                     <td>{{project.Client}}</td>
                     <td>{{project.ProjectName}}</td>
@@ -148,6 +149,9 @@
                     <td><i class="fa fa-times" ng-click="AddProject(project, 'Delete')"> </i></td>
                 </tr>
             </table>
+            <div class="text-center">
+                <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/js/dirPagination.tpl.html" pagination-id="ProjectPagination"></dir-pagination-controls>
+            </div>
         </div>
 
         <!-- /.panel-body -->
@@ -214,6 +218,20 @@
                                 <label for="selectTechnology" class="col-sm-2 control-label">Technology</label>
                                 <div class="col-sm-4">
                                     <select class="form-control" id="selectTechnology" ng-model="ProjectEntity.Technology">
+                                        <option>OpenText</option>
+                                        <option>Sharepoint</option>
+                                        <option>Other ECM</option>
+                                        <option>Cognos BI</option>
+                                        <option>Cognos TM1</option>
+                                        <option>OBIEE</option>
+                                        <option>Hyperion</option>
+                                        <option>BPC</option>
+                                        <option>SAS</option>
+                                        <option>Qlikview</option>
+                                        <option>Tableau</option>
+                                        <option>Other BIDW</option>
+                                        <option>Other Big Data</option>
+                                        <option>Other Advanced Analytics</option>
                                         <option>Java</option>
                                         <option>Sitecore</option>
                                         <option>UX</option>

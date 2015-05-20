@@ -460,3 +460,13 @@ cursor: pointer;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
 }
+
+.CICPBanner{
+    color:white;
+}
+
+.vcenter {
+    display: inline-block;
+    vertical-align: bottom;
+    float: none;
+}

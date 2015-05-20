@@ -1,8 +1,7 @@
 ﻿<div class="col-lg-4">
     <div class="panel panel-green">
         <div class="panel-heading">
-            <i class="fa fa-info-circle fa-fw"></i> Open Items
-
+            <i class="fa fa-info-circle fa-fw"></i> Open Items            
         </div>
         <div class="panel-body panel-chart">
             <canvas tc-chartjs-pie chart-options="ActionItemChartOptions" chart-data="ActionItemChartData" auto-legend></canvas>
@@ -18,7 +17,15 @@
     <div class="panel panel-green">
         <div class="panel-heading">
             <i class="fa fa-info-circle fa-fw"></i> Action Items
-
+            <span class="pull-right">
+                Show
+                <select id="filterToDo" ng-model="ToDoSearch">
+                    <option value="">All</option>
+                    <option>Open</option>
+                    <option>Closed</option>
+                    <option>Pending</option>
+                </select>
+            </span>
         </div>
         <div class="panel-body">
             <table class="table table-responsive">
@@ -37,9 +44,11 @@
                     <th>Assigned To</th>
                     <th>Status</th>
                     <th>Comments</th>
+                    <td><i class="fa fa-times"</td>
                 </tr>
 
-                <tr ng-repeat="ToDoItem in NewToDos track by $index">
+                <!--<tr ng-repeat="ToDoItem in NewToDos track by $index">-->
+                <tr dir-paginate="ToDoItem in NewToDos | filter:ToDoSearch | itemsPerPage: 5" current-page="currentToDoPage" pagination-id="ToDoPagination">
                     <td><i class="fa fa-edit" ng-click="EditToDoItem(ToDoItem, $index)" data-toggle="modal" data-target=".bs-AddActionItem-modal-lg"> </i></td>
                     <td class="col-lg-4">{{ToDoItem.Desc}}</td>
                     <td class="col-lg-2">{{ToDoItem.AssignedTo}}</td>
@@ -47,6 +56,9 @@
                     <td class="col-lg-6">{{ToDoItem.Comments}}</td>
                 </tr>
             </table>
+            <div class="text-center">
+                <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/js/dirPagination.tpl.html" pagination-id="ToDoPagination"></dir-pagination-controls>
+            </div>
         </div>
 
         <div class="modal fade bs-AddActionItem-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -91,7 +103,8 @@
 
                                 <div class="form-group">
                                     <div class="col-sm-offset-5 col-sm-10">
-                                        <button type="submit" class="btn btn-success" data-dismiss="modal" ng-click="AddToDoItem(ToDoItem)">Save</button>
+                                        <button type="submit" class="btn btn-success" data-dismiss="modal" ng-click="AddToDoItem(ToDoItem)">Save</button> &nbsp;
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="DeleteToDoItem(ToDoItem)">Delete</button>
                                     </div>
                                 </div>
                             </form>

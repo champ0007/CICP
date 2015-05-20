@@ -41,7 +41,7 @@ CICPApp.config(['$routeProvider',
     }
 ]);
 
-CICPApp.controller('DashboardController', ['$scope', '$http', 'FileUploader', function ($scope, $http, FileUploader) {
+CICPApp.controller('DashboardController', ['$scope', '$http','$location', 'FileUploader', function ($scope, $http, $location, FileUploader) {
 
     $scope.UserIdentity = null;
     $scope.UserPassword = null;
@@ -60,8 +60,6 @@ CICPApp.controller('DashboardController', ['$scope', '$http', 'FileUploader', fu
                 $scope.LoginMessage = "* user name/password not correct";
             else {
                 $scope.LoginMessage = null;
-
-
                 $http({
                     method: 'GET',
                     url: 'api/Dashboard/GetDashboardCounts?authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
@@ -100,9 +98,9 @@ CICPApp.controller('DashboardController', ['$scope', '$http', 'FileUploader', fu
                 }];
 
                 $scope.notifications = FakeNotifications;
-
-
-
+                debugger;
+                $location.path('/Dashboard');
+                
 
                 $scope.ProjectChartData = [];
 
@@ -339,6 +337,9 @@ CICPApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', fu
     var STORAGE_ID = 'Projects';
     $scope.EditMode = "false";
     $scope.ActiveFilterSet;
+    $scope.currentProjectPage = 1;
+    $scope.pageSize = 10;
+    $scope.ProjectPerPage = 10;
 
     var ProjectDetails = $scope.ActiveProjectDetails = [];
 
@@ -370,30 +371,7 @@ CICPApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', fu
         $scope.ProjectEntity = jQuery.extend(true, {}, project); // deep copy
         $scope.OriginalProject = jQuery.extend(true, {}, project); // deep copy
     }
-
-    //$scope.setProjects = function (ProjectDetails) {
-    //    var referenceData = new Object();
-    //    referenceData.storageId = STORAGE_ID;
-    //    referenceData.storageData = JSON.stringify(ProjectDetails);
-    //    $http({
-    //        url: 'api/Dashboard/SetReferenceData',
-    //        method: "POST",
-    //        data: JSON.stringify(JSON.stringify(referenceData))
-    //    })
-    //        .then(function (response) {
-    //            $scope.getProjects();
-    //        },
-    //            function (response) { // optional
-    //            }
-    //        );
-    //};
-
-    //$scope.$watch('ActiveProjectDetails', function (newValue, oldValue) {
-    //    if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
-    //        $scope.setProjects($scope.ActiveProjectDetails);
-    //    }
-    //}, true);
-
+  
     $scope.AddProject = function (ProjectEntity, action) {
         var projectRequest = new Object();
         projectRequest.Projects = ProjectDetails;
@@ -495,6 +473,11 @@ CICPApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', fu
         $scope.keyUpdates = keyUpdates;
         $scope.keyUpdate = '';
     };
+
+    $scope.DeleteKeyUpdate = function (keyUpdate) {
+        keyUpdates.splice(keyUpdate.index, 1);
+    };
+
     //End Key updates
 
 
@@ -791,6 +774,10 @@ CICPApp.controller('ActiveResourcesController', ['$scope', '$http', 'FileUploade
 CICPApp.controller('NewActionItemsController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
     var STORAGE_ID = 'NewToDoItems'; // To be passed
     //$scope.EditMode = "false";
+    $scope.currentPage = 1;
+    $scope.currentToDoPage = 1;
+    $scope.pageSize = 5;
+    $scope.ToDoPerPage = 5;
 
     var NewToDos = $scope.NewToDos = [];
 
@@ -858,6 +845,16 @@ CICPApp.controller('NewActionItemsController', ['$scope', '$filter', '$http', fu
 
         $scope.NewToDos = NewToDos;
         $scope.NewToDoItem = '';
+    };
+
+    $scope.DeleteToDoItem = function (ToDoItem) {
+        for (var i = 0; i < NewToDos.length; i++) {
+            if (NewToDos[i].Desc === ToDoItem.Desc && NewToDos[i].AssignedTo === ToDoItem.AssignedTo && NewToDos[i].Status === ToDoItem.Status && NewToDos[i].Comments === ToDoItem.Comments) {
+                NewToDos.splice(i, 1);
+                break;
+            }
+        }
+
     };
 
     $scope.UpdateChart = function (open, closed, pending) {
