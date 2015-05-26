@@ -2,7 +2,7 @@
 /// <reference path="../jquery-1.10.2.intellisense.js" />
 var todos;
 
-var CICPApp = angular.module("CICPApp", ["ngRoute", "tc.chartjs", "angularFileUpload", "angularUtils.directives.dirPagination", "angular-chartist"]);
+var CICPApp = angular.module("CICPApp", ["ngRoute", "tc.chartjs", "angularFileUpload", "angularUtils.directives.dirPagination", "angular-chartist","fcsa-number"]);
 
 CICPApp.config(['$routeProvider',
     function ($routeProvider) {
@@ -334,7 +334,7 @@ CICPApp.controller('ActionItemsController', ['$scope', '$filter', '$http', funct
 }]);
 
 CICPApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', function ($scope, $filter, $http) {
-    var STORAGE_ID = 'Projects';
+    var STORAGE_ID = 'Opportunities';
     $scope.EditMode = "false";
     $scope.ActiveFilterSet;
     $scope.currentProjectPage = 1;
@@ -354,7 +354,7 @@ CICPApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', fu
             if (data != 'null') {
                 ProjectDetails = $scope.ActiveProjectDetails = JSON.parse(JSON.parse(data));
                 $scope.OriginalProjectDetails = JSON.parse(JSON.parse(data));
-                $scope.$parent.ActiveProjects = $filter('filter')(ProjectDetails, { Stage: "Sold" }).length;
+                $scope.$parent.ActiveProjects = ProjectDetails.length;
                 $scope.UpdateChart();
             }
         }).
@@ -389,7 +389,7 @@ CICPApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', fu
            if (data != 'null') {
                ProjectDetails = $scope.ActiveProjectDetails = JSON.parse(JSON.parse(data));
                $scope.OriginalProjectDetails = JSON.parse(JSON.parse(data));
-               $scope.$parent.ActiveProjects = $filter('filter')(ProjectDetails, { Stage: "Sold" }).length;
+               $scope.$parent.ActiveProjects = ProjectDetails.length;
                $scope.UpdateChart();
 
                $scope.ActiveProjectDetails = ProjectDetails;

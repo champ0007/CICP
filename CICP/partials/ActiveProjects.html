@@ -109,19 +109,7 @@
             <i class="fa fa-info-circle fa-fw"></i> Active Projects
             <span class="pull-right">
                 Show
-                <select id="filterProjectStage" ng-model="searchProject">
-                    <option value="">All</option>
-                    <option>Contacted</option>
-                    <option>Qualified</option>
-                    <option>Proposal</option>
-                    <option>Verbal Commit</option>
-                    <option>Sold</option>
-                    <option>Design</option>
-                    <option>Development</option>
-                    <option>UAT</option>
-                    <option>Completed</option>
-                    <option>Abandoned / Lost</option>
-                </select>
+                <input type="text" ng-model="searchProject" />
                 <i class="fa fa-plus" data-toggle="modal" data-target=".bs-AddProjects-modal-lg" ng-click="OpenAddProject()"></i>
             </span>
         </div>
@@ -129,23 +117,23 @@
             <table class="table table-striped table-responsive">
                 <tr>
                     <th>Edit</th>
-                    <th ng-click="predicate = 'Client'; reverse=false">Client</th>
-                    <th ng-click="predicate = 'ProjectName'; reverse=false">Project Name</th>
-                    <th ng-click="predicate = 'Stage'; reverse=false">Project Stage</th>
-                    <th ng-click="predicate = 'Technology'; reverse=false">Technology</th>
-                    <th ng-click="predicate = 'GDM'; reverse=false">GDM</th>
-                    <th ng-click="predicate = 'AUPM'; reverse=false">CA-PM</th>
+                    <th ng-click="predicate = 'OpportunityId'; reverse=false">Id#</th>
+                    <th ng-click="predicate = 'Account'; reverse=false">Account</th>
+                    <th ng-click="predicate = 'Opportunity'; reverse=false">Opportunity</th>
+                    <th ng-click="predicate = 'USIProposalSupport'; reverse=false">USI Support</th>
+                    <th ng-click="predicate = 'USILead'; reverse=false">USI GDM</th>
+                    <th ng-click="predicate = 'SalesStage'; reverse=false">Sales Stage</th>
                     <th><i class="fa fa-times"</th>
 
                 </tr>
                 <tr dir-paginate="project in ActiveProjectDetails | orderBy:predicate:reverse | filter: searchProject |itemsPerPage: 10" current-page="currentProjectPage" pagination-id="ProjectPagination">
                     <td><i class="fa fa-edit" ng-click="EditProject(project, $index)" data-toggle="modal" data-target=".bs-AddProjects-modal-lg"> </i></td>
-                    <td>{{project.Client}}</td>
-                    <td>{{project.ProjectName}}</td>
-                    <td>{{project.Stage}}</td>
-                    <td>{{project.Technology}}</td>
-                    <td>{{project.GDM}}</td>
-                    <td>{{project.AUPM}}</td>
+                    <td>{{project.OpportunityId}}</td>
+                    <td>{{project.Account}}</td>
+                    <td>{{project.Opportunity}}</td>
+                    <td>{{project.USIProposalSupport}}</td>
+                    <td>{{project.USILead}}</td>
+                    <td>{{project.SalesStage}}</td>
                     <td><i class="fa fa-times" ng-click="AddProject(project, 'Delete')"> </i></td>
                 </tr>
             </table>
@@ -166,118 +154,61 @@
                         <div class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></div>
                     </div>
                     <div class="panel-body">
-                        <form class="form-horizontal" name="addForm" role="form">
-                            <input type="hidden" ng-model="ProjectEntity.Id" />
+                        <form class="form-horizontal" name="addForm" role="form">                            
                             <div class="form-group">
-                                <label for="inputClientName" class="col-sm-2 control-label">Client</label>
+                                <label for="inputOppId" class="col-sm-2 control-label">Id#</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="inputOppId" placeholder="Opportunity Id" ng-model="ProjectEntity.OpportunityId">
+                                </div>                            
+                                <label for="inputAccount" class="col-sm-2 control-label">Account</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" id="inputAccount" placeholder="Account Name" ng-model="ProjectEntity.Account">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputOppDesc" class="col-sm-2 control-label">Opportunity</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="inputClientName" placeholder="Client Name" ng-model="ProjectEntity.Client">
-                                </div>
+                                    <input type="text" class="form-control" id="inputOppDesc" placeholder="Description" ng-model="ProjectEntity.Opportunity">
+                                </div>                                
                             </div>
                             <div class="form-group">
-                                <label for="inputProjectName" class="col-sm-2 control-label">Project</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="inputProjectName" placeholder="Project Name" ng-model="ProjectEntity.ProjectName">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="selectProjectStage" class="col-sm-2 control-label">Stage</label>
+                                <label for="inputUSISupport" class="col-sm-2 control-label">USI Support</label>
                                 <div class="col-sm-4">
-                                    <select class="form-control" id="selectProjectStage" ng-model="ProjectEntity.Stage">
-                                        <option>Contacted</option>
-                                        <option>Qualified</option>
-                                        <option>Proposal</option>
-                                        <option>Verbal Commit</option>
-                                        <option>Sold</option>
-                                        <option>Design</option>
-                                        <option>Development</option>
-                                        <option>UAT</option>
-                                        <option>Completed</option>
-                                        <option>Abandoned / Lost</option>
-                                    </select>
+                                    <input type="text" class="form-control" id="inputUSISupport" placeholder="Support" ng-model="ProjectEntity.USIProposalSupport">
                                 </div>
 
-                                <label for="inputGDM" class="col-sm-2 control-label">GDM</label>
+                                <label for="inputGDM" class="col-sm-2 control-label">USI Lead</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" id="inputGDM" placeholder="India Contact" ng-model="ProjectEntity.GDM">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="selectProjectProbability" class="col-sm-2 control-label">Probability</label>
-                                <div class="col-sm-4">
-                                    <select class="form-control" id="selectProjectProbability" ng-model="ProjectEntity.Probability">
-                                        <option>N/A</option>
-                                        <option>Low</option>
-                                        <option>Medium</option>
-                                        <option>High</option>
-                                        <option>Sold</option>
-                                    </select>
-                                </div>
-
-                                <label for="selectTechnology" class="col-sm-2 control-label">Technology</label>
-                                <div class="col-sm-4">
-                                    <select class="form-control" id="selectTechnology" ng-model="ProjectEntity.Technology">
-                                        <option>OpenText</option>
-                                        <option>Sharepoint</option>
-                                        <option>Other ECM</option>
-                                        <option>Cognos BI</option>
-                                        <option>Cognos TM1</option>
-                                        <option>OBIEE</option>
-                                        <option>Hyperion</option>
-                                        <option>BPC</option>
-                                        <option>SAS</option>
-                                        <option>Qlikview</option>
-                                        <option>Tableau</option>
-                                        <option>Other BIDW</option>
-                                        <option>Other Big Data</option>
-                                        <option>Other Advanced Analytics</option>
-                                        <option>Java</option>
-                                        <option>Sitecore</option>
-                                        <option>UX</option>
-                                        <option>FE</option>
-                                        <option>CQ5</option>
-                                        <option>Biztalk</option>
-                                        <option>Mobile</option>
-                                        <option>Web</option>
-                                        <option>QA</option>
-                                        <option>Other</option>
-                                    </select>
+                                    <input type="text" class="form-control" id="inputGDM" placeholder="India Contact" ng-model="ProjectEntity.USILead">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputStartDate" class="col-sm-2 control-label">StartDate</label>
+                                <label for="inputClosePeriod" class="col-sm-2 control-label">Close Period</label>
                                 <div class="col-sm-4">
-                                    <input type="date" class="form-control" id="inputStartDate" placeholder="Start Date" ng-model="ProjectEntity.StartDate">
+                                    <input type="text" class="form-control" id="inputClosePeriod" placeholder="Period" ng-model="ProjectEntity.ClosePeriod">
                                 </div>
 
-                                <label for="inputEndDate" class="col-sm-2 control-label">EndDate</label>
+                                <label for="inputSalesStage" class="col-sm-2 control-label">Sales Stage</label>
                                 <div class="col-sm-4">
-                                    <input type="date" class="form-control" id="inputEndDate" placeholder="End Date" ng-model="ProjectEntity.EndDate">
+                                    <input type="text" class="form-control" id="inputSalesStage" placeholder="Stage" ng-model="ProjectEntity.SalesStage">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputResources" class="col-sm-2 control-label">Resources</label>
+                                <label for="inputTER" class="col-sm-2 control-label">Total Estimated Revenue</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" id="inputResources" placeholder="No. of Resources" ng-model="ProjectEntity.TotalResources">
+                                    <input type="text" class="form-control" id="inputTER" placeholder="Estimated Revenue" ng-model="ProjectEntity.TotalEstimatedRevenue" fcsa-number="{ prepend: '$' }">
                                 </div>
-
-                                <label for="selectWorkOrder" class="col-sm-2 control-label">WorkOrder</label>
+                                <label for="inputTEN" class="col-sm-2 control-label">Total Estimated NSR</label>
                                 <div class="col-sm-4">
-                                    <select class="form-control" id="selectWorkOrder" ng-model="ProjectEntity.WorkOrderStatus">
-                                        <option>Not Received</option>
-                                        <option>EDC Review</option>
-                                        <option>Waiting CA Signature</option>
-                                        <option>Signed WO Received</option>
-                                        <option>WBS created</option>
-                                    </select>
+                                    <input type="text" class="form-control" id="inputTEN" placeholder="Estimated NSR" ng-model="ProjectEntity.TotalEstimatedNSR" fcsa-number="{ prepend: '$' }">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputCAPM" class="col-sm-2 control-label">CA PM</label>
+                                <label for="input3rdParty" class="col-sm-2 control-label">3rd Party Revenue</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" id="inputCAPM" placeholder="AU Project Manager" ng-model="ProjectEntity.AUPM">
+                                    <input type="text" class="form-control" id="input3rdParty" placeholder="No. of Resources" ng-model="ProjectEntity.TotalThirdPartyEstRevenue" fcsa-number="{ prepend: '$' }">
                                 </div>
+
                             </div>
                             <div class="form-group">
                                 <label for="ProjectComments" class="col-sm-2 control-label">Comments</label>

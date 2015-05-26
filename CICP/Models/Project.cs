@@ -37,8 +37,8 @@ namespace AUDash.Models
 
     public class ProjectRequest
     {
-        public List<ProjectEntity> Projects { get; set; }
-        public ProjectEntity Project { get; set; }
+        public List<Opportunities> Projects { get; set; }
+        public Opportunities Project { get; set; }
         public RequestedAction action { get; set; }
 
     }

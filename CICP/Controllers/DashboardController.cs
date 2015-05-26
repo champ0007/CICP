@@ -398,9 +398,10 @@ namespace AUDash.Controllers
 
             repo.SetReferenceData("ActualBudget", JsonConvert.SerializeObject(actualBudgetData));
             repo.SetReferenceData("IMTime", JsonConvert.SerializeObject(IMTimeData));
-            repo.SetReferenceData("Opportunities", JsonConvert.SerializeObject(opportunitiesData));
-            repo.SetReferenceData("OpportunitiesStatus", JsonConvert.SerializeObject(opportunityStatusData));            
+            repo.SetReferenceData("Opportunities", JsonConvert.SerializeObject(MergeOpportunities(opportunitiesData)));
+            repo.SetReferenceData("OpportunitiesStatus", JsonConvert.SerializeObject(opportunityStatusData));
         }
+
 
         //POST api/Dashboard/UpsertProject
         [HttpPost]
@@ -408,19 +409,19 @@ namespace AUDash.Controllers
         {
             if (projectRequest.action == RequestedAction.Delete)
             {
-                int index = projectRequest.Projects.FindIndex(x => x.Id == projectRequest.Project.Id);
+                int index = projectRequest.Projects.FindIndex(x => x.OpportunityId == projectRequest.Project.OpportunityId);
                 projectRequest.Projects.RemoveAt(index);
             }
             else if (projectRequest.action == RequestedAction.Upsert)
             {
-                if (projectRequest.Project.Id == null)
+                if (projectRequest.Project.OpportunityId == null)
                 {
-                    projectRequest.Project.Id = DateTime.Now.ToString("dMyyHHmmss");
+                    projectRequest.Project.OpportunityId = DateTime.Now.ToString("dMyyHHmmss");
                     projectRequest.Projects.Add(projectRequest.Project);
                 }
                 else
                 {
-                    int index = projectRequest.Projects.FindIndex(x => x.Id == projectRequest.Project.Id);
+                    int index = projectRequest.Projects.FindIndex(x => x.OpportunityId == projectRequest.Project.OpportunityId);
                     if (index >= 0)
                     {
                         projectRequest.Projects[index] = projectRequest.Project;
@@ -533,7 +534,7 @@ namespace AUDash.Controllers
                         TotalHours = g.Sum(x => x.TotalHours)
                     }).OrderBy(x => x.TotalHours).ToList();
                 returnList.Add(JsonConvert.SerializeObject(groupedResult.Select(s => s.IMLead).ToList()));
-                
+
                 List<List<decimal>> embeddedData = new List<List<decimal>>();
                 List<decimal> finalData = groupedResult.Select(s => s.TotalHours).ToList();
                 embeddedData.Add(finalData);
@@ -585,7 +586,7 @@ namespace AUDash.Controllers
             List<string> returnList = new List<string>();
             if (actualBudgetData != null)
             {
-             
+
                 var groupedResult = actualBudgetData
                      .GroupBy(s => new { s.Series, s.Period })
                     .Select(g => new
@@ -1056,7 +1057,7 @@ namespace AUDash.Controllers
             List<string> dashboardCounts = new List<string>();
 
             dashboardCounts.Add(JsonConvert.DeserializeObject<List<Invoice>>(dashboardData["Invoices"]).Where(x => x.PaymentReceived == "Pending").Count().ToString());
-            dashboardCounts.Add(JsonConvert.DeserializeObject<List<ProjectEntity>>(dashboardData["Projects"]).Where(x => x.Stage == "Sold").Count().ToString());
+            dashboardCounts.Add(JsonConvert.DeserializeObject<List<ProjectEntity>>(dashboardData["Opportunities"]).Count().ToString());
             dashboardCounts.Add(JsonConvert.DeserializeObject<List<ActionItem>>(dashboardData["NewToDoItems"]).Where(x => x.Status == "Open").Count().ToString());
             dashboardCounts.Add(JsonConvert.DeserializeObject<List<ResourceEntity>>(dashboardData["GSSResources"]).Count.ToString());
 
@@ -1298,8 +1299,38 @@ namespace AUDash.Controllers
 
         }
 
+        private List<Opportunities> MergeOpportunities(List<Opportunities> importedOpportunites)
+        {
+            List<Opportunities> mergedOpportunities = new List<Opportunities>();
+            List<Opportunities> CICPOpportunities = new List<Opportunities>();
+            CICPOpportunities = JsonConvert.DeserializeObject<List<Opportunities>>(repo.GetReferenceData("Opportunities"));
 
-   
+            mergedOpportunities.AddRange(importedOpportunites.Intersect(CICPOpportunities, new opportunityComparer()).ToList());
+            mergedOpportunities.AddRange(importedOpportunites.Except(CICPOpportunities, new opportunityComparer()).ToList());
+
+            mergedOpportunities.AddRange(CICPOpportunities.Except(importedOpportunites, new opportunityIdComparer()).Select(x => new Opportunities()
+            {
+                Account = x.Account,
+                ClosePeriod = x.ClosePeriod,
+                ClosePeriodYear = x.ClosePeriodYear,
+                DisplayClosePeriod = x.DisplayClosePeriod,
+                IMLead = x.IMLead,
+                IMService = x.IMService,
+                LeadPursuitPartner = x.LeadPursuitPartner,
+                Opportunity = x.Opportunity,
+                OpportunityId = x.OpportunityId,
+                SalesStage = "Closed",
+                TotalCount = x.TotalCount,
+                TotalEstimatedNSR = x.TotalEstimatedNSR,
+                TotalEstimatedRevenue = x.TotalEstimatedRevenue,
+                TotalThirdPartyEstRevenue = x.TotalThirdPartyEstRevenue,
+                USILead = x.USILead,
+                USIOpportunity = x.USIOpportunity,
+                USIProposalSupport = x.USIProposalSupport
+            }).ToList());
+
+            return mergedOpportunities;
+        }
 
     }
 }

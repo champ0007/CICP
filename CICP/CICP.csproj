@@ -363,6 +363,7 @@
     </Content>
     <Content Include="js\plugins\dataTables\dataTables.bootstrap.js" />
     <Content Include="js\plugins\dataTables\jquery.dataTables.js" />
+    <Content Include="js\plugins\fcsaNumber\fcsaNumber.js" />
     <Content Include="js\plugins\flot\excanvas.min.js" />
     <Content Include="js\plugins\flot\flot-data.js" />
     <Content Include="js\plugins\flot\jquery.flot.js" />
