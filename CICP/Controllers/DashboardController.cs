@@ -619,9 +619,10 @@ namespace AUDash.Controllers
                       USIOpportunity = g.Key.USIOpportunity,
                       IMLead = g.Key.IMLead,
                       TotalCount = g.Count()
-                  }).OrderBy(x => x.USIOpportunity).ThenBy(x => x.TotalCount).ToList();
+                  }).OrderBy(x => x.IMLead).ThenBy(x => x.TotalCount).ToList();
 
-                List<string> KeyLeads = groupedResult.Where(x => x.USIOpportunity.Contains("Proposal")).OrderBy(x => x.TotalCount).GroupBy(s => s.IMLead).Select(s => s.Key).ToList();
+                //List<string> KeyLeads = groupedResult.Where(x => x.USIOpportunity.Contains("Proposal")).OrderBy(x => x.TotalCount).GroupBy(s => s.IMLead).Select(s => s.Key).ToList();
+                List<string> KeyLeads = groupedResult.OrderBy(x => x.TotalCount).GroupBy(s => s.IMLead).Select(s => s.Key).ToList();
                 List<string> KeyCategories = groupedResult.GroupBy(s => s.USIOpportunity).Select(s => s.Key).ToList();
 
                 foreach (string category in KeyCategories)
@@ -1057,7 +1058,7 @@ namespace AUDash.Controllers
             List<string> dashboardCounts = new List<string>();
 
             dashboardCounts.Add(JsonConvert.DeserializeObject<List<Invoice>>(dashboardData["Invoices"]).Where(x => x.PaymentReceived == "Pending").Count().ToString());
-            dashboardCounts.Add(JsonConvert.DeserializeObject<List<ProjectEntity>>(dashboardData["Opportunities"]).Count().ToString());
+            dashboardCounts.Add(JsonConvert.DeserializeObject<List<Opportunities>>(dashboardData["Opportunities"]).Where(x=> x.USIOpportunity.Contains("Yes")).Count().ToString());
             dashboardCounts.Add(JsonConvert.DeserializeObject<List<ActionItem>>(dashboardData["NewToDoItems"]).Where(x => x.Status == "Open").Count().ToString());
             dashboardCounts.Add(JsonConvert.DeserializeObject<List<ResourceEntity>>(dashboardData["GSSResources"]).Count.ToString());
 
@@ -1319,13 +1320,13 @@ namespace AUDash.Controllers
                 LeadPursuitPartner = x.LeadPursuitPartner,
                 Opportunity = x.Opportunity,
                 OpportunityId = x.OpportunityId,
-                SalesStage = "Closed",
+                SalesStage = x.SalesStage,
                 TotalCount = x.TotalCount,
                 TotalEstimatedNSR = x.TotalEstimatedNSR,
                 TotalEstimatedRevenue = x.TotalEstimatedRevenue,
                 TotalThirdPartyEstRevenue = x.TotalThirdPartyEstRevenue,
                 USILead = x.USILead,
-                USIOpportunity = x.USIOpportunity,
+                USIOpportunity = "Closed",
                 USIProposalSupport = x.USIProposalSupport
             }).ToList());
 

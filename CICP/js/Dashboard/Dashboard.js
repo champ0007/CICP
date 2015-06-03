@@ -1970,7 +1970,7 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
     };
 
     $scope.PBLbarOptions = {
-        seriesBarDistance: 15,
+        seriesBarDistance: 5,
         horizontalBars: true,
         axisY: { offset: 80 },
         animate: {

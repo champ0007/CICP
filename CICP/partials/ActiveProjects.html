@@ -66,18 +66,18 @@
         <!-- /.panel-body -->
     </div>
 
-    <div class="panel panel-blue">
+    <!--<div class="panel panel-blue">
         <div class="panel-heading">
             <i class="fa fa-bell fa-fw"></i> Projects by Status
-        </div>
+        </div>-->
         <!-- /.panel-heading -->
-        <div class="panel-body panel-chart">
-            <canvas tc-chartjs-bar chart-options="ActiveProjectChartOptions" chart-data="ActiveProjectChartData" auto-legend></canvas>
+        <!--<div class="panel-body panel-chart">
+            <canvas tc-chartjs-bar chart-options="ActiveProjectChartOptions" chart-data="ActiveProjectChartData" auto-legend></canvas>-->
             <!-- /.list-group -->
             <!--<a href="#" class="btn btn-default btn-block">View All Alerts</a>-->
-        </div>
+        <!--</div>-->
         <!-- /.panel-body -->
-    </div>
+    <!--</div>-->
     <!-- /.panel -->
 
     <div class="panel panel-blue">
@@ -120,20 +120,20 @@
                     <th ng-click="predicate = 'OpportunityId'; reverse=false">Id#</th>
                     <th ng-click="predicate = 'Account'; reverse=false">Account</th>
                     <th ng-click="predicate = 'Opportunity'; reverse=false">Opportunity</th>
-                    <th ng-click="predicate = 'USIProposalSupport'; reverse=false">USI Support</th>
+                    <th ng-click="predicate = 'IMLead'; reverse=false">IM Lead</th>
                     <th ng-click="predicate = 'USILead'; reverse=false">USI GDM</th>
-                    <th ng-click="predicate = 'SalesStage'; reverse=false">Sales Stage</th>
+                    <th ng-click="predicate = 'USIOpportunity'; reverse=false">Stage</th>
                     <th><i class="fa fa-times"</th>
 
                 </tr>
-                <tr dir-paginate="project in ActiveProjectDetails | orderBy:predicate:reverse | filter: searchProject |itemsPerPage: 10" current-page="currentProjectPage" pagination-id="ProjectPagination">
+                <tr dir-paginate="project in ActiveProjectDetails | orderBy:['IMLead','USIOpportunity'] | filter: searchProject |itemsPerPage: 10" current-page="currentProjectPage" pagination-id="ProjectPagination">
                     <td><i class="fa fa-edit" ng-click="EditProject(project, $index)" data-toggle="modal" data-target=".bs-AddProjects-modal-lg"> </i></td>
                     <td>{{project.OpportunityId}}</td>
                     <td>{{project.Account}}</td>
                     <td>{{project.Opportunity}}</td>
-                    <td>{{project.USIProposalSupport}}</td>
+                    <td>{{project.IMLead}}</td>
                     <td>{{project.USILead}}</td>
-                    <td>{{project.SalesStage}}</td>
+                    <td>{{project.USIOpportunity}}</td>
                     <td><i class="fa fa-times" ng-click="AddProject(project, 'Delete')"> </i></td>
                 </tr>
             </table>
@@ -172,9 +172,9 @@
                                 </div>                                
                             </div>
                             <div class="form-group">
-                                <label for="inputUSISupport" class="col-sm-2 control-label">USI Support</label>
+                                <label for="inputIMLead" class="col-sm-2 control-label">IM Lead</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" id="inputUSISupport" placeholder="Support" ng-model="ProjectEntity.USIProposalSupport">
+                                    <input type="text" class="form-control" id="inputIMLead" placeholder="Support" ng-model="ProjectEntity.IMLead">
                                 </div>
 
                                 <label for="inputGDM" class="col-sm-2 control-label">USI Lead</label>
@@ -188,9 +188,14 @@
                                     <input type="text" class="form-control" id="inputClosePeriod" placeholder="Period" ng-model="ProjectEntity.ClosePeriod">
                                 </div>
 
-                                <label for="inputSalesStage" class="col-sm-2 control-label">Sales Stage</label>
+                                <label for="inputUSIOpp" class="col-sm-2 control-label">Stage</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control" id="inputSalesStage" placeholder="Stage" ng-model="ProjectEntity.SalesStage">
+                                    <select class="form-control" id="inputUSIOpp" ng-model="ProjectEntity.USIOpportunity">
+                                        <option>Yes - Still Qualifying</option>
+                                        <option>Yes - Proposal Support</option>
+                                        <option>Closed</option>
+                                    </select>
+                                    
                                 </div>
                             </div>
                             <div class="form-group">
