@@ -354,7 +354,7 @@ CICPApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', fu
             if (data != 'null') {
                 ProjectDetails = $scope.ActiveProjectDetails = JSON.parse(JSON.parse(data));
                 $scope.OriginalProjectDetails = JSON.parse(JSON.parse(data));
-                $scope.$parent.ActiveProjects = ProjectDetails.length;
+                $scope.$parent.ActiveProjects = $filter('filter')(ProjectDetails, { USIOpportunity: "Yes - Proposal Support" }).length + $filter('filter')(ProjectDetails, { USIOpportunity: "Yes - Still Qualifying" }).length
                 $scope.UpdateChart();
             }
         }).
@@ -389,7 +389,7 @@ CICPApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', fu
            if (data != 'null') {
                ProjectDetails = $scope.ActiveProjectDetails = JSON.parse(JSON.parse(data));
                $scope.OriginalProjectDetails = JSON.parse(JSON.parse(data));
-               $scope.$parent.ActiveProjects = ProjectDetails.length;
+               $scope.$parent.ActiveProjects = $filter('filter')(ProjectDetails, { USIOpportunity: "Yes - Proposal Support" }).length + $filter('filter')(ProjectDetails, { USIOpportunity: "Yes - Still Qualifying" }).length
                $scope.UpdateChart();
 
                $scope.ActiveProjectDetails = ProjectDetails;

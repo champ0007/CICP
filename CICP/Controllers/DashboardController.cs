@@ -429,9 +429,9 @@ namespace AUDash.Controllers
                 }
             }
 
-            repo.SetReferenceData("Projects", JsonConvert.SerializeObject(projectRequest.Projects));
+            repo.SetReferenceData("Opportunities", JsonConvert.SerializeObject(projectRequest.Projects));
 
-            return repo.GetReferenceData("Projects");
+            return repo.GetReferenceData("Opportunities");
         }
 
 
@@ -1307,14 +1307,38 @@ namespace AUDash.Controllers
             CICPOpportunities = JsonConvert.DeserializeObject<List<Opportunities>>(repo.GetReferenceData("Opportunities"));
 
             mergedOpportunities.AddRange(importedOpportunites.Intersect(CICPOpportunities, new opportunityComparer()).ToList());
-            mergedOpportunities.AddRange(importedOpportunites.Except(CICPOpportunities, new opportunityComparer()).ToList());
+
+            mergedOpportunities.AddRange(importedOpportunites.Except(CICPOpportunities, new opportunityComparer()).Select(x => new Opportunities()
+            {
+                Account = x.Account,
+                ClosePeriod = x.ClosePeriod,
+                ClosePeriodYear = x.ClosePeriodYear,
+                Comments = CICPOpportunities.Any(y => y.OpportunityId == x.OpportunityId) ? CICPOpportunities.Where(y => y.OpportunityId == x.OpportunityId).First().Comments : String.Empty,
+                DisplayClosePeriod = x.DisplayClosePeriod,
+                IMLead = x.IMLead,
+                IMService = x.IMService,
+                LeadPursuitPartner = x.LeadPursuitPartner,
+                Opportunity = x.Opportunity,
+                OpportunityId = x.OpportunityId,
+                SalesStage = x.SalesStage,
+                TotalCount = x.TotalCount,
+                TotalEstimatedNSR = x.TotalEstimatedNSR,
+                TotalEstimatedRevenue = x.TotalEstimatedRevenue,
+                TotalThirdPartyEstRevenue = x.TotalThirdPartyEstRevenue,
+                USILead = x.USILead,
+                USIOpportunity = x.USIOpportunity,
+                USIProposalSupport = x.USIProposalSupport
+
+
+            }).ToList());
 
             mergedOpportunities.AddRange(CICPOpportunities.Except(importedOpportunites, new opportunityIdComparer()).Select(x => new Opportunities()
             {
                 Account = x.Account,
                 ClosePeriod = x.ClosePeriod,
                 ClosePeriodYear = x.ClosePeriodYear,
-                DisplayClosePeriod = x.DisplayClosePeriod,
+                Comments = x.Comments,
+                DisplayClosePeriod = x.DisplayClosePeriod,                
                 IMLead = x.IMLead,
                 IMService = x.IMService,
                 LeadPursuitPartner = x.LeadPursuitPartner,
