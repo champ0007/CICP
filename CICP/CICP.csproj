@@ -406,7 +406,7 @@
     <Content Include="partials\ActiveProjects.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="partials\ActiveResources.html">
+    <Content Include="partials\ProjectDelivery.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="partials\ManageDashboard.html">

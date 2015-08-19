@@ -1,0 +1,139 @@
+﻿<div class="col-lg-4">
+    <div class="panel panel-red">
+        <div class="panel-heading">
+            <i class="fa fa-info-circle fa-fw"></i> Project Status
+        </div>
+        <div class="panel-body panel-chart">
+            <canvas tc-chartjs-pie chart-options="ActionItemChartOptions" chart-data="ActionItemChartData" auto-legend></canvas>
+        </div>
+
+        <link href="../css/plugins/ToDo/NewToDoItem.css" rel="stylesheet" />
+        <!-- /.panel-body -->
+    </div>
+</div>
+
+<!--Begin Three Charts-->
+<div class="col-lg-8">
+    <div class="panel panel-red">
+        <div class="panel-heading">
+            <i class="fa fa-info-circle fa-fw"></i> Projects
+            <span class="pull-right">
+                Show
+                <select id="filterToDo" ng-model="ToDoSearch">
+                    <option value="">All</option>
+                    <option>Open</option>
+                    <option>Closed</option>
+                    <option>Pending</option>
+                </select>
+            </span>
+        </div>
+        <div class="panel-body">
+            <table class="table table-responsive">
+                <tr>
+                    <td><input id="new-todo" placeholder="Client Name" ng-model="NewToDoItem.ClientName" autofocus></td>
+                    <td><input id="new-todo" placeholder="Description" ng-model="NewToDoItem.Desc"></td>
+                    <td><input id="new-todo" placeholder="Manager" ng-model="NewToDoItem.Manager"></td>
+                    <td><select ng-model="NewToDoItem.Status">
+                        <option selected="selected">Green</option>
+                        <option>Yellow</option>
+                        <option>Red</option>
+                    </select></td>                    
+                    <td>
+                        <input id="new-AssignedTo" placeholder="Comments" ng-model="NewToDoItem.Comments">
+                        &nbsp; <input type="button" class="btn-success" value="Add" ng-click="AddToDoItem(NewToDoItem)">
+                    </td>
+                </tr>
+            </table>
+            <table class="table table-responsive col-lg-8">
+                <tr>
+                    <th></th>
+                    <th>Client Name</th>
+                    <th>Project Description</th>
+                    <th>Engagement Manager</th>
+                    <th>Current Status</th>
+                    <th>Comments</th>
+                    <td><i class="fa fa-times"</td>
+                </tr>
+
+                <!--<tr ng-repeat="ToDoItem in NewToDos track by $index">-->
+                <tr dir-paginate="ToDoItem in NewToDos | filter:ToDoSearch | itemsPerPage: 5" current-page="currentToDoPage" pagination-id="ToDoPagination">
+                    <td><i class="fa fa-edit" ng-click="EditToDoItem(ToDoItem, $index)" data-toggle="modal" data-target=".bs-AddActionItem-modal-lg"> </i></td>
+                    <td class="col-lg-4">{{ToDoItem.ClientName}}</td>
+                    <td class="col-lg-2">{{ToDoItem.Desc}}</td>
+                    <td class="col-lg-2">{{ToDoItem.Manager}}</td>
+                    <td class="col-lg-6">{{ToDoItem.Status}}</td>
+                    <td class="col-lg-6">{{ToDoItem.Comments}}</td>
+                </tr>
+            </table>
+            <div class="text-center">
+                <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="/js/dirPagination.tpl.html" pagination-id="ToDoPagination"></dir-pagination-controls>
+            </div>
+        </div>
+
+        <div class="modal fade bs-AddActionItem-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Action Item Details
+                            <div class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></div>
+                        </div>
+                        <div class="panel-body">
+                            <form class="form-horizontal" name="addForm" role="form" ng-valid>
+                                <input type="hidden" ng-model="ToDoItem.index" />
+                                <div class="form-group">
+                                    <label for="ClientName" class="col-sm-3 control-label">Client Name</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="ClientName" placeholder="Client Name" ng-model="ToDoItem.ClientName" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Description" class="col-sm-3 control-label">Description</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="Description" placeholder="Description" ng-model="ToDoItem.Desc" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Manager" class="col-sm-3 control-label">Manager</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="Manager" placeholder="Manager" ng-model="ToDoItem.Manager" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Status" class="col-sm-3 control-label">Status</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" ng-model="ToDoItem.Status">
+                                            <option>Green</option>
+                                            <option>Yellow</option>
+                                            <option>Red</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputSkills" class="col-sm-3 control-label">Comments</label>
+                                    <div class="col-sm-8">
+                                        <textarea class="form-control" rows="2" cols="50" placeholder="Comments" ng-model="ToDoItem.Comments"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-5 col-sm-10">
+                                        <button type="submit" class="btn btn-success" data-dismiss="modal" ng-click="AddToDoItem(ToDoItem)">Save</button> &nbsp;
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="DeleteToDoItem(ToDoItem)">Delete</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <link href="../css/plugins/ToDo/NewToDoItem.css" rel="stylesheet" />
+        <!-- /.panel-body -->
+    </div>
+</div>
+
+
+
+
+

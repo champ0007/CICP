@@ -592,7 +592,7 @@ namespace AUDash.Controllers
                     .Select(g => new
                             {
                                 Series = g.Key.Series,
-                                Period = g.Key.Period,
+                                Period = g.Key.Period.ToString(),
                                 TotalHours = g.Sum(x => x.TotalHours)
                             }).OrderBy(x => x.Series).ThenBy(x => x.Period);
 
@@ -600,6 +600,7 @@ namespace AUDash.Controllers
                 returnList.Add(JsonConvert.SerializeObject(groupedResult.Where(x => x.Series.Equals("Budget")).Select(x => x.TotalHours).ToList()));
                 returnList.Add("Actual");
                 returnList.Add("Budget");
+                returnList.Add(JsonConvert.SerializeObject(groupedResult.Where(x => x.Series.Equals("Budget")).Select(x => x.Period).ToList()));
             }
             return returnList;
 
@@ -1060,7 +1061,7 @@ namespace AUDash.Controllers
             dashboardCounts.Add(JsonConvert.DeserializeObject<List<Invoice>>(dashboardData["Invoices"]).Where(x => x.PaymentReceived == "Pending").Count().ToString());
             dashboardCounts.Add(JsonConvert.DeserializeObject<List<Opportunities>>(dashboardData["Opportunities"]).Where(x=> x.USIOpportunity.Contains("Yes")).Count().ToString());
             dashboardCounts.Add(JsonConvert.DeserializeObject<List<ActionItem>>(dashboardData["NewToDoItems"]).Where(x => x.Status == "Open").Count().ToString());
-            dashboardCounts.Add(JsonConvert.DeserializeObject<List<ResourceEntity>>(dashboardData["GSSResources"]).Count.ToString());
+            dashboardCounts.Add(JsonConvert.DeserializeObject<List<ResourceEntity>>(dashboardData["Projects"]).Count.ToString());
 
             return dashboardCounts;
 

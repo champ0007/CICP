@@ -19,9 +19,9 @@ CICPApp.config(['$routeProvider',
             templateUrl: 'partials/ActiveProjects.html',
             controller: 'ActiveProjectsController'
         }).
-        when('/ActiveResources', {
-            templateUrl: 'partials/ActiveResources.html',
-            controller: 'ActiveResourcesController'
+        when('/ProjectDelivery', {
+            templateUrl: 'partials/ProjectDelivery.html',
+            controller: 'ProjectDeliveryController'
         }).
         when('/NewActionItems', {
             templateUrl: 'partials/NewActionItems.html',
@@ -559,215 +559,153 @@ CICPApp.controller('ActiveProjectsController', ['$scope', '$filter', '$http', fu
 
 }]);
 
-CICPApp.controller('ActiveResourcesController', ['$scope', '$http', 'FileUploader', function ($scope, $http, FileUploader) {
-    var STORAGE_ID = 'Resources';
-    $scope.EditMode = "false";
+CICPApp.controller('ProjectDeliveryController', ['$scope', '$http', 'FileUploader', '$filter', function ($scope, $http, FileUploader, $filter) {
+    var STORAGE_ID = 'Projects'; // To be passed
+    //$scope.EditMode = "false";
     $scope.currentPage = 1;
-    $scope.currentGSSPage = 1;
-    $scope.pageSize = 10;
+    $scope.currentToDoPage = 1;
+    $scope.pageSize = 5;
+    $scope.ToDoPerPage = 5;
 
-    var resources = $scope.AllResources = [];
+    var NewToDos = $scope.NewToDos = [];
 
-    $scope.getResources = function () {
+    $scope.getNewToDos = function () {
         $http({
             method: 'GET',
             url: 'api/Dashboard/GetReferenceData?storageId=' + STORAGE_ID + '&authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
         }).
         success(function (data, status, headers, config) {
-            if (data != null) {
-                resources = $scope.AllResources = JSON.parse(JSON.parse(data));
-                $scope.UpdateChart();
+
+            if (data != 'null') {
+                debugger;
+                NewToDos = $scope.NewToDos = JSON.parse(JSON.parse(data));
+                $scope.$parent.ActiveResources = NewToDos.length;
+                $scope.UpdateChart($filter('filter')(NewToDos, { Status: "Red" }).length, $filter('filter')(NewToDos, { Status: "Green" }).length, $filter('filter')(NewToDos, { Status: "Yellow" }).length);
+                
             }
         }).
         error(function (data, status, headers, config) {
             // called asynchronously if an error occurs
             // or server returns response with an error status.
-            $scope.AllResources = -1;
+
         });
 
-        $http({
-            method: 'GET',
-            url: 'api/Dashboard/GetReferenceData?storageId=GSSResources&authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
+    };
 
-        }).
-       success(function (data, status, headers, config) {
-           if (data != null) {
-               $scope.AllGSSResources = JSON.parse(JSON.parse(data));
-               $scope.$parent.ActiveResources = $scope.AllGSSResources.length;
-               $scope.UpdateChart();
-           }
-       }).
-       error(function (data, status, headers, config) {
-           // called asynchronously if an error occurs
-           // or server returns response with an error status.
-           $scope.AllResources = -1;
-       });
+    $scope.EditToDoItem = function (ToDoItem, index) {
+        debugger;
+        ToDoItem.index = index;
+        $scope.ToDoItem = jQuery.extend(true, {}, ToDoItem); // deep copy
+        $scope.OriginalToDoItem = jQuery.extend(true, {}, ToDoItem); // deep copy
+    }
+
+    $scope.setToDoItems = function (NewToDos) {
+        var referenceData = new Object();
+        referenceData.storageId = STORAGE_ID;
+        referenceData.storageData = JSON.stringify(NewToDos);
+        referenceData.authToken = $scope.UserIdentity + "-" + $scope.UserPassword;
+        $http({
+            url: 'api/Dashboard/SetReferenceData',
+            method: "POST",
+            data: JSON.stringify(JSON.stringify(referenceData))
+        })
+            .then(function (response) {
+                $scope.getNewToDos();
+            },
+                function (response) { // optional
+                }
+            );
+    };
+
+    $scope.$watch('NewToDos', function (newValue, oldValue) {
+        if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
+            $scope.setToDoItems(NewToDos);
+        }
+    }, true);
+
+    $scope.AddToDoItem = function (ToDoItem) {
+        debugger;
+
+        if (ToDoItem.index >= 0) {
+            NewToDos[ToDoItem.index] = ToDoItem;
+        } else {          
+            NewToDos.push(ToDoItem);
+        }
+
+        $scope.NewToDos = NewToDos;
+        $scope.NewToDoItem = '';
+    };
+
+    $scope.DeleteToDoItem = function (ToDoItem) {
+        for (var i = 0; i < NewToDos.length; i++) {
+            if (NewToDos[i].Desc === ToDoItem.Desc && NewToDos[i].AssignedTo === ToDoItem.AssignedTo && NewToDos[i].Status === ToDoItem.Status && NewToDos[i].Comments === ToDoItem.Comments) {
+                NewToDos.splice(i, 1);
+                break;
+            }
+        }
 
     };
 
-    //$scope.setResources = function (resourcesToBeSaved) {
-    //    var referenceData = new Object();
-    //    referenceData.storageId = STORAGE_ID;
-    //    referenceData.storageData = JSON.stringify(resourcesToBeSaved);
-    //    $http({
-    //        url: 'api/Dashboard/SetReferenceData',
-    //        method: "POST",
-    //        data: JSON.stringify(JSON.stringify(referenceData))
-    //    })
-    //        .then(function (response) {
-    //            $scope.getResources();
-    //        },
-    //            function (response) { // optional
-    //            }
-    //        );
-    //};
-
-    //$scope.$watch('AllResources', function (newValue, oldValue) {
-    //    if (newValue !== oldValue) { // This prevents unneeded calls to the local storage
-    //        $scope.setResources(resources);
-    //    }
-    //}, true);
-
-    $scope.EditResource = function (resource, index) {
-        //debugger;
-        resource.index = index;
-        $scope.EditMode = "true";
-        //Shallow Copy - $scope.ResourceEntity = resource;
-        $scope.ResourceEntity = jQuery.extend(true, {}, resource); // deep copy
-        $scope.OriginalResourceEntity = jQuery.extend(true, {}, resource); // deep copy
-    };
-
-    $scope.addResource = function (resource, action) {
-        var resourceRequest = new Object();
-        resourceRequest.Resources = resources;
-        resourceRequest.Resource = resource;
-        resourceRequest.Action = action;
-        resourceRequest.authToken = $scope.UserIdentity + "-" + $scope.UserPassword;
-
-        $http({
-            method: 'POST',
-            url: 'api/Dashboard/UpsertResource',
-            data: resourceRequest
-        }).
-       success(function (data, status, headers, config) {
-           //success logic
-           if (data != null) {
-               resources = $scope.AllResources = JSON.parse(JSON.parse(data));
-
-               $scope.UpdateChart();
-
-               $scope.AllResources = resources;
-               $scope.ResourceEntity = '';
-
-           }
-       }).
-       error(function (data, status, headers, config) {
-           //error handling logic
-       });
-
-    };
-
-    var chartLabels, chartData;
-
-    $scope.UpdateChart = function () {
-        $http({
-            method: 'GET',
-            url: 'api/Dashboard/GetResourceChartData?authToken=' + $scope.UserIdentity + "-" + $scope.UserPassword
-        }).
-      success(function (data, status, headers, config) {
-          if (data != null) {
-              chartLabels = JSON.parse(data[0]);
-              chartData = JSON.parse(data[1]);
-          }
-      }).
-      error(function (data, status, headers, config) {
-          // called asynchronously if an error occurs
-          // or server returns response with an error status.
-          $scope.AllGSSResources = -1;
-      });
-
-
+    $scope.UpdateChart = function (red, green, yellow) {
         // Chart.js Data
-        $scope.ResourceChartData = {
-            labels: chartLabels, // ['AMP', 'Telstra', 'QUU', 'AusSuper', 'ANZ', 'Caltex'],
-            datasets: [
-              {
-                  label: 'My First dataset',
-                  fillColor: '#FFFFFF',
-                  strokeColor: '#000000',
-                  highlightFill: '#000000',
-                  highlightStroke: '#FFFFFF',
-                  data: chartData //[65, 59, 80, 81, 56, 55]
-              }
-
-            ]
-        };
+        $scope.ActionItemChartData = [
+          {
+              value: red,
+              color: '#F7464A',
+              highlight: '#FF5A5E',
+              label: 'Red'
+          },
+          {
+              value: green,
+              color: '#46BFBD',
+              highlight: '#5AD3D1',
+              label: 'Green'
+          },
+          {
+              value: yellow,
+              color: '#FDB45C',
+              highlight: '#FFC870',
+              label: 'Yellow'
+          }
+        ];
 
         // Chart.js Options
-        $scope.ResourceChartOptions = {
+        $scope.ActionItemChartOptions = {
 
             // Sets the chart to be responsive
             responsive: true,
 
-            //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
-            scaleBeginAtZero: true,
+            //Boolean - Whether we should show a stroke on each segment
+            segmentShowStroke: true,
 
-            //Boolean - Whether grid lines are shown across the chart
-            scaleShowGridLines: true,
+            //String - The colour of each segment stroke
+            segmentStrokeColor: '#fff',
 
-            //String - Colour of the grid lines
-            scaleGridLineColor: "rgba(0,0,0,.05)",
+            //Number - The width of each segment stroke
+            segmentStrokeWidth: 2,
 
-            //Number - Width of the grid lines
-            scaleGridLineWidth: 1,
+            //Number - The percentage of the chart that we cut out of the middle
+            percentageInnerCutout: 0, // This is 0 for Pie charts
 
-            //Boolean - If there is a stroke on each bar
-            barShowStroke: true,
+            //Number - Amount of animation steps
+            animationSteps: 100,
 
-            //Number - Pixel width of the bar stroke
-            barStrokeWidth: 2,
+            //String - Animation easing effect
+            animationEasing: 'easeOutQuint',
 
-            //Number - Spacing between each of the X value sets
-            barValueSpacing: 15,
+            //Boolean - Whether we animate the rotation of the Doughnut
+            animateRotate: true,
 
-            //Number - Spacing between data sets within X values
-            barDatasetSpacing: 1,
+            //Boolean - Whether we animate scaling the Doughnut from the centre
+            animateScale: false,
 
             //String - A legend template
-            legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>'
+            legendTemplate: '<ul class="tc-chart-js-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
+
         };
-
     };
 
-    //File upload functionality
-    var uploader = $scope.uploader = new FileUploader({
-        url: 'api/Dashboard/UploadResources',
-        autoUpload: true
-        //removeAfterUpload: true
-    });
-
-    uploader.onCompleteItem = function (fileItem, response, status, headers) {
-        $scope.getResources();
-    };
-
-    $scope.ShowCurrent = true;
-
-    $scope.DisplayContent = function (activeTab) {
-        if (activeTab == 'Unallocated') {
-            $scope.ShowCurrent = false;
-        }
-        else {
-            $scope.ShowCurrent = true;
-        }
-        $scope.searchResource = '';
-    };
-
-    $scope.OpenAddResource = function () {
-        $scope.ResourceEntity = '';
-        $scope.IsHidden = true;
-    };
-
-    $scope.getResources();
+    $scope.getNewToDos();
 
 }]);
 
@@ -1388,8 +1326,9 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
 
               $scope.actualVsBudgetData.datasets[0].data = $scope.usiHoursActualData;
               $scope.actualVsBudgetData.datasets[1].data = $scope.usiHoursBudgetData;
-              $scope.actualVsBudgetData.datasets[0].label = JSON.parse(data[2]);
-              $scope.actualVsBudgetData.datasets[1].label = JSON.parse(data[3]);
+              $scope.actualVsBudgetData.datasets[0].label = data[2];
+              $scope.actualVsBudgetData.datasets[1].label = data[3];
+              $scope.actualVsBudgetData.labels = JSON.parse(data[4]);
           }
       }).
       error(function (data, status, headers, config) {
@@ -1401,7 +1340,7 @@ CICPApp.controller('OperationsController', ['$scope', '$http', function ($scope,
 
     // Chart.js Data
     $scope.actualVsBudgetData = {
-        labels: ['201501', '201502', '201503', '201504', '201505', '201506', '201507', '201508', '201509', '201510', '201511', '201512', '201513'],
+        labels:[] ,
 
         datasets: [
           {
